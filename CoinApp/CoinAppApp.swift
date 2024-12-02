@@ -12,6 +12,7 @@ import RevenueCat
 struct CoinAppApp: App {
     @StateObject var userViewModel: UserViewModel = UserViewModel()
     
+    
     init() {
         Purchases.logLevel = .debug
         Purchases.configure(withAPIKey: "appl_uJbYFaiwBZHJPOMizXgSqOvSqbV")
