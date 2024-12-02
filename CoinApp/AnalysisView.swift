@@ -1,0 +1,171 @@
+//
+//  AnalysisView.swift
+//  CoinApp
+//
+//  Created by Petru Grigor on 30.11.2024.
+//
+
+import SwiftUI
+import Combine
+
+class AnalysisViewModel: ObservableObject {
+    @Published var selectedImage: UIImage?
+    @Published var isLoading: Bool = false
+    @Published var memeCoinAnalisys: MemeCoinAnalysisResponse?
+    
+    var updatePath: ((UUID) -> Void)?
+    
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(updatePath: @escaping (UUID) -> Void) {
+        self.updatePath = updatePath
+        
+        $selectedImage.sink { newImage in
+            guard let selectedImage = newImage else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.isLoading = true
+            }
+            
+            Task {
+                let analysisResult = await CMCApi.instance.analyzeChartImage(image: selectedImage)
+                
+                DispatchQueue.main.async {
+                    self.memeCoinAnalisys = analysisResult
+                    
+                    if self.memeCoinAnalisys != nil {
+                        self.isLoading = false
+                    } else {
+                        print("Meme coin analysis failed")
+                    }
+                }
+            }
+        }
+        .store(in: &cancellables)
+    }
+}
+
+struct AnalysisView: View {
+    @StateObject private var viewModel: AnalysisViewModel
+    
+    @State private var isImagePickerPresented: Bool = false
+    @State private var sourceType: UIImagePickerController.SourceType = .camera
+    
+    @State private var showActionSheet = false
+    
+    @EnvironmentObject private var userViewModel: UserViewModel
+    
+    @Binding var path: [UUID]
+    @Binding var showPaywall: Bool
+    
+    init(path: Binding<[UUID]>, showPaywall: Binding<Bool>) {
+        self._path = path
+        self._showPaywall = showPaywall
+        
+        _viewModel = StateObject(wrappedValue: AnalysisViewModel(updatePath: { uuid in
+            path.wrappedValue.append(uuid)
+        }))
+    }
+    
+    var body: some View {
+        NavigationStack(path: $path) {
+            ScrollView {
+                VStack {
+                    Text("MemeAI")
+                        .foregroundStyle(AppConstants.primaryColor)
+                        .font(Font.custom("Gabarito", size: 36))
+                        .padding(.bottom, 5)
+                        .padding(.top, 75)
+                    
+                    HStack {
+                        Image(systemName: "crown.fill")
+                            .font(.title)
+                            .foregroundStyle(Color(hex: "#FFD737"))
+                        
+                        Text("AI Chart Analysis")
+                            .font(.title2.weight(.semibold))
+                            .foregroundStyle(Color(hex: "#FFD737"))
+                    }
+                    
+                    Text("Understand any chart with the help of he AI Chart Analysis! Take a photo of the chart and get instant information and details.")
+                        .multilineTextAlignment(.center)
+                        .font(Font.custom("Inter", size: 16))
+                        .foregroundStyle(.gray)
+                        .padding(.top, 25)
+                        .padding(.horizontal)
+                    
+                    Button(action: {
+                        if userViewModel.isUserSubscribed {
+                            showActionSheet = true
+                        } else {
+                            withAnimation {
+                                showPaywall = true
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "photo.badge.plus.fill")
+                                .font(.title2)
+                                .foregroundStyle(.white)
+                            
+                            Text("Get Analysis")
+                                .font(Font.custom("Inter", size: 17))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.vertical, 13)
+                        .padding(.horizontal, 80)
+                        .background(AppConstants.primaryColor)
+                        .cornerRadius(18)
+                        .padding(.top, 90)
+                    }
+                    
+                    if viewModel.isLoading {
+                        VStack {
+                            ProgressView("Analyzing...")
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
+                        .padding(.top, 30)
+                    }
+                    
+                    HStack {
+                        Spacer()
+                    }
+                }
+            }
+            .background(AppConstants.backgroundColor)
+            .actionSheet(isPresented: $showActionSheet) {
+                ActionSheet(
+                    title: Text("Photo Options"),
+                    message: Text("Choose how you want to select a photo"),
+                    buttons: [
+                        .default(Text("From Photos")) {
+                            sourceType = .photoLibrary
+                            isImagePickerPresented.toggle()
+                        },
+                        .default(Text("Take Picture")) {
+                            sourceType = .camera
+                            isImagePickerPresented.toggle()
+                        },
+                        .cancel {}
+                    ]
+                )
+            }
+            .sheet(isPresented: $isImagePickerPresented) {
+                ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
+            }
+            .navigationDestination(for: UUID.self, destination: { _ in
+                ChartAnalysisView(image: viewModel.selectedImage!, analysis: $viewModel.memeCoinAnalisys)
+            })
+        }
+    }
+}
+
+//#Preview {
+//    AnalysisView()
+//}
