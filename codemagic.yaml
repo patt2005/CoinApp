@@ -2,11 +2,11 @@
 # Codemagic UI under Apple Developer Portal integration.
 workflows:
   ios-workflow:
-    # name: iOS Workflow
+    name: iOS Workflow
     integrations:
       app_store_connect: CI/CD Api Key
 
-    environment:
+    # environment:
       # ...  
 
     scripts:
