@@ -42,6 +42,12 @@ workflows:
 
           pod install
 
+      - name: Fetch Signing Files
+      
+        script: |
+        
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+
       - name: Set up provisioning profiles settings on Xcode project
 
         script: xcode-project use-profiles
