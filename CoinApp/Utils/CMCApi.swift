@@ -374,9 +374,11 @@ class CMCApi {
         
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         
+        let apiKey = await AppConstants.getApiKey()
+        
         let headers = [
             "Content-Type": "application/json",
-            "Authorization": "Bearer \(AppConstants().openAiApiKey)"
+            "Authorization": "Bearer \(apiKey)"
         ]
         
         let requestBody: [String: Any] = [
