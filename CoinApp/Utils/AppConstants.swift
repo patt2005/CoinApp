@@ -14,7 +14,7 @@ class AppConstants {
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
     static let primaryColor: Color = Color(hex: "#FF6500")
     
-    static let openAiApiKey = "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"
+    static let openAiApiKey = "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"
 }
 
 enum AppDestination: Hashable {
