@@ -40,10 +40,9 @@ class CoinListViewModel: ObservableObject {
 }
 
 struct CoinListView: View {
-    @Binding var showPaywall: Bool
+    @ObservedObject private var appProvider = AppProvider.instance
     
     @StateObject private var viewModel = CoinListViewModel()
-    @ObservedObject private var appProvider = AppProvider.instance
     
     @State private var hasFetchedApi = false
     
@@ -108,7 +107,7 @@ struct CoinListView: View {
         }
     }
     
-    init(showPaywall: Binding<Bool>) {
+    init() {
         let appearance = UINavigationBarAppearance()
         
         appearance.titleTextAttributes = [
@@ -126,8 +125,6 @@ struct CoinListView: View {
         
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        
-        self._showPaywall = showPaywall
     }
     
     private func getCoinScrollCard(coin: Coin) -> some View {
@@ -180,7 +177,7 @@ struct CoinListView: View {
                         if !userViewModel.isUserSubscribed {
                             Button(action: {
                                 withAnimation {
-                                    showPaywall = true
+                                    appProvider.showPaywall = true
                                 }
                             }) {
                                 ZStack {
@@ -189,7 +186,6 @@ struct CoinListView: View {
                                         .foregroundColor(Color(hex: "#933A00"))
                                     Image(systemName: "crown.fill")
                                         .foregroundStyle(Color(hex: "#ffcb42"))
-                                        
                                 }
                             }
                         }
@@ -250,7 +246,7 @@ struct CoinListView: View {
                         .padding(.horizontal, 20)
                     }
                     ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
-                        CoinListCard(coin: coin, pickedDateRange: $viewModel.pickedDateRange)
+                        CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
                     }
                 }
                 .refreshable {

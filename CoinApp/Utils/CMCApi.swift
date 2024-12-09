@@ -288,6 +288,10 @@ class CMCApi {
         let data: DataResponse
     }
     
+    enum ApiAnalysisError: Error {
+        case invalidData
+    }
+    
     func getCoinPriceList(id: Int, dateRange: String) async -> [Double] {
         guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=\(id)&range=\(dateRange.uppercased())") else { return [] }
         
@@ -362,10 +366,10 @@ class CMCApi {
         return nil
     }
     
-    func analyzeChartImage(image: UIImage) async -> MemeCoinAnalysisResponse? {
+    func analyzeChartImage(image: UIImage) async throws -> MemeCoinAnalysisResponse {
         guard let base64Image = convertImageToBase64(image: image) else {
             print("Failed to convert image to Base64")
-            return nil
+            throw ApiAnalysisError.invalidData
         }
         
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
@@ -420,7 +424,7 @@ class CMCApi {
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
             print("Error: Unable to serialize JSON")
-            return nil
+            throw ApiAnalysisError.invalidData
         }
         
         var request = URLRequest(url: url)
@@ -447,11 +451,14 @@ class CMCApi {
                 return analysis
             } else {
                 print("Error: Unable to parse cleaned JSON string")
+                
+                throw ApiAnalysisError.invalidData
             }
         } catch {
             print("Caught an error: \(error.localizedDescription)")
+            
+            throw ApiAnalysisError.invalidData
         }
-        return nil
     }
     
     func fetchTrendingCoins() async {

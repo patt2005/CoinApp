@@ -9,17 +9,16 @@ import SwiftUI
 import RevenueCat
 
 struct PaywallView: View {
-    @Binding var showPaywall: Bool
-    
     @State private var currentOffering: Offering?
     
+    @ObservedObject private var appProvider = AppProvider.instance
     @EnvironmentObject private var userViewModel: UserViewModel
     
     var body: some View {
         VStack(alignment: .trailing) {
             HStack {
                 Button(action: {
-                    showPaywall = false
+                    appProvider.showPaywall = false
                 }) {
                     Image(systemName: "xmark.circle")
                         .font(.title)
@@ -95,9 +94,9 @@ struct PaywallView: View {
                     Spacer()
                     Button(action: {
                         Purchases.shared.purchase(package: currentOffering.availablePackages.first!) { (transaction, customerInfo, error, userCancelled) in
-                            if customerInfo?.entitlements.all["Pro access"]?.isActive == true {
+                            if customerInfo?.entitlements.all["pro"]?.isActive == true {
                                 userViewModel.isUserSubscribed = true
-                                showPaywall = false
+                                appProvider.showPaywall = false
                             }
                         }
                     }) {
@@ -134,30 +133,29 @@ struct PaywallView: View {
             Spacer()
             
             HStack {
-                Spacer()
                 Link(destination: URL(string: "https://docs.google.com/document/d/1uth_ytIH6sL8eJu1w2loQkPMonuRYz-c1yq5xkVK71k/edit?usp=sharing")!) {
                     Text("Privacy Policy")
-                        .font(.callout)
+                        .font(.caption)
                         .foregroundStyle(.gray)
                 }
                 Spacer()
                 Link(destination: URL(string: "https://docs.google.com/document/d/1VbemNFyZpawCaigbmEPzndAt3HN-iH4VsMH0Znsi-gU/edit?usp=sharing")!) {
                     Text("Terms of Use")
-                        .font(.callout)
+                        .font(.caption)
                         .foregroundStyle(.gray)
                 }
                 Spacer()
                 Button(action: {
                     Purchases.shared.restorePurchases { (customerInfo, error) in
-                        userViewModel.isUserSubscribed = customerInfo?.entitlements.all["Pro access"]?.isActive == true
+                        userViewModel.isUserSubscribed = customerInfo?.entitlements.all["pro"]?.isActive == true
                     }
                 }) {
                     Text("Restore Purchase")
-                        .font(.callout)
+                        .font(.caption)
                         .foregroundStyle(.gray)
                 }
             }
-            
+            .padding(.horizontal, 10)
             
             Spacer()
         }
@@ -166,6 +164,7 @@ struct PaywallView: View {
                 if let offer = offerings?.current, error == nil {
                     currentOffering = offer
                 }
+                print("\(error?.localizedDescription ?? "No error")")
             }
         }
         .padding(.horizontal, 20)
@@ -174,5 +173,5 @@ struct PaywallView: View {
 }
 
 #Preview {
-    PaywallView(showPaywall: .constant(false))
+    PaywallView()
 }

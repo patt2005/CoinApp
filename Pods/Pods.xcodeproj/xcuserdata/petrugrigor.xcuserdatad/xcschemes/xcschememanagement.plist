@@ -7,21 +7,21 @@
 		<key>Pods-CoinApp-CoinAppUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
 		<key>Pods-CoinApp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
 		<key>Pods-CoinAppTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>

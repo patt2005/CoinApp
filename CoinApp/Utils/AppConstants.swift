@@ -14,7 +14,12 @@ class AppConstants {
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
     static let primaryColor: Color = Color(hex: "#FF6500")
     
-    static let openAiApiKey = "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"
+    static let openAiApiKey = "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"
+}
+
+enum AppDestination: Hashable {
+    case coinDetail(coin: Coin)
+    case chartAnalysis(image: UIImage?, analysis: MemeCoinAnalysisResponse?)
 }
 
 func buildFormattedPrice(_ price: Double) -> some View {

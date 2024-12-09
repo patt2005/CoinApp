@@ -12,36 +12,38 @@ class AnalysisViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isLoading: Bool = false
     @Published var memeCoinAnalisys: MemeCoinAnalysisResponse?
+    @Published var showAlert: Bool = false
     
-    var updatePath: ((UUID) -> Void)?
-    
+    @ObservedObject var appProvider = AppProvider.instance
+
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
-    init(updatePath: @escaping (UUID) -> Void) {
-        self.updatePath = updatePath
-        
+
+    init() {
         $selectedImage.sink { newImage in
             guard let selectedImage = newImage else {
                 return
             }
-            
+
             DispatchQueue.main.async {
                 self.isLoading = true
             }
-            
+
             Task {
-                let analysisResult = await CMCApi.instance.analyzeChartImage(image: selectedImage)
-                
-                DispatchQueue.main.async {
-                    self.memeCoinAnalisys = analysisResult
+                do {
+                    self.memeCoinAnalisys = try await CMCApi.instance.analyzeChartImage(image: selectedImage)
                     
-                    if self.memeCoinAnalisys != nil {
-                        self.isLoading = false
-                    } else {
-                        print("Meme coin analysis failed")
+                    DispatchQueue.main.async {
+                        if self.memeCoinAnalisys != nil {
+                            self.isLoading = false
+                            self.appProvider.path.append(.chartAnalysis(image: self.selectedImage, analysis: self.memeCoinAnalisys!))
+                        } else {
+                            print("Meme coin analysis failed")
+                        }
                     }
+                } catch {
+                    self.showAlert = true
                 }
             }
         }
@@ -50,7 +52,7 @@ class AnalysisViewModel: ObservableObject {
 }
 
 struct AnalysisView: View {
-    @StateObject private var viewModel: AnalysisViewModel
+    @StateObject private var viewModel = AnalysisViewModel()
     
     @State private var isImagePickerPresented: Bool = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
@@ -59,20 +61,7 @@ struct AnalysisView: View {
     
     @EnvironmentObject private var userViewModel: UserViewModel
     
-    @Binding var path: [UUID]
-    @Binding var showPaywall: Bool
-    
-    init(path: Binding<[UUID]>, showPaywall: Binding<Bool>) {
-        self._path = path
-        self._showPaywall = showPaywall
-        
-        _viewModel = StateObject(wrappedValue: AnalysisViewModel(updatePath: { uuid in
-            path.wrappedValue.append(uuid)
-        }))
-    }
-    
     var body: some View {
-        NavigationStack(path: $path) {
             ScrollView {
                 VStack {
                     Text("MemeAI")
@@ -103,7 +92,7 @@ struct AnalysisView: View {
                             showActionSheet = true
                         } else {
                             withAnimation {
-                                showPaywall = true
+                                viewModel.appProvider.showPaywall = true
                             }
                         }
                     }) {
@@ -138,6 +127,11 @@ struct AnalysisView: View {
                     }
                 }
             }
+            .alert("Error", isPresented: $viewModel.showAlert, actions: {
+                Button("OK", role: .cancel) {}
+            }, message: {
+                Text("There was an error analyzing the chart. Please try again.")
+            })
             .background(AppConstants.backgroundColor)
             .actionSheet(isPresented: $showActionSheet) {
                 ActionSheet(
@@ -159,11 +153,7 @@ struct AnalysisView: View {
             .sheet(isPresented: $isImagePickerPresented) {
                 ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
             }
-            .navigationDestination(for: UUID.self, destination: { _ in
-                ChartAnalysisView(image: viewModel.selectedImage!, analysis: $viewModel.memeCoinAnalisys)
-            })
         }
-    }
 }
 
 //#Preview {

@@ -9,10 +9,31 @@ import SwiftUI
 
 struct CoinListCard: View {
     let coin: Coin
+    
+    @ObservedObject private var appProvider = AppProvider.instance
+    
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     @Binding var pickedDateRange: String
     
+    let type: String
+    
+    init(coin: Coin, type: String, pickedDateRange: Binding<String>) {
+        self.coin = coin
+        self.type = type
+        self._pickedDateRange = pickedDateRange
+    }
+    
     var body: some View {
-        NavigationLink(destination: CoinDetailsView(coin: coin)) {
+        Button(action: {
+            if userViewModel.isUserSubscribed {
+                appProvider.path.append(.coinDetail(coin: coin))
+            } else {
+                withAnimation {
+                    appProvider.showPaywall = true
+                }
+            }
+        }) {
             VStack {
                 Divider()
                     .background(Color.gray.opacity(0.25))
@@ -55,7 +76,7 @@ struct CoinListCard: View {
                     Spacer()
                     VStack(alignment: .trailing) {
                         buildFormattedPrice(coin.price)
-                        coin.getPriceChangeText(pickedDateRange)
+                        coin.getPriceChangeText(type == "Gainers" || type == "Losers" ? pickedDateRange : "24h")
                     }
                 }
                 .padding(.horizontal, 20)

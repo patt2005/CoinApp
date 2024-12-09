@@ -29,7 +29,7 @@ class SearchViewModel: ObservableObject {
     
     func loadInitialResults() {
         if results.isEmpty {
-            self.results = AppProvider.instance.gainersList.shuffled()
+            self.results = AppProvider.instance.trendingList.shuffled()
         }
     }
     
@@ -76,7 +76,7 @@ struct SearchView: View {
                 }
             } else {
                 ForEach(viewModel.results, id: \.self) { coin in
-                    CoinListCard(coin: coin, pickedDateRange: .constant("24h"))
+                    CoinListCard(coin: coin, type: "", pickedDateRange: .constant("24h"))
                 }
             }
             

@@ -3,7 +3,6 @@ import Combine
 
 class ContentViewModel: ObservableObject {
     @Published var selectedTab = 0
-    @Published var path: [UUID] = []
     
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     
@@ -22,24 +21,24 @@ class ContentViewModel: ObservableObject {
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
     
+    @ObservedObject private var appProvider = AppProvider.instance
+    
     @State private var isSearchSheetPresented = false
     @State private var showAlert = false
-    @State private var showOnboarding = true
-    @State private var showPaywall = false
     
     @EnvironmentObject private var userViewModel: UserViewModel
     
     var body: some View {
         ZStack {
-            NavigationStack(path: $viewModel.path) {
+            NavigationStack(path: $appProvider.path) {
                 TabView(selection: $viewModel.selectedTab) {
-                    CoinListView(showPaywall:  $showPaywall)
+                    CoinListView()
                         .tabItem {
                             Label("Trending", systemImage: "waveform")
                         }
                         .tag(0)
                     
-                    AnalysisView(path: $viewModel.path, showPaywall: $showPaywall)
+                    AnalysisView()
                         .tabItem {
                             Label("Analysis", systemImage: "chart.line.uptrend.xyaxis")
                         }
@@ -62,6 +61,7 @@ struct ContentView: View {
                                 .frame(width: 30, height: 30)
                         }
                     }
+                    
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
@@ -75,13 +75,19 @@ struct ContentView: View {
                 .navigationTitle("MemeAI")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(AppConstants.backgroundColor)
+                .navigationDestination(for: AppDestination.self) { destination in
+                    switch destination {
+                    case .coinDetail(let coin): CoinDetailsView(coin: coin)
+                    case .chartAnalysis(let image, let analysis): ChartAnalysisView(image: image, analysis: analysis)
+                    }
+                }
+                .blur(radius: appProvider.showPaywall || appProvider.showOnboarding ? 4 : 0)
             }
-            .blur(radius: showPaywall || showOnboarding ? 4 : 0)
             
-            if showOnboarding {
-                OnboardingView(showOnboarding: $showOnboarding, showPaywall: $showPaywall)
-            } else if showPaywall && !userViewModel.isUserSubscribed {
-                PaywallView(showPaywall: $showPaywall)
+            if appProvider.showOnboarding {
+                OnboardingView()
+            } else if appProvider.showPaywall {
+                PaywallView()
             }
         }
     }

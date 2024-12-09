@@ -24,8 +24,7 @@ struct OnboardingView: View {
     
     @Environment(\.requestReview) var requestReview
     
-    @Binding var showOnboarding: Bool
-    @Binding var showPaywall: Bool
+    @ObservedObject private var appProvider = AppProvider.instance
     
     @State private var currentStep: Int = 0
     
@@ -94,16 +93,22 @@ struct OnboardingView: View {
             .padding(.bottom, 80)
             
             Button(action: {
-                if currentStep < onboardingSteps.count - 1 {
-                    impactFeedback.impactOccurred()
+                impactFeedback.impactOccurred()
+                if currentStep < onboardingSteps.count - 2 {
                     withAnimation {
                         currentStep += 1
                     }
-                } else {
-                    requestReview()
+                } else if currentStep == onboardingSteps.count - 2 {
                     withAnimation {
-                        showOnboarding = false
-                        showPaywall = true
+                        currentStep += 1
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        requestReview()
+                    }
+                } else {
+                    withAnimation {
+                        appProvider.completeOnboarding()
+                        appProvider.showPaywall = true
                     }
                 }
             }) {

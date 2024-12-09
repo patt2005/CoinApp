@@ -13,7 +13,7 @@ class UserViewModel: ObservableObject {
     
     init() {
         Purchases.shared.getCustomerInfo { (customerInfo, error) in
-            self.isUserSubscribed = customerInfo?.entitlements.all["Pro access"]?.isActive == true
+            self.isUserSubscribed = customerInfo?.entitlements.all["pro"]?.isActive == true
         }
     }
 }

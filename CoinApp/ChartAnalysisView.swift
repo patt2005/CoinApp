@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct ChartAnalysisView: View {
-    let image: UIImage
-    @Binding var analysis: MemeCoinAnalysisResponse?
+    var image: UIImage?
+    var analysis: MemeCoinAnalysisResponse?
     
     var body: some View {
         if let analysis = analysis {
             ScrollView {
                 VStack(alignment: .center) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(2.5)
-                        .frame(height: 200)
-                        .padding(.top, 15)
+                    if let image = image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(2.5)
+                            .frame(height: 200)
+                            .padding(.top, 15)
+                    }
                     
                     VStack(alignment: .leading) {
                         Text("General Trend")
