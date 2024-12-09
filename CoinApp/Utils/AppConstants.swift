@@ -14,7 +14,10 @@ class AppConstants {
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
     static let primaryColor: Color = Color(hex: "#FF6500")
     
-    static let openAiApiKey = "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"
+    var openAiApiKey: String {
+        let env = ProcessInfo.processInfo.environment
+        return env["OPEN_AI_API_KEY"] ?? ""
+    }
 }
 
 enum AppDestination: Hashable {

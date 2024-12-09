@@ -376,7 +376,7 @@ class CMCApi {
         
         let headers = [
             "Content-Type": "application/json",
-            "Authorization": "Bearer \(AppConstants.openAiApiKey)"
+            "Authorization": "Bearer \(AppConstants().openAiApiKey)"
         ]
         
         let requestBody: [String: Any] = [
