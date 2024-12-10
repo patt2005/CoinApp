@@ -55,7 +55,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -74,13 +74,6 @@
             ReferencedContainer = "container:CoinApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "OPEN_AI_API_KEY"
-            value = "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"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
