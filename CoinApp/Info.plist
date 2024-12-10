@@ -7,5 +7,10 @@
 		<string>Inter.ttf</string>
 		<string>Gabarito.ttf</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>background-color</string>
+	</dict>
 </dict>
 </plist>

@@ -85,7 +85,7 @@ struct AnalysisView: View {
                         .font(Font.custom("Inter", size: 16))
                         .foregroundStyle(.gray)
                         .padding(.top, 25)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 25)
                     
                     Button(action: {
                         if userViewModel.isUserSubscribed {
@@ -106,7 +106,7 @@ struct AnalysisView: View {
                                 .foregroundStyle(.white)
                         }
                         .padding(.vertical, 13)
-                        .padding(.horizontal, 80)
+                        .padding(.horizontal, 90)
                         .background(AppConstants.primaryColor)
                         .cornerRadius(18)
                         .padding(.top, 90)

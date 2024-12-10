@@ -234,7 +234,20 @@ struct CoinDetailsView: View {
                                     .cornerRadius(15)
                                 }
                             }
-                            .padding(.bottom, 20)
+                            
+//                            HStack {
+//                                Image(systemName: "flame")
+//                                    .font(.title2)
+//                                Text("Get analysis")
+//                                    .font(Font.custom("Inter", size: 18).weight(.medium))
+//                                    .foregroundStyle(.white)
+//                            }
+//                            .frame(maxWidth: .infinity)
+//                            .padding(.vertical, 15)
+//                            .background(AppConstants.primaryColor)
+//                            .cornerRadius(15)
+//                            .padding(.top, 5)
+//                            .padding(.bottom, 20)
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 20)

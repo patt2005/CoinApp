@@ -14,6 +14,8 @@ struct PaywallView: View {
     @ObservedObject private var appProvider = AppProvider.instance
     @EnvironmentObject private var userViewModel: UserViewModel
     
+    @State private var isPurchasing = false
+    
     var body: some View {
         VStack(alignment: .trailing) {
             HStack {
@@ -26,14 +28,25 @@ struct PaywallView: View {
                 }
                 Spacer()
             }
-            .padding(.top, 20)
+            .padding(.top, 8)
+            
+            HStack(alignment: .center) {
+                Image(systemName: "crown.fill")
+                    .font(.title)
+                    .foregroundStyle(Color(hex: "#FFD737"))
+                
+                Text("MemeAI Pro Access")
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(Color(hex: "#FFD737"))
+            }
+            .padding(.top, 25)
             
             Text("Upgrade to Pro Subscription to Unlock All Features")
                 .lineLimit(2)
                 .multilineTextAlignment(.trailing)
                 .font(Font.custom("Inter", size: 24).weight(.medium))
                 .foregroundColor(AppConstants.primaryColor)
-                .padding(.top, 80)
+                .padding(.top, 25)
             
             HStack {
                 Text("3 Days Free Trial")
@@ -93,21 +106,30 @@ struct PaywallView: View {
                 HStack {
                     Spacer()
                     Button(action: {
+                        isPurchasing = true
                         Purchases.shared.purchase(package: currentOffering.availablePackages.first!) { (transaction, customerInfo, error, userCancelled) in
                             if customerInfo?.entitlements.all["pro"]?.isActive == true {
-                                userViewModel.isUserSubscribed = true
-                                appProvider.showPaywall = false
+                                withAnimation {
+                                    userViewModel.isUserSubscribed = true
+                                    appProvider.showPaywall = false
+                                }
                             }
+                            isPurchasing = false
                         }
                     }) {
-                        Text("Try Free & Subscribe")
-                            .font(Font.custom("Inter", size: 21)).fontWeight(.semibold)
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 40)
-                            .padding(.vertical, 13)
-                            .background(AppConstants.primaryColor)
-                            .cornerRadius(30)
-                        
+                        ZStack {
+                            if isPurchasing {
+                                ProgressView()
+                            }
+                            Text("Try Free & Subscribe")
+                                .font(Font.custom("Inter", size: 21)).fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .opacity(isPurchasing ? 0 : 1)
+                        }
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 13)
+                        .background(AppConstants.primaryColor)
+                        .cornerRadius(30)
                     }
                     Spacer()
                 }
@@ -116,7 +138,7 @@ struct PaywallView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Text("Try 3 days free, then $3.99/week.")
+                        Text("Try 3 days free, then \(currentOffering.availablePackages.first!.localizedPriceString) / week.")
                             .font(Font.custom("Inter", size: 16))
                             .foregroundStyle(.gray)
                         
@@ -146,7 +168,7 @@ struct PaywallView: View {
                 }
                 Spacer()
                 Button(action: {
-                    Purchases.shared.restorePurchases { (customerInfo, error) in
+                    Purchases.shared.restorePurchases { customerInfo, error in
                         userViewModel.isUserSubscribed = customerInfo?.entitlements.all["pro"]?.isActive == true
                     }
                 }) {
@@ -164,7 +186,6 @@ struct PaywallView: View {
                 if let offer = offerings?.current, error == nil {
                     currentOffering = offer
                 }
-                print("\(error?.localizedDescription ?? "No error")")
             }
         }
         .padding(.horizontal, 20)

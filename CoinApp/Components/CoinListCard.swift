@@ -16,6 +16,8 @@ struct CoinListCard: View {
     
     @Binding var pickedDateRange: String
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     let type: String
     
     init(coin: Coin, type: String, pickedDateRange: Binding<String>) {
@@ -26,6 +28,7 @@ struct CoinListCard: View {
     
     var body: some View {
         Button(action: {
+            impactFeedback.impactOccurred()
             if userViewModel.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {
@@ -81,6 +84,9 @@ struct CoinListCard: View {
                 }
                 .padding(.horizontal, 20)
             }
+        }
+        .onAppear {
+            impactFeedback.prepare()
         }
     }
 }

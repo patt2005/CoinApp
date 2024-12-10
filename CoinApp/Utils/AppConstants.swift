@@ -151,15 +151,3 @@ extension Color {
         )
     }
 }
-
-extension SubscriptionPeriod {
-    var durationTitle: String {
-        switch self.unit {
-        case .day: return "day"
-        case .week: return "week"
-        case .month: return "month"
-        case .year: return "year"
-        default: return "Unknown"
-        }
-    }
-}

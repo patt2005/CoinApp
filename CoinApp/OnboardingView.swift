@@ -102,7 +102,7 @@ struct OnboardingView: View {
                     withAnimation {
                         currentStep += 1
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                         requestReview()
                     }
                 } else {
