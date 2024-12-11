@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0465BE20FB981980BF688D99 /* Pods_CoinAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7F8799C80CFFB17A34CA66 /* Pods_CoinAppTests.framework */; };
+		817697DB2D0952A200B1D2FD /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817697DA2D0952A200B1D2FD /* AdSupport.framework */; };
 		81C9E1992CFCE149002BB1FF /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E1982CFCE149002BB1FF /* SuperwallKit */; };
 		81C9E19C2CFD0128002BB1FF /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E19B2CFD0128002BB1FF /* RevenueCat */; };
 		81C9E19E2CFD0128002BB1FF /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E19D2CFD0128002BB1FF /* RevenueCatUI */; };
 		81E066742D06ED3E00D4BF85 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81E066732D06ED3E00D4BF85 /* StoreKit.framework */; };
-		81EBB1982CF9C9740097A472 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81EBB1972CF9C9740097A472 /* SVGKit */; };
-		81EBB19A2CF9C9740097A472 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81EBB1992CF9C9740097A472 /* SVGKitSwift */; };
+		81F3F66E2D08B4790001BE50 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F66D2D08B4790001BE50 /* FirebaseAnalytics */; };
+		81F3F6702D08B4790001BE50 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F66F2D08B4790001BE50 /* FirebaseCrashlytics */; };
+		81F3F6722D08B4790001BE50 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F6712D08B4790001BE50 /* FirebaseMessaging */; };
+		81F3F6742D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F6732D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		E68CD689247E66FD4BAFB71A /* Pods_CoinApp_CoinAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7C37BE0016EB02FDD00E12 /* Pods_CoinApp_CoinAppUITests.framework */; };
 		EE170111A6CDAD9F8A7492F9 /* Pods_CoinApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC6229D437D5951B058DE41 /* Pods_CoinApp.framework */; };
 /* End PBXBuildFile section */
@@ -44,6 +47,7 @@
 		8131B05E2CF3173F003A01B1 /* CoinApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoinApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8131B06E2CF31740003A01B1 /* CoinAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoinAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8131B0782CF31740003A01B1 /* CoinAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoinAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		817697DA2D0952A200B1D2FD /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		81E066732D06ED3E00D4BF85 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8EDF643DBF941FB35AF3D840 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp-CoinAppUITests.release.xcconfig"; path = "Target Support Files/Pods-CoinApp-CoinAppUITests/Pods-CoinApp-CoinAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B0FC4B4E8D255A9418753F21 /* Pods-CoinApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp.debug.xcconfig"; path = "Target Support Files/Pods-CoinApp/Pods-CoinApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +63,20 @@
 			);
 			target = 8131B05D2CF3173F003A01B1 /* CoinApp */;
 		};
+		81F3F66A2D08B3760001BE50 /* Exceptions for "CoinApp" folder in "CoinAppTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = 8131B06D2CF31740003A01B1 /* CoinAppTests */;
+		};
+		81F3F66B2D08B3760001BE50 /* Exceptions for "CoinApp" folder in "CoinAppUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = 8131B0772CF31740003A01B1 /* CoinAppUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -66,6 +84,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				814D04062CF910C700F7BC40 /* Exceptions for "CoinApp" folder in "CoinApp" target */,
+				81F3F66A2D08B3760001BE50 /* Exceptions for "CoinApp" folder in "CoinAppTests" target */,
+				81F3F66B2D08B3760001BE50 /* Exceptions for "CoinApp" folder in "CoinAppUITests" target */,
 			);
 			path = CoinApp;
 			sourceTree = "<group>";
@@ -88,10 +108,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				81C9E19C2CFD0128002BB1FF /* RevenueCat in Frameworks */,
+				817697DB2D0952A200B1D2FD /* AdSupport.framework in Frameworks */,
 				81E066742D06ED3E00D4BF85 /* StoreKit.framework in Frameworks */,
-				81EBB19A2CF9C9740097A472 /* SVGKitSwift in Frameworks */,
-				81EBB1982CF9C9740097A472 /* SVGKit in Frameworks */,
+				81F3F6722D08B4790001BE50 /* FirebaseMessaging in Frameworks */,
+				81F3F66E2D08B4790001BE50 /* FirebaseAnalytics in Frameworks */,
+				81F3F6742D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				81C9E19E2CFD0128002BB1FF /* RevenueCatUI in Frameworks */,
+				81F3F6702D08B4790001BE50 /* FirebaseCrashlytics in Frameworks */,
 				81C9E1992CFCE149002BB1FF /* SuperwallKit in Frameworks */,
 				EE170111A6CDAD9F8A7492F9 /* Pods_CoinApp.framework in Frameworks */,
 			);
@@ -132,6 +155,7 @@
 		65337F086940FEDD2A64E086 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				817697DA2D0952A200B1D2FD /* AdSupport.framework */,
 				81E066732D06ED3E00D4BF85 /* StoreKit.framework */,
 				3CC6229D437D5951B058DE41 /* Pods_CoinApp.framework */,
 				6E7C37BE0016EB02FDD00E12 /* Pods_CoinApp_CoinAppUITests.framework */,
@@ -173,6 +197,7 @@
 				8131B05A2CF3173F003A01B1 /* Sources */,
 				8131B05B2CF3173F003A01B1 /* Frameworks */,
 				8131B05C2CF3173F003A01B1 /* Resources */,
+				8164B8C92D0948630039252D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -183,11 +208,13 @@
 			);
 			name = CoinApp;
 			packageProductDependencies = (
-				81EBB1972CF9C9740097A472 /* SVGKit */,
-				81EBB1992CF9C9740097A472 /* SVGKitSwift */,
 				81C9E1982CFCE149002BB1FF /* SuperwallKit */,
 				81C9E19B2CFD0128002BB1FF /* RevenueCat */,
 				81C9E19D2CFD0128002BB1FF /* RevenueCatUI */,
+				81F3F66D2D08B4790001BE50 /* FirebaseAnalytics */,
+				81F3F66F2D08B4790001BE50 /* FirebaseCrashlytics */,
+				81F3F6712D08B4790001BE50 /* FirebaseMessaging */,
+				81F3F6732D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport */,
 			);
 			productName = CoinApp;
 			productReference = 8131B05E2CF3173F003A01B1 /* CoinApp.app */;
@@ -270,9 +297,9 @@
 			mainGroup = 8131B0552CF3173F003A01B1;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				81EBB1962CF9C9320097A472 /* XCRemoteSwiftPackageReference "SVGKit" */,
 				81C9E1972CFCE149002BB1FF /* XCRemoteSwiftPackageReference "Superwall-iOS" */,
 				81C9E19A2CFD0128002BB1FF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8131B05F2CF3173F003A01B1 /* Products */;
@@ -332,6 +359,28 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		8164B8C92D0948630039252D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 		CFA1F7AA1B96642B87869E4A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -543,8 +592,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = MainAppColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = CoinApp/CoinApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = VGKDATW82L;
 				ENABLE_PREVIEWS = YES;
@@ -554,6 +605,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to allow you to take photos for analysis.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to allow you to select images for analysis.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide personalized content and improve your experience within the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -563,7 +615,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codbun.meme.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -579,8 +632,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = MainAppColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = CoinApp/CoinApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = VGKDATW82L;
 				ENABLE_PREVIEWS = YES;
@@ -590,6 +644,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to allow you to take photos for analysis.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to allow you to select images for analysis.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide personalized content and improve your experience within the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -599,7 +654,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codbun.meme.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -743,12 +799,12 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		81EBB1962CF9C9320097A472 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+		81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SVGKit/SVGKit";
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
+				minimumVersion = 11.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -769,15 +825,25 @@
 			package = 81C9E19A2CFD0128002BB1FF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCatUI;
 		};
-		81EBB1972CF9C9740097A472 /* SVGKit */ = {
+		81F3F66D2D08B4790001BE50 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 81EBB1962CF9C9320097A472 /* XCRemoteSwiftPackageReference "SVGKit" */;
-			productName = SVGKit;
+			package = 81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
-		81EBB1992CF9C9740097A472 /* SVGKitSwift */ = {
+		81F3F66F2D08B4790001BE50 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 81EBB1962CF9C9320097A472 /* XCRemoteSwiftPackageReference "SVGKit" */;
-			productName = SVGKitSwift;
+			package = 81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		81F3F6712D08B4790001BE50 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		81F3F6732D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81F3F66C2D08B4790001BE50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

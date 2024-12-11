@@ -15,21 +15,21 @@ class AnalysisViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
     @ObservedObject var appProvider = AppProvider.instance
-
+    
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-
+    
     private var cancellables = Set<AnyCancellable>()
-
+    
     init() {
         $selectedImage.sink { newImage in
             guard let selectedImage = newImage else {
                 return
             }
-
+            
             DispatchQueue.main.async {
                 self.isLoading = true
             }
-
+            
             Task {
                 do {
                     self.memeCoinAnalisys = try await CMCApi.instance.analyzeChartImage(image: selectedImage)
@@ -62,98 +62,98 @@ struct AnalysisView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     
     var body: some View {
-            ScrollView {
-                VStack {
-                    Text("MemeAI")
-                        .foregroundStyle(AppConstants.primaryColor)
-                        .font(Font.custom("Gabarito", size: 36))
-                        .padding(.bottom, 5)
-                        .padding(.top, 75)
+        ScrollView {
+            VStack {
+                Text("MemeAI")
+                    .foregroundStyle(AppConstants.primaryColor)
+                    .font(Font.custom("Gabarito", size: 36))
+                    .padding(.bottom, 5)
+                    .padding(.top, 75)
+                
+                HStack {
+                    Image(systemName: "crown.fill")
+                        .font(.title)
+                        .foregroundStyle(Color(hex: "#FFD737"))
                     
+                    Text("AI Chart Analysis")
+                        .font(.title2.weight(.semibold))
+                        .foregroundStyle(Color(hex: "#FFD737"))
+                }
+                
+                Text("Understand any chart with the help of the AI Chart Analysis! Take a photo of the chart and get instant information and details.")
+                    .multilineTextAlignment(.center)
+                    .font(.body)
+                    .foregroundStyle(.gray)
+                    .padding(.top, 25)
+                    .padding(.horizontal, 25)
+                
+                Button(action: {
+                    if userViewModel.isUserSubscribed {
+                        showActionSheet = true
+                    } else {
+                        withAnimation {
+                            viewModel.appProvider.showPaywall = true
+                        }
+                    }
+                }) {
                     HStack {
-                        Image(systemName: "crown.fill")
-                            .font(.title)
-                            .foregroundStyle(Color(hex: "#FFD737"))
+                        Image(systemName: "photo.badge.plus.fill")
+                            .font(.title2)
+                            .foregroundStyle(.white)
                         
-                        Text("AI Chart Analysis")
-                            .font(.title2.weight(.semibold))
-                            .foregroundStyle(Color(hex: "#FFD737"))
+                        Text("Get Analysis")
+                            .font(Font.custom("Inter", size: 17).weight(.medium))
+                            .foregroundStyle(.white)
                     }
-                    
-                    Text("Understand any chart with the help of he AI Chart Analysis! Take a photo of the chart and get instant information and details.")
-                        .multilineTextAlignment(.center)
-                        .font(Font.custom("Inter", size: 16))
-                        .foregroundStyle(.gray)
-                        .padding(.top, 25)
-                        .padding(.horizontal, 25)
-                    
-                    Button(action: {
-                        if userViewModel.isUserSubscribed {
-                            showActionSheet = true
-                        } else {
-                            withAnimation {
-                                viewModel.appProvider.showPaywall = true
-                            }
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "photo.badge.plus.fill")
-                                .font(.title2)
-                                .foregroundStyle(.white)
-                            
-                            Text("Get Analysis")
-                                .font(Font.custom("Inter", size: 17).weight(.medium))
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.vertical, 13)
-                        .padding(.horizontal, 90)
-                        .background(AppConstants.primaryColor)
-                        .cornerRadius(18)
-                        .padding(.top, 90)
+                    .padding(.vertical, 13)
+                    .padding(.horizontal, 90)
+                    .background(AppConstants.primaryColor)
+                    .cornerRadius(18)
+                    .padding(.top, 90)
+                }
+                
+                if viewModel.isLoading {
+                    VStack {
+                        ProgressView("Analyzing...")
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .font(.headline)
+                            .foregroundColor(.white)
                     }
-                    
-                    if viewModel.isLoading {
-                        VStack {
-                            ProgressView("Analyzing...")
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .font(.headline)
-                                .foregroundColor(.white)
-                        }
-                        .padding(.top, 30)
-                    }
-                    
-                    HStack {
-                        Spacer()
-                    }
+                    .padding(.top, 30)
+                }
+                
+                HStack {
+                    Spacer()
                 }
             }
-            .alert("Error", isPresented: $viewModel.showAlert, actions: {
-                Button("OK", role: .cancel) {}
-            }, message: {
-                Text("There was an error analyzing the chart. Please try again.")
-            })
-            .background(AppConstants.backgroundColor)
-            .actionSheet(isPresented: $showActionSheet) {
-                ActionSheet(
-                    title: Text("Photo Options"),
-                    message: Text("Choose how you want to select a photo"),
-                    buttons: [
-                        .default(Text("From Photos")) {
-                            sourceType = .photoLibrary
-                            isImagePickerPresented.toggle()
-                        },
-                        .default(Text("Take Picture")) {
-                            sourceType = .camera
-                            isImagePickerPresented.toggle()
-                        },
-                        .cancel {}
-                    ]
-                )
-            }
-            .sheet(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
-            }
         }
+        .alert("Error", isPresented: $viewModel.showAlert, actions: {
+            Button("OK", role: .cancel) {}
+        }, message: {
+            Text("There was an error analyzing the chart. Please try again.")
+        })
+        .background(AppConstants.backgroundColor)
+        .actionSheet(isPresented: $showActionSheet) {
+            ActionSheet(
+                title: Text("Photo Options"),
+                message: Text("Choose how you want to select a photo"),
+                buttons: [
+                    .default(Text("From Photos")) {
+                        sourceType = .photoLibrary
+                        isImagePickerPresented.toggle()
+                    },
+                    .default(Text("Take Picture")) {
+                        sourceType = .camera
+                        isImagePickerPresented.toggle()
+                    },
+                    .cancel {}
+                ]
+            )
+        }
+        .sheet(isPresented: $isImagePickerPresented) {
+            ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
+        }
+    }
 }
 
 //#Preview {

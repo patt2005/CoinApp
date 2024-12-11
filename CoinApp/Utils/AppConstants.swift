@@ -14,6 +14,8 @@ class AppConstants {
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
     static let primaryColor: Color = Color(hex: "#FF6500")
     
+    static let revenueCatApiKey = "appl_uJbYFaiwBZHJPOMizXgSqOvSqbV"
+    
     struct ApiResponse: Decodable {
         let OPEN_AI_API_KEY: String
     }
@@ -24,8 +26,6 @@ class AppConstants {
         do {
             let (data, _) = try await URLSession.shared.data(from: URL(string: apiUrl)!)
             let content = try JSONDecoder().decode(ApiResponse.self, from: data)
-            
-            print(content.OPEN_AI_API_KEY)
             
             return content.OPEN_AI_API_KEY
         } catch {

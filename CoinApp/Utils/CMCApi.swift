@@ -13,6 +13,8 @@ struct Coin: Decodable, Identifiable, Hashable {
     let name: String
     let symbol: String
     let price: Double
+    let selfReportedMarketCap: Double?
+    let marketCap: Double
     let priceChange1h: Double?
     let priceChange24h: Double
     let priceChange7d: Double?
@@ -65,6 +67,8 @@ struct Coin: Decodable, Identifiable, Hashable {
         case id
         case name
         case symbol
+        case selfReportedMarketCap
+        case marketCap
         case priceChange
     }
     
@@ -84,6 +88,8 @@ struct Coin: Decodable, Identifiable, Hashable {
         case price = "priceUsd"
         case priceChange24h
         case volume24h
+        case selfReportedMarketCap
+        case marketCap
     }
     
     private enum BaseTokenKeys: String, CodingKey {
@@ -103,6 +109,8 @@ struct Coin: Decodable, Identifiable, Hashable {
             let priceChange7d = try? priceContainer.decode(Double.self, forKey: .priceChange7d)
             let priceChange30d = try? priceContainer.decode(Double.self, forKey: .priceChange30d)
             let volume24h = try priceContainer.decode(Double.self, forKey: .volume24h)
+            let marketCap = try container.decode(Double.self, forKey: .marketCap)
+            let selfReportedMarketCap = try container.decode(Double.self, forKey: .selfReportedMarketCap)
             
             self.id = id
             self.name = name
@@ -113,6 +121,8 @@ struct Coin: Decodable, Identifiable, Hashable {
             self.priceChange7d = priceChange7d
             self.priceChange30d = priceChange30d
             self.volume24h = volume24h
+            self.marketCap = marketCap
+            self.selfReportedMarketCap = selfReportedMarketCap
         } catch {
             let container = try decoder.container(keyedBy: PairKeys.self)
             let baseTokenContainer = try container.nestedContainer(keyedBy: BaseTokenKeys.self, forKey: .baseToken)
@@ -125,6 +135,8 @@ struct Coin: Decodable, Identifiable, Hashable {
             let price = try Double(container.decode(String.self, forKey: .price)) ?? 0.0
             let priceChange24h = try Double(container.decode(String.self, forKey: .priceChange24h)) ?? 0.0
             let volume24h = try Double(container.decode(String.self, forKey: .volume24h)) ?? 0.0
+            let selfReportedMarketCap = try? container.decode(Double.self, forKey: .selfReportedMarketCap)
+            let marketcap = try container.decode(String.self, forKey: .marketCap)
             
             self.id = intBaseTokenId
             self.name = name
@@ -135,6 +147,8 @@ struct Coin: Decodable, Identifiable, Hashable {
             self.priceChange7d = nil
             self.priceChange30d = nil
             self.volume24h = volume24h
+            self.selfReportedMarketCap = selfReportedMarketCap
+            self.marketCap = Double(marketcap) ?? 0.0
         }
     }
 }
@@ -292,6 +306,109 @@ class CMCApi {
         case invalidData
     }
     
+    func getCoinAnalysis(coin: Coin, priceList: [Double], dateRange: String) async throws -> MemeCoinAnalysisResponse {
+        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
+        
+        let apiKey = await AppConstants.getApiKey()
+        
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(apiKey)"
+        ]
+        
+        let priceListFormatted = priceList.enumerated().map { index, price in
+            "\"\(index + 1)\": \(price)"
+        }.joined(separator: ", ")
+        
+        let requestBody: [String: Any] = [
+            "model": "gpt-4o-mini",
+            "messages": [
+                [
+                    "role": "system",
+                    "content": """
+                You are a professional trader specializing in meme coins and cryptocurrency markets. 
+                You have extensive experience analyzing chart patterns, market trends, and identifying key factors that drive meme coin behavior. 
+                Your expertise includes understanding the volatile nature of meme coins, the impact of social media trends, community-driven market moves, and the role of celebrity endorsements. 
+                When analyzing charts, you focus on identifying early trends, breakout points, pump-and-dump patterns, and the influence of social sentiment. 
+                You are able to analyze a chart to determine which meme coin it is, providing detailed insights about its potential price movements, and the likelihood of continued hype or market correction. 
+                Your goal is to provide actionable insights on the meme coin, with a focus on spotting opportunities, understanding volatility, and predicting potential future movements.
+        
+                Please return your analysis in the following JSON format with the following sections:
+                
+                - **"general_trend"**: A detailed analysis of the current trend, whether it’s bullish, bearish, or neutral. Include key trend points like price movements, support, and resistance levels.
+                
+                - **"indicator_analysis"**: A breakdown of technical indicators used in the analysis. This may include moving averages, RSI, MACD, Bollinger Bands, etc. Provide insights into whether these indicators support the trend or signal a reversal.
+                
+                - **"chart_pattern"**: Analyze the chart for any recognizable patterns, such as triangles, head and shoulders, or double tops/bottoms. Mention if the chart pattern indicates a continuation or reversal.
+                
+                - **"future_market_prediction"**: A forecast of the potential market movements. Discuss any predicted future price movements, possible breakouts or breakdowns, or potential consolidation areas.
+        
+        If insufficient data is provided, return a general market analysis in the same JSON format.
+        
+        Sample Json Response:
+        
+                {
+                    "general_trend": "The current trend is neutral, as the coin has been experiencing a sideways movement over the past few days. Price action has not shown strong directional momentum.",
+                    "indicator_analysis": "The RSI is currently at 50, indicating a neutral market sentiment. The MACD is flat, and there are no strong buy or sell signals. Bollinger Bands are showing low volatility, suggesting consolidation.",
+                    "chart_pattern": "There are no significant patterns observed in the chart. The price action is range-bound, and there is no clear breakout or breakdown signal at the moment.",
+                    "future_market_prediction": "In the short term, the market is expected to remain relatively stable. However, any new market catalyst, such as news or social sentiment, could drive price movement in either direction."
+                }
+        """
+                ],
+                [
+                    "role": "user",
+                    "content": """
+        Analyze the following meme coin information and historical price data:
+        - Coin Name: \(coin.name)
+        - Symbol: \(coin.symbol)
+        - Current Price: \(coin.price)
+        - Price Change (24h): \(coin.priceChange24h)%
+        - Volume (24h): \(coin.volume24h)
+        - Price Data (ordered by timestamp): {\(priceListFormatted)}
+        - Date Range: \(dateRange)
+        """
+                ]
+            ]
+        ]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
+            print("Error: Unable to serialize JSON")
+            throw ApiAnalysisError.invalidData
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = jsonData
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            
+            let responseObject = try JSONDecoder().decode(OpenAIAPIResponse.self, from: data)
+            
+            var messageContent = responseObject.choices.first?.message.content ?? ""
+            
+            if messageContent.hasPrefix("```json") {
+                messageContent = messageContent.replacingOccurrences(of: "```json", with: "")
+            }
+            if messageContent.hasSuffix("```") {
+                messageContent = messageContent.replacingOccurrences(of: "```", with: "")
+            }
+            
+            if let jsonData = messageContent.data(using: .utf8) {
+                let analysis = try JSONDecoder().decode(MemeCoinAnalysisResponse.self, from: jsonData)
+                
+                return analysis
+            } else {
+                print("Error: Unable to parse cleaned JSON string")
+                throw ApiAnalysisError.invalidData
+            }
+        } catch {
+            print("Caught an error: \(error.localizedDescription)")
+            throw ApiAnalysisError.invalidData
+        }
+    }
+    
     func getCoinPriceList(id: Int, dateRange: String) async -> [Double] {
         guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=\(id)&range=\(dateRange.uppercased())") else { return [] }
         
@@ -334,9 +451,22 @@ class CMCApi {
             
             let decoded = try JSONDecoder().decode(SearchApiResponse.self, from: data)
             
-            return decoded.data.pairs.filter { coin in
+            let filteredList = decoded.data.pairs.filter { coin in
                 return coin.id != 0
             }
+            
+            var seenIds = Set<Int>()
+            let uniqueFilteredList = filteredList.filter { coin in
+                if seenIds.contains(coin.id) {
+                    return false
+                } else {
+                    
+                    seenIds.insert(coin.id)
+                    return true
+                }
+            }
+            
+            return uniqueFilteredList
         } catch {
             print("Caught while fetching search api an error: \(error)")
         }

@@ -41,6 +41,7 @@ struct CoinListCard: View {
                 Divider()
                     .background(Color.gray.opacity(0.25))
                     .padding(.horizontal, 20)
+                    .padding(.leading, 67)
                 HStack {
                     AsyncImage(url: URL(string: coin.imageUrl)) { phase in
                         if let image = phase.image {
@@ -49,6 +50,7 @@ struct CoinListCard: View {
                                 .scaledToFit()
                                 .frame(width: 60, height: 60)
                                 .cornerRadius(30)
+                                .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(.gray)
@@ -67,6 +69,7 @@ struct CoinListCard: View {
                         Text(coin.symbol)
                             .font(.headline)
                             .foregroundStyle(.white)
+                            .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
                         HStack(spacing: 0) {
                             Text("$\(formatNumber(coin.volume24h))")
                                 .font(.subheadline)

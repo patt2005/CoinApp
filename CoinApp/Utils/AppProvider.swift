@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import FirebaseAnalytics
 
 class AppProvider: ObservableObject {
     static let instance = AppProvider()
@@ -16,6 +17,7 @@ class AppProvider: ObservableObject {
     }
     
     func completeOnboarding() {
+        AnalyticsManager.shared.logEvent(name: AnalyticsEventTutorialComplete)
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         self.showOnboarding = false
     }

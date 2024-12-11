@@ -55,9 +55,9 @@ struct CoinListView: View {
         switch type {
         case "Gainers": return Image(systemName: "chart.line.uptrend.xyaxis.circle").foregroundStyle(.green)
         case "Losers": return Image(systemName: "chart.line.downtrend.xyaxis.circle").foregroundStyle(.red)
-        case "Recently Added": return Image(systemName: "clock").foregroundStyle(.orange)
-        case "Most Visited": return Image(systemName: "star").foregroundStyle(.yellow)
-        case "Trending": return Image(systemName: "flame").foregroundStyle(.red)
+        case "Recently Added": return Image(systemName: "clock.fill").foregroundStyle(.orange)
+        case "Most Visited": return Image(systemName: "star.fill").foregroundStyle(.yellow)
+        case "Trending": return Image(systemName: "flame.fill").foregroundStyle(.red)
         default:
             return Image(systemName: "arrow.up.circle.fill").foregroundStyle(.white)
         }
@@ -128,7 +128,15 @@ struct CoinListView: View {
     }
     
     private func getCoinScrollCard(coin: Coin) -> some View {
-        NavigationLink(destination: CoinDetailsView(coin: coin)) {
+        Button(action: {
+            if userViewModel.isUserSubscribed {
+                appProvider.path.append(.coinDetail(coin: coin))
+            } else {
+                withAnimation {
+                    appProvider.showPaywall = true
+                }
+            }
+        }) {
             HStack {
                 AsyncImage(url: URL(string: coin.imageUrl)) { phase in
                     if let image = phase.image {
@@ -137,6 +145,7 @@ struct CoinListView: View {
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
+                            .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
                     } else if phase.error != nil {
                         Image(systemName: "circle.fill")
                             .foregroundColor(.gray)
@@ -155,9 +164,11 @@ struct CoinListView: View {
                     Text(coin.symbol)
                         .font(.headline)
                         .foregroundStyle(.white)
+                        .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
                     coin.getPriceChangeText("24h")
                 }
             }
+            .padding(.leading, 5)
         }
     }
     

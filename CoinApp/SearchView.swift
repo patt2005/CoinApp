@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import FirebaseAnalytics
 
 class SearchViewModel: ObservableObject {
     @Published var searchText: String = ""
@@ -68,6 +69,7 @@ struct SearchView: View {
             .padding(.horizontal, 16)
             .padding(.top, 30)
             .padding(.bottom, 15)
+            
             if viewModel.isLoading {
                 VStack {
                     ProgressView()

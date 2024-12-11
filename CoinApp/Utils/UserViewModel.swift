@@ -15,5 +15,6 @@ class UserViewModel: ObservableObject {
         Purchases.shared.getCustomerInfo { (customerInfo, error) in
             self.isUserSubscribed = customerInfo?.entitlements.all["pro"]?.isActive == true
         }
+        AnalyticsManager.shared.setUserProperty(value: self.isUserSubscribed.description, property: "isPremiumUser")
     }
 }

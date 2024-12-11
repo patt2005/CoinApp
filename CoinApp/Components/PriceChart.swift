@@ -50,7 +50,6 @@ struct PriceChart: View {
                     .multilineTextAlignment(.center)
                     .frame(width: geometry.size.width, height: geometry.size.height)
             } else {
-                // Render the chart when priceList is not empty
                 let width = geometry.size.width / CGFloat(priceList.count - 1)
                 let height = geometry.size.height
                 

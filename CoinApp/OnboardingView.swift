@@ -7,6 +7,7 @@
 
 import SwiftUI
 import StoreKit
+import FirebaseAnalytics
 
 struct OnboardingStep {
     let image: String
@@ -48,6 +49,7 @@ struct OnboardingView: View {
             }
             .onAppear {
                 impactFeedback.prepare()
+                AnalyticsManager.shared.logEvent(name: AnalyticsEventTutorialBegin)
             }
             
             TabView(selection: $currentStep) {
