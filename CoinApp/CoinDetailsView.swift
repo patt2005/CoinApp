@@ -126,7 +126,7 @@ struct CoinDetailsView: View {
                                 VStack(alignment: .leading) {
                                     Text(coinDetails.description)
                                         .foregroundStyle(.secondary)
-                                        .lineLimit(showFullDescription ? nil : 3)
+                                        .lineLimit(showFullDescription ? nil : 6)
                                     Button(showFullDescription ? "Show less" : "Read more") {
                                         withAnimation {
                                             showFullDescription = !showFullDescription

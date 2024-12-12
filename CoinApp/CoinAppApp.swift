@@ -9,7 +9,6 @@ import SwiftUI
 import RevenueCat
 import Firebase
 import FirebaseMessaging
-import AppTrackingTransparency
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.Message_ID"
@@ -31,10 +30,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     @MainActor
     private func handleTrackingAndNotificationPermissions(application: UIApplication) async {
-        if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-            _ = await ATTrackingManager.requestTrackingAuthorization()
-        }
-        
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         do {
             let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: authOptions)
