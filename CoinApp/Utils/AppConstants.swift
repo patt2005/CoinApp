@@ -37,6 +37,7 @@ class AppConstants {
 enum AppDestination: Hashable {
     case coinDetail(coin: Coin)
     case chartAnalysis(image: UIImage?, analysis: MemeCoinAnalysisResponse?)
+    case searchCoin
 }
 
 func buildFormattedPrice(_ price: Double) -> some View {

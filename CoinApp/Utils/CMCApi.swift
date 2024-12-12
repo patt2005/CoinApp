@@ -136,7 +136,7 @@ struct Coin: Decodable, Identifiable, Hashable {
             let priceChange24h = try Double(container.decode(String.self, forKey: .priceChange24h)) ?? 0.0
             let volume24h = try Double(container.decode(String.self, forKey: .volume24h)) ?? 0.0
             let selfReportedMarketCap = try? container.decode(Double.self, forKey: .selfReportedMarketCap)
-            let marketcap = try container.decode(String.self, forKey: .marketCap)
+            let marketcap = try? container.decode(String.self, forKey: .marketCap)
             
             self.id = intBaseTokenId
             self.name = name
@@ -148,7 +148,7 @@ struct Coin: Decodable, Identifiable, Hashable {
             self.priceChange30d = nil
             self.volume24h = volume24h
             self.selfReportedMarketCap = selfReportedMarketCap
-            self.marketCap = Double(marketcap) ?? 0.0
+            self.marketCap = Double(marketcap ?? "0.0") ?? 0.0
         }
     }
 }

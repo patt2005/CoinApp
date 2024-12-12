@@ -40,8 +40,8 @@ struct CoinListCard: View {
             VStack {
                 Divider()
                     .background(Color.gray.opacity(0.25))
-                    .padding(.horizontal, 20)
-                    .padding(.leading, 67)
+                    .padding(.leading, 20)
+                    .padding(.leading, 60)
                 HStack {
                     AsyncImage(url: URL(string: coin.imageUrl)) { phase in
                         if let image = phase.image {
@@ -85,7 +85,7 @@ struct CoinListCard: View {
                         coin.getPriceChangeText(type == "Gainers" || type == "Losers" ? pickedDateRange : "24h")
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 10)
             }
         }
         .onAppear {

@@ -50,32 +50,22 @@ struct PriceChart: View {
                     .multilineTextAlignment(.center)
                     .frame(width: geometry.size.width, height: geometry.size.height)
             } else {
-                let width = geometry.size.width / CGFloat(priceList.count - 1)
+                let totalPoints = max(priceList.count, 2)
+                let width = geometry.size.width / CGFloat(totalPoints - 1)
                 let height = geometry.size.height
                 
-                let maxPoint = priceList.max() ?? 0
-                let minPoint = priceList.min() ?? 0
-                
-                let points = priceList.enumerated().compactMap { item in
-                    let progress = (item.element - minPoint) / (maxPoint - minPoint)
-                    let pathHeight = progress * height
-                    let pathWidth = width * CGFloat(item.offset)
-                    
-                    return CGPoint(x: pathWidth, y: -pathHeight + height)
+                let points = priceList.enumerated().map { index, value in
+                    let x = width * CGFloat(index)
+                    let y = (1 - CGFloat((value - minY) / (maxY - minY))) * height
+                    return CGPoint(x: x, y: y)
                 }
                 
                 Path { path in
-                    for index in priceList.indices {
-                        let xPosition = geometry.size.width / CGFloat(priceList.count) * CGFloat(index + 1)
-                        let yAxis = maxY - minY
-                        let yPosition = CGFloat((priceList[index] - minY) / yAxis) * geometry.size.height
-                        
-                        let invertedYPosition = geometry.size.height - yPosition
-                        
-                        if index == 0 {
-                            path.move(to: CGPoint(x: xPosition, y: invertedYPosition))
-                        }
-                        path.addLine(to: CGPoint(x: xPosition, y: invertedYPosition))
+                    guard let firstPoint = points.first else { return }
+                    path.move(to: firstPoint)
+                    
+                    for point in points {
+                        path.addLine(to: point)
                     }
                 }
                 .trim(from: 0, to: trimValue)
@@ -103,9 +93,7 @@ struct PriceChart: View {
                     .opacity(showPlot ? 1 : 0)
                 }
                 .gesture(DragGesture().onChanged { value in
-                    let translation = value.location.x
-                    let index = max(min(Int((translation / width).rounded() + 1), priceList.count - 1), 0)
-                    self.translation = translation
+                    let index = max(min(Int((value.location.x / width).rounded()), priceList.count - 1), 0)
                     
                     withAnimation {
                         selectedPrice = priceList[index]
@@ -114,9 +102,9 @@ struct PriceChart: View {
                     
                     offset = CGSize(
                         width: points[index].x - (geometry.size.width / 2),
-                        height: (points[index].y - height) + 75
+                        height: points[index].y - height / 2
                     )
-                }.onEnded { value in
+                }.onEnded { _ in
                     withAnimation {
                         showPlot = false
                     }

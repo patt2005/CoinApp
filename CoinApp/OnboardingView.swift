@@ -8,7 +8,6 @@
 import SwiftUI
 import StoreKit
 import FirebaseAnalytics
-import AppTrackingTransparency
 
 struct OnboardingStep {
     let image: String
@@ -98,12 +97,6 @@ struct OnboardingView: View {
             Button(action: {
                 impactFeedback.impactOccurred()
                 if currentStep < onboardingSteps.count - 2 {
-                    Task {
-                        if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                            
-                            _ = await ATTrackingManager.requestTrackingAuthorization()
-                        }
-                    }
                     withAnimation {
                         currentStep += 1
                     }

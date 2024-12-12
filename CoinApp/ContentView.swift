@@ -53,8 +53,10 @@ struct ContentView: View {
                     UITabBar.appearance().scrollEdgeAppearance = appearance
                 }
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        NavigationLink(destination: SearchView()) {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            appProvider.path.append(.searchCoin)
+                        }) {
                             Image("search")
                                 .resizable()
                                 .scaledToFit()
@@ -62,7 +64,7 @@ struct ContentView: View {
                         }
                     }
                     
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .topBarLeading) {
                         NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
                                 .resizable()
@@ -79,6 +81,7 @@ struct ContentView: View {
                     switch destination {
                     case .coinDetail(let coin): CoinDetailsView(coin: coin)
                     case .chartAnalysis(let image, let analysis): ChartAnalysisView(image: image, analysis: analysis)
+                    case .searchCoin: SearchView()
                     }
                 }
                 .blur(radius: appProvider.showPaywall || appProvider.showOnboarding ? 4 : 0)

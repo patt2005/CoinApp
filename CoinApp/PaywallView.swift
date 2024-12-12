@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RevenueCat
+import AppTrackingTransparency
 
 struct PaywallView: View {
     @State private var currentOffering: Offering?
@@ -20,6 +21,12 @@ struct PaywallView: View {
         VStack(alignment: .trailing) {
             HStack {
                 Button(action: {
+                    Task {
+                        if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                            
+                            _ = await ATTrackingManager.requestTrackingAuthorization()
+                        }
+                    }
                     appProvider.showPaywall = false
                 }) {
                     Image(systemName: "xmark.circle")

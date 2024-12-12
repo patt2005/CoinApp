@@ -46,7 +46,6 @@ struct CoinDetailsView: View {
     
     private func loadData() async {
         priceData = await CMCApi.instance.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
-        print(priceData.count)
         coinDetails = await CMCApi.instance.getCoinDetails(id: coin.id)
         selectedPrice = coinDetails?.statistics.price ?? 0
     }
@@ -160,8 +159,8 @@ struct CoinDetailsView: View {
                                                 Text("\(formatNumber(selfReportedMarketCap))")
                                                     .font(.headline.bold())
                                                     .foregroundStyle(.white)
-                                            } else if coinDetails.statistics.marketCap != 0 {
-                                                Text("\(formatNumber(coinDetails.statistics.marketCap))")
+                                            } else {
+                                                Text("\(formatNumber(coin.marketCap))")
                                                     .font(.headline.bold())
                                                     .foregroundStyle(.white)
                                             }
@@ -240,7 +239,7 @@ struct CoinDetailsView: View {
                                             .frame(maxWidth: .infinity)
                                             .foregroundColor(.blue)
                                         }
-                                        .padding(.vertical, 23)
+                                        .padding(.vertical, 21.5)
                                         .background(AppConstants.grayColor)
                                         .cornerRadius(15)
                                     }
@@ -258,7 +257,7 @@ struct CoinDetailsView: View {
                                             .frame(maxWidth: .infinity)
                                             .foregroundColor(.blue)
                                         }
-                                        .padding(.vertical, 23)
+                                        .padding(.vertical, 21.5)
                                         .background(AppConstants.grayColor)
                                         .cornerRadius(15)
                                     }
