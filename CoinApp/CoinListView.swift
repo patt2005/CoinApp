@@ -146,7 +146,7 @@ struct CoinListView: View {
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
-                            .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
+                            .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                     } else if phase.error != nil {
                         Image(systemName: "circle.fill")
                             .foregroundColor(.gray)
@@ -165,7 +165,7 @@ struct CoinListView: View {
                     Text(coin.symbol)
                         .font(.headline)
                         .foregroundStyle(.white)
-                        .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
+                        .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                     coin.getPriceChangeText("24h")
                 }
             }

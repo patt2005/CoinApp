@@ -50,7 +50,7 @@ struct CoinListCard: View {
                                 .scaledToFit()
                                 .frame(width: 60, height: 60)
                                 .cornerRadius(30)
-                                .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
+                                .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(.gray)
@@ -69,7 +69,7 @@ struct CoinListCard: View {
                         Text(coin.symbol)
                             .font(.headline)
                             .foregroundStyle(.white)
-                            .blur(radius: userViewModel.isUserSubscribed ? 4 : 0)
+                            .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                         HStack(spacing: 0) {
                             Text("$\(formatNumber(coin.volume24h))")
                                 .font(.subheadline)
