@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import Firebase
 import FirebaseMessaging
+import AppTrackingTransparency
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.Message_ID"
