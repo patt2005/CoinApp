@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Combine
-import AppTrackingTransparency
 
 class CoinListViewModel: ObservableObject {
     @Published var pickedDateRange = "24h"
@@ -48,7 +47,7 @@ struct CoinListView: View {
     @State private var hasFetchedApi = false
     
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
-    private var coinListType = ["Gainers", "Losers", "Recently Added", "Most Visited", "Trending"]
+    private var coinListType = ["Gainers", "Losers", "Recently Added", "Trending", "Most Visited"]
     
     @EnvironmentObject private var userViewModel: UserViewModel
     
@@ -272,10 +271,6 @@ struct CoinListView: View {
                 await CMCApi.instance.fetchCoinData(dateRange: viewModel.pickedDateRange)
                 await CMCApi.instance.fetchTrendingCoins()
                 hasFetchedApi = true
-            }
-            
-            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                _ = await ATTrackingManager.requestTrackingAuthorization()
             }
         }
         .preferredColorScheme(.dark)

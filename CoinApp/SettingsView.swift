@@ -33,12 +33,13 @@ struct SettingsView: View {
                     isSharing = true
                 }) {
                     HStack {
-                        Image(systemName: "square.and.arrow.up")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
+                        Image("share-2")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22.5, height: 22.5)
                         Text("Share App")
                             .foregroundColor(.gray)
-                            .padding(.leading, 5)
+                            .padding(.leading, 8.5)
                     }
                 }
                 
@@ -136,7 +137,8 @@ struct SettingsView: View {
             }
         }
         .sheet(isPresented: $isSharing) {
-            ActivityView(activityItems: ["https://apps.apple.com/us/app/meme-ai-meme-coin-tracker-app/id6738891806"])
+            ActivityView(activityItems: [
+                "https://apps.apple.com/us/app/meme-ai-meme-coin-tracker-app/id6738891806"])
         }
         .alert(isPresented: $showDisclaimer) {
             Alert(

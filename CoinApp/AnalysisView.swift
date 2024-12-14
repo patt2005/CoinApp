@@ -85,7 +85,7 @@ struct AnalysisView: View {
                     .font(.body)
                     .foregroundStyle(.gray)
                     .padding(.top, 25)
-                    .padding(.horizontal, 25)
+                    .padding(.horizontal, 30)
                 
                 Button(action: {
                     if userViewModel.isUserSubscribed {
@@ -96,16 +96,19 @@ struct AnalysisView: View {
                         }
                     }
                 }) {
-                    HStack {
-                        Image(systemName: "photo.badge.plus.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
+                    HStack(spacing: 7) {
+                        Image("chart")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .padding(.bottom, 7)
                         
                         Text("Get Analysis")
                             .font(Font.custom("Inter", size: 17).weight(.medium))
                             .foregroundStyle(.white)
                     }
-                    .padding(.vertical, 13)
+                    .padding(.bottom, 9)
+                    .padding(.top, 9)
                     .padding(.horizontal, 90)
                     .background(AppConstants.primaryColor)
                     .cornerRadius(18)

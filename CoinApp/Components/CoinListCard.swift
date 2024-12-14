@@ -52,14 +52,10 @@ struct CoinListCard: View {
                                 .cornerRadius(30)
                                 .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
-                            Image(systemName: "circle.fill")
-                                .foregroundColor(.gray)
+                            Rectangle()
                                 .frame(width: 60, height: 60)
-                                .background(Circle().fill(Color.gray.opacity(0.2)))
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.gray, lineWidth: 1)
-                                )
+                                .cornerRadius(30)
+                                .foregroundColor(AppConstants.grayColor )
                         } else {
                             ProgressView()
                                 .frame(width: 60, height: 60)

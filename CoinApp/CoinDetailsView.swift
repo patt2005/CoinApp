@@ -8,6 +8,27 @@
 import SwiftUI
 
 struct CoinDetailsView: View {
+    struct HolderRatioCard: View {
+        let title: String
+        let ratio: Double
+        
+        var body: some View {
+            VStack(spacing: 10) {
+                Text(title)
+                    .font(.title3)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                Text("\(ratio, specifier: "%.2f")%")
+                    .font(.body.bold())
+                    .foregroundColor(.green)
+            }
+            .padding()
+            .frame(width: 150)
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(15)
+        }
+    }
+    
     let coin: Coin
     
     @State private var priceData: [Double] = []
@@ -23,8 +44,11 @@ struct CoinDetailsView: View {
     
     @State private var isLoading = false
     @State private var showAlert = false
+    @State private var isSharing = false
     
     @ObservedObject var appProvider = AppProvider.instance
+    
+    @State private var isCopied = false
     
     private func getAnalysis() async {
         isLoading = true
@@ -177,7 +201,7 @@ struct CoinDetailsView: View {
                                             Image(systemName: "chart.bar")
                                                 .font(.headline)
                                                 .foregroundColor(.white)
-                                            Text(formatNumber(coinDetails.volume))
+                                            Text("$\(formatNumber(coinDetails.volume))")
                                                 .font(.headline.bold())
                                                 .foregroundStyle(.white)
                                         }
@@ -229,7 +253,7 @@ struct CoinDetailsView: View {
                                     if !coinDetails.urls.website.isEmpty {
                                         Link(destination: URL(string: coinDetails.urls.website.first!)!) {
                                             HStack {
-                                                Image(systemName: "app.badge.fill")
+                                                Image(systemName: "globe")
                                                     .font(.title2)
                                                     .foregroundColor(.white)
                                                 Text("Website")
@@ -263,12 +287,199 @@ struct CoinDetailsView: View {
                                     }
                                 }
                                 
+                                if let holderList = coinDetails.holders?.holderList {
+                                    Text("Top holders")
+                                        .font(Font.custom("Inter", size: 18).weight(.bold))
+                                        .foregroundStyle(.white)
+                                        .padding(.vertical, 10)
+                                    
+                                    VStack(spacing: 15) {
+                                        ForEach(holderList.prefix(5), id: \.address) { holder in
+                                            HStack {
+                                                VStack(alignment: .leading) {
+                                                    Text("Address")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.secondary)
+                                                    HStack {
+                                                        Text(holder.address)
+                                                            .font(.body)
+                                                            .lineLimit(1)
+                                                            .truncationMode(.middle)
+                                                            .foregroundColor(.white)
+                                                        
+                                                        Button(action: {
+                                                            UIPasteboard.general.string = holder.address
+                                                        }) {
+                                                            Image(systemName: "doc.on.doc")
+                                                                .foregroundColor(.blue)
+                                                        }
+                                                        .buttonStyle(BorderlessButtonStyle())
+                                                    }
+                                                }
+                                                Spacer()
+                                                VStack(alignment: .trailing) {
+                                                    Text("Balance")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.secondary)
+                                                    Text("\(formatNumber(holder.balance))")
+                                                        .font(.body.bold())
+                                                        .foregroundColor(.white)
+                                                }
+                                            }
+                                            .padding()
+                                            .background(Color.gray.opacity(0.2))
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    
+                                    Text("Holders share")
+                                        .font(Font.custom("Inter", size: 18).weight(.bold))
+                                        .foregroundStyle(.white)
+                                        .padding(.top, 10)
+                                    
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 15) {
+                                            HolderRatioCard(title: "Top 10", ratio: coinDetails.holders!.topTenHolderRatio)
+                                            HolderRatioCard(title: "Top 20", ratio: coinDetails.holders!.topTwentyHolderRatio)
+                                            HolderRatioCard(title: "Top 50", ratio: coinDetails.holders!.topFiftyHolderRatio)
+                                            HolderRatioCard(title: "Top 100 ", ratio: coinDetails.holders!.topHundredHolderRatio)
+                                        }
+                                        .padding(.top, 7)
+                                    }
+                                }
+                                
+                                if let contractInfo = coinDetails.platforms?.first {
+                                    VStack(alignment: .leading, spacing: 15) {
+                                        HStack {
+                                            AsyncImage(url: URL(string: contractInfo.imageUrl)) { phase in
+                                                if let image = phase.image {
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 40, height: 40)
+                                                        .clipShape(Circle())
+                                                        .shadow(radius: 5)
+                                                } else if phase.error != nil {
+                                                    Image(systemName: "exclamationmark.triangle.fill")
+                                                        .foregroundColor(.red)
+                                                        .frame(width: 40, height: 40)
+                                                } else {
+                                                    ProgressView()
+                                                        .frame(width: 40, height: 40)
+                                                }
+                                            }
+                                            VStack(alignment: .leading) {
+                                                Text(contractInfo.contractPlatform)
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                Text("Contract Address")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                        }
+                                        .padding(.top, 15)
+                                        
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            Text("Address")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            HStack {
+                                                Text(contractInfo.contractAddress)
+                                                    .font(.body)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.middle)
+                                                    .foregroundColor(.white)
+                                                Spacer()
+                                                Button(action: {
+                                                    UIPasteboard.general.string = contractInfo.contractAddress
+                                                    withAnimation {
+                                                        isCopied = true
+                                                    }
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                        withAnimation {
+                                                            isCopied = false
+                                                        }
+                                                    }
+                                                }) {
+                                                    HStack {
+                                                        Image(systemName: "doc.on.doc")
+                                                            .foregroundColor(.blue)
+                                                        Text(isCopied ? "Copied" : "Copy")
+                                                            .font(.body)
+                                                            .foregroundStyle(.blue)
+                                                    }
+                                                    .padding(.trailing, 10)
+                                                }
+                                                .buttonStyle(BorderlessButtonStyle())
+                                            }
+                                        }
+                                        
+                                        Button(action: {
+                                            if let url = URL(string: "https://phantom.app/ul/buy?tokenAddress=\(contractInfo.contractAddress)") {
+                                                UIApplication.shared.open(url)
+                                            }
+                                        }) {
+                                            HStack {
+                                                Image("phantom")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 28, height: 28)
+                                                    
+                                                Text("Trade on Phantom")
+                                                    .font(Font.custom("Inter", size: 18).weight(.medium))
+                                                    .foregroundColor(.white)
+                                            }
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 15)
+                                            .background(Color.purple)
+                                            .cornerRadius(15)
+                                            .padding(.top, 8)
+                                        }
+                                        
+                                        Button(action: {
+                                            var chain = ""
+                                            switch contractInfo.contractPlatform {
+                                            case "Base":
+                                                chain = "base"
+                                                break
+                                            case "Ethereum":
+                                                chain = "mainnet"
+                                                break
+                                            case "BNB Smart Chain (BEP20)":
+                                                chain = "bnb"
+                                                break
+                                            default:
+                                                break
+                                            }
+                                            let link = "https://app.uniswap.org/swap?chain=\(chain)&outputCurrency=\(contractInfo.contractAddress)"
+                                            if let url = URL(string: link) {
+                                                UIApplication.shared.open(url)
+                                            }
+                                        }) {
+                                            HStack {
+                                                Image("uniswap")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 28, height: 28)
+                                                    
+                                                Text("Trade on Uniswap")
+                                                    .font(Font.custom("Inter", size: 18).weight(.medium))
+                                                    .foregroundColor(.white)
+                                            }
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 15)
+                                            .background(.pink)
+                                            .cornerRadius(15)
+                                        }
+                                    }
+                                }
+                                
                                 Button(action: {
                                     Task {
                                         await getAnalysis()
                                     }
                                 }) {
-                                    HStack {
+                                    HStack(spacing: 10) {
                                         Image(systemName: "flame.fill")
                                             .foregroundStyle(.white)
                                             .font(.title2)
@@ -280,7 +491,7 @@ struct CoinDetailsView: View {
                                     .padding(.vertical, 15)
                                     .background(AppConstants.primaryColor)
                                     .cornerRadius(15)
-                                    .padding(.top, 7)
+                                    .padding(.top, 8)
                                     .padding(.bottom, 20)
                                 }
                             }
@@ -322,6 +533,27 @@ struct CoinDetailsView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .font(.headline)
                         .foregroundColor(.white)
+                }
+            }
+        }
+        .sheet(isPresented: $isSharing) {
+            ActivityView(activityItems: ["Check out \(coin.symbol) on Meme AI app: https://apps.apple.com/us/app/meme-ai-meme-coin-tracker-app/id6738891806"])
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    isSharing = true
+                }) {
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(AppConstants.grayColor)
+                            .frame(width: 35, height: 35)
+                            .cornerRadius(17.5)
+                        Image("share")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 17.5, height: 17.5)
+                    }
                 }
             }
         }

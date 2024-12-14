@@ -166,6 +166,42 @@ struct CoinDetails: Codable, Identifiable {
         let twitter: [String]
     }
     
+    struct RelatedCoinInfo: Codable {
+        let id: Int
+        let name: String
+        let price: Double
+        let priceChangePercentage24h: Double
+        
+        var imageUrl: String {
+            return "https://s2.coinmarketcap.com/static/img/coins/128x128/\(id).png"
+        }
+    }
+    
+    struct ContractInfo: Codable {
+        let contractId: Int
+        let contractAddress: String
+        let contractPlatform: String
+        let contractExplorerUrl: String
+        
+        var imageUrl: String {
+            return "https://s2.coinmarketcap.com/static/img/coins/128x128/\(contractId).png"
+        }
+    }
+    
+    struct Holders: Codable {
+        struct HolderInfo: Codable {
+            let address: String
+            let balance: Double
+            let share: Double
+        }
+        
+        let holderList: [HolderInfo]
+        let topTenHolderRatio: Double
+        let topTwentyHolderRatio: Double
+        let topFiftyHolderRatio: Double
+        let topHundredHolderRatio: Double
+    }
+    
     struct Statistics: Codable {
         let price: Double
         let marketCap: Double
@@ -186,6 +222,8 @@ struct CoinDetails: Codable, Identifiable {
     let urls: Urls
     let volume: Double
     let statistics: Statistics
+    let platforms: [ContractInfo]?
+    let holders: Holders?
     
     func getPriceChangeText(_ dateRange: String) -> some View {
         let priceChangePercentage: Double
@@ -240,6 +278,8 @@ struct CoinDetails: Codable, Identifiable {
         self.urls = try container.decode(Urls.self, forKey: .urls)
         self.volume = try container.decode(Double.self, forKey: .volume)
         self.statistics = try container.decode(Statistics.self, forKey: .statistics)
+        self.platforms = try? container.decode([ContractInfo].self, forKey: .platforms)
+        self.holders = try? container.decode(Holders.self, forKey: .holders)
     }
 }
 
@@ -475,6 +515,8 @@ class CMCApi {
     
     func getCoinDetails(id: Int) async -> CoinDetails? {
         guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/?id=\(id)") else { return nil }
+        
+        print("Coin id: \(id)")
         
         let headers = [
             "Accepts": "application/json",
