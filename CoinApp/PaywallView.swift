@@ -20,11 +20,19 @@ struct PaywallView: View {
         VStack(alignment: .trailing) {
             HStack {
                 Button(action: {
-                    appProvider.showPaywall = false
+                    withAnimation {
+                        appProvider.showPaywall = false
+                    }
                 }) {
-                    Image(systemName: "xmark.circle")
-                        .font(.title)
-                        .foregroundStyle(.gray.opacity(0.3))
+                    ZStack {
+                        Rectangle()
+                            .frame(width: 35, height: 35)
+                            .cornerRadius(17.5)
+                            .foregroundStyle(AppConstants.grayColor)
+                        Image(systemName: "xmark")
+                            .fontWeight(.bold)
+                            .foregroundStyle(.gray)
+                    }
                 }
                 Spacer()
             }
@@ -64,16 +72,7 @@ struct PaywallView: View {
             
             VStack(alignment: .trailing) {
                 HStack {
-                    Text("AI Chart Analysis")
-                        .font(Font.custom("Inter", size: 17))
-                        .foregroundStyle(.white)
-                    Image(systemName: "checkmark.circle")
-                        .font(.title2)
-                        .foregroundStyle(.green)
-                }
-                .padding(.bottom, 10)
-                HStack {
-                    Text("Access to Private Community Chats")
+                    Text("AI-Powered Chart Insights")
                         .font(Font.custom("Inter", size: 17))
                         .foregroundStyle(.white)
                     Image(systemName: "checkmark.circle")
@@ -91,7 +90,16 @@ struct PaywallView: View {
                 }
                 .padding(.bottom, 10)
                 HStack {
-                    Text("Remove Ads")
+                    Text("Top Trending Coins")
+                        .font(Font.custom("Inter", size: 17))
+                        .foregroundStyle(.white)
+                    Image(systemName: "checkmark.circle")
+                        .font(.title2)
+                        .foregroundStyle(.green)
+                }
+                .padding(.bottom, 10)
+                HStack {
+                    Text("Detailed Coin Analysis")
                         .font(Font.custom("Inter", size: 17))
                         .foregroundStyle(.white)
                     Image(systemName: "checkmark.circle")

@@ -53,7 +53,13 @@ struct CoinDetailsView: View {
     private func getAnalysis() async {
         isLoading = true
         do {
-            memeCoinAnalysis = try await CMCApi.instance.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange)
+            var marketCap: Double
+            if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
+                marketCap = selfReportedMarketCap
+            } else {
+                marketCap = coinDetails?.statistics.marketCap ?? 0.0
+            }
+            memeCoinAnalysis = try await CMCApi.instance.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap)
             
             DispatchQueue.main.async {
                 if self.memeCoinAnalysis != nil {

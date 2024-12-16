@@ -64,11 +64,18 @@ struct AnalysisView: View {
     var body: some View {
         ScrollView {
             VStack {
+                Image("icon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(15)
+                    .padding(.top, 50)
+                
                 Text("MemeAI")
                     .foregroundStyle(AppConstants.primaryColor)
                     .font(Font.custom("Gabarito", size: 36))
                     .padding(.bottom, 5)
-                    .padding(.top, 75)
+                    .padding(.top, 25)
                 
                 HStack {
                     Image(systemName: "crown.fill")
@@ -97,22 +104,19 @@ struct AnalysisView: View {
                     }
                 }) {
                     HStack(spacing: 7) {
-                        Image("chart")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .padding(.bottom, 7)
+                        Image(systemName: "chart.bar.xaxis")
+                            .font(.title)
+                            .foregroundStyle(.white)
                         
                         Text("Get Analysis")
                             .font(Font.custom("Inter", size: 17).weight(.medium))
                             .foregroundStyle(.white)
                     }
-                    .padding(.bottom, 9)
-                    .padding(.top, 9)
+                    .padding(.vertical, 13)
                     .padding(.horizontal, 90)
                     .background(AppConstants.primaryColor)
                     .cornerRadius(18)
-                    .padding(.top, 90)
+                    .padding(.top, 60)
                 }
                 
                 if viewModel.isLoading {

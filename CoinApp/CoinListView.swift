@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 class CoinListViewModel: ObservableObject {
-    @Published var pickedDateRange = "24h"
+    @Published var pickedDateRange = "1h"
     @Published var pickedCoinListType = "Gainers"
     @Published var isLoading: Bool = false
     
@@ -78,7 +78,7 @@ struct CoinListView: View {
                     .foregroundStyle(viewModel.pickedCoinListType == type ? .white : .gray)
             }
             .padding(.vertical, 8)
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 10)
             .background(Color(hex: "#131517").opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 25))
             .overlay(
@@ -205,14 +205,17 @@ struct CoinListView: View {
                     .padding(.horizontal, 16)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 20) {
+                        HStack(spacing: 10) {
+                            Rectangle()
+                                .foregroundStyle(.clear)
+                                .frame(width: 4)
                             ForEach(appProvider.mostVisitedList, id: \.self) { item in
                                 getCoinScrollCard(coin: item)
+                                    .padding(.trailing, 10)
                             }
                         }
                     }
                     .frame(height: 30)
-                    .padding(.horizontal)
                     .padding(.top)
                     
                     HStack {
@@ -221,17 +224,21 @@ struct CoinListView: View {
                             .font(.title2)
                         Spacer()
                     }
+                    .padding(.horizontal, 16)
                     .padding(.top, 20)
-                    .padding(.leading, 16)
+                    
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
+                        HStack(spacing: 6) {
+                            Rectangle()
+                                .foregroundStyle(.clear)
+                                .frame(width: 4)
                             ForEach(coinListType, id: \.self) { type in
                                 getCoinListTypeCard(type)
                             }
                         }
-                        .padding(.horizontal)
                         .padding(.bottom, 18)
                     }
+                    
                     if viewModel.pickedCoinListType == coinListType[0] || viewModel.pickedCoinListType == coinListType[1] {
                         HStack(spacing: 0) {
                             Text("Time range: ")
