@@ -50,6 +50,8 @@ struct CoinDetailsView: View {
     
     @State private var isCopied = false
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     private func getAnalysis() async {
         isLoading = true
         do {
@@ -261,10 +263,10 @@ struct CoinDetailsView: View {
                                             HStack {
                                                 Image(systemName: "globe")
                                                     .font(.title2)
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.blue)
                                                 Text("Website")
                                                     .font(.headline)
-                                                    .foregroundColor(.secondary)
+                                                    .foregroundColor(.white)
                                             }
                                             .frame(maxWidth: .infinity)
                                             .foregroundColor(.blue)
@@ -278,11 +280,13 @@ struct CoinDetailsView: View {
                                         Link(destination: URL(string: coinDetails.urls.twitter.first!)!) {
                                             HStack {
                                                 Image("twitter")
-                                                    .font(.title2)
-                                                    .foregroundColor(.white)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 28, height: 28)
+                                                    .cornerRadius(14)
                                                 Text("Twitter")
                                                     .font(.headline)
-                                                    .foregroundColor(.secondary)
+                                                    .foregroundColor(.white)
                                             }
                                             .frame(maxWidth: .infinity)
                                             .foregroundColor(.blue)
@@ -314,6 +318,7 @@ struct CoinDetailsView: View {
                                                             .foregroundColor(.white)
                                                         
                                                         Button(action: {
+                                                            impactFeedback.impactOccurred()
                                                             UIPasteboard.general.string = holder.address
                                                         }) {
                                                             Image(systemName: "doc.on.doc")
@@ -397,6 +402,7 @@ struct CoinDetailsView: View {
                                                     .foregroundColor(.white)
                                                 Spacer()
                                                 Button(action: {
+                                                    impactFeedback.impactOccurred()
                                                     UIPasteboard.general.string = contractInfo.contractAddress
                                                     withAnimation {
                                                         isCopied = true
@@ -523,6 +529,7 @@ struct CoinDetailsView: View {
             .toolbarBackground(.thinMaterial, for: .navigationBar)
             .toolbarBackground(Color.clear, for: .navigationBar)
             .task {
+                impactFeedback.prepare()
                 await loadData()
             }
             .alert(isPresented: $showAlert) {

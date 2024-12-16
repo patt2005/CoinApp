@@ -109,7 +109,7 @@ struct AnalysisView: View {
                             .foregroundStyle(.white)
                         
                         Text("Get Analysis")
-                            .font(Font.custom("Inter", size: 17).weight(.medium))
+                            .font(Font.custom("Inter", size: 17).weight(.bold))
                             .foregroundStyle(.white)
                     }
                     .padding(.vertical, 13)

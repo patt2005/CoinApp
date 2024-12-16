@@ -40,25 +40,24 @@ struct CoinListCard: View {
             VStack {
                 Divider()
                     .background(Color.gray.opacity(0.25))
-                    .padding(.leading, 20)
-                    .padding(.leading, 60)
+                    .padding(.leading, 71)
                 HStack {
                     AsyncImage(url: URL(string: coin.imageUrl)) { phase in
                         if let image = phase.image {
                             image
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 60, height: 60)
-                                .cornerRadius(30)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(25)
                                 .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
                             Rectangle()
-                                .frame(width: 60, height: 60)
-                                .cornerRadius(30)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(25)
                                 .foregroundColor(AppConstants.grayColor )
                         } else {
                             ProgressView()
-                                .frame(width: 60, height: 60)
+                                .frame(width: 50, height: 50)
                         }
                     }
                     VStack(alignment: .leading) {
