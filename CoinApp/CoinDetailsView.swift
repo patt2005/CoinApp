@@ -54,14 +54,31 @@ struct CoinDetailsView: View {
     
     private func getAnalysis() async {
         isLoading = true
+        
         do {
+            let priceChangePercentage: Double
+            switch selectedDateRange {
+            case "1h":
+                priceChangePercentage = coinDetails!.statistics.priceChangePercentage1h
+            case "1d":
+                priceChangePercentage = coinDetails!.statistics.priceChangePercentage24h
+            case "7d":
+                priceChangePercentage = coinDetails!.statistics.priceChangePercentage7d
+            case "1m":
+                priceChangePercentage = coinDetails!.statistics.priceChangePercentage30d
+            case "1y":
+                priceChangePercentage = coinDetails!.statistics.priceChangePercentage1y
+            default:
+                priceChangePercentage = 0
+            }
+            
             var marketCap: Double
             if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
                 marketCap = selfReportedMarketCap
             } else {
                 marketCap = coinDetails?.statistics.marketCap ?? 0.0
             }
-            memeCoinAnalysis = try await CMCApi.instance.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap)
+            memeCoinAnalysis = try await CMCApi.instance.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
             
             DispatchQueue.main.async {
                 if self.memeCoinAnalysis != nil {
@@ -383,7 +400,7 @@ struct CoinDetailsView: View {
                                                 Text(contractInfo.contractPlatform)
                                                     .font(.headline)
                                                     .foregroundColor(.white)
-                                                Text("Contract Address")
+                                                Text("Contract Network")
                                                     .font(.subheadline)
                                                     .foregroundColor(.secondary)
                                             }
@@ -436,7 +453,7 @@ struct CoinDetailsView: View {
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 28, height: 28)
-                                                    
+                                                
                                                 Text("Trade on Phantom")
                                                     .font(Font.custom("Inter", size: 18).weight(.medium))
                                                     .foregroundColor(.white)
@@ -473,7 +490,7 @@ struct CoinDetailsView: View {
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 28, height: 28)
-                                                    
+                                                
                                                 Text("Trade on Uniswap")
                                                     .font(Font.custom("Inter", size: 18).weight(.medium))
                                                     .foregroundColor(.white)

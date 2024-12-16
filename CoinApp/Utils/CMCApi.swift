@@ -346,7 +346,7 @@ class CMCApi {
         case invalidData
     }
     
-    func getCoinAnalysis(coin: Coin, priceList: [Double], dateRange: String, marketCap: Double) async throws -> MemeCoinAnalysisResponse {
+    func getCoinAnalysis(coin: Coin, priceList: [Double], dateRange: String, marketCap: Double, priceChange: Double) async throws -> MemeCoinAnalysisResponse {
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         
         let apiKey = await AppConstants.getApiKey()
@@ -402,8 +402,8 @@ class CMCApi {
         - Coin Name: \(coin.name)
         - Symbol: \(coin.symbol)
         - Current Price: \(coin.price)
-        - Price Change (24h): \(coin.priceChange24h)%
-        - Volume (24h): \(coin.volume24h)
+        - Price Change (\(dateRange): \(priceChange)%
+        - Volume (24h): $\(coin.volume24h)
         - Price Data (ordered by timestamp): {\(priceListFormatted)}
         - Date Range: \(dateRange)
         - Market Cap: \(marketCap)
