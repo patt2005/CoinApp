@@ -14,7 +14,7 @@ class AnalysisViewModel: ObservableObject {
     @Published var memeCoinAnalisys: MemeCoinAnalysisResponse?
     @Published var showAlert: Bool = false
     
-    @ObservedObject var appProvider = AppProvider.instance
+    @ObservedObject var appProvider = AppProvider.shared
     
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     
@@ -31,19 +31,15 @@ class AnalysisViewModel: ObservableObject {
             }
             
             Task {
-                do {
-                    self.memeCoinAnalisys = try await CMCApi.instance.analyzeChartImage(image: selectedImage)
-                    
-                    DispatchQueue.main.async {
-                        if self.memeCoinAnalisys != nil {
-                            self.isLoading = false
-                            self.appProvider.path.append(.chartAnalysis(image: self.selectedImage, analysis: self.memeCoinAnalisys!))
-                        } else {
-                            print("Meme coin analysis failed")
-                        }
+                self.memeCoinAnalisys = try? await OpenAiApi.shared.analyzeChartImage(image: selectedImage)
+                
+                DispatchQueue.main.async {
+                    if self.memeCoinAnalisys != nil {
+                        self.appProvider.path.append(.chartAnalysis(image: self.selectedImage, analysis: self.memeCoinAnalisys!))
+                    } else {
+                        self.showAlert = true
                     }
-                } catch {
-                    self.showAlert = true
+                    self.isLoading = false
                 }
             }
         }
@@ -104,18 +100,18 @@ struct AnalysisView: View {
                     }
                 }) {
                     HStack(spacing: 7) {
-                        Image(systemName: "chart.bar.xaxis")
-                            .font(.title)
+                        Image(systemName: "plus.viewfinder")
+                            .font(.title2)
                             .foregroundStyle(.white)
                         
-                        Text("Get Analysis")
+                        Text("Analyze Chart")
                             .font(Font.custom("Inter", size: 17).weight(.bold))
                             .foregroundStyle(.white)
                     }
-                    .padding(.vertical, 13)
-                    .padding(.horizontal, 90)
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 100 )
                     .background(AppConstants.primaryColor)
-                    .cornerRadius(18)
+                    .cornerRadius(14)
                     .padding(.top, 60)
                 }
                 

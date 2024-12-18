@@ -7,29 +7,29 @@
 
 import Foundation
 import SwiftUI
-import RevenueCat
 
 class AppConstants {
     static let backgroundColor: Color = Color(hex: "#050506")
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
-    static let primaryColor: Color = Color(hex: "#FF6500")
+    static var primaryColor: Color = Color(hex: "#FF6500")
     
     static let revenueCatApiKey = "appl_uJbYFaiwBZHJPOMizXgSqOvSqbV"
+    static var openAiApiKey: String = ""
     
     struct ApiResponse: Decodable {
         let OPEN_AI_API_KEY: String
     }
     
-    static func getApiKey() async -> String {
+    static func getApiKey() async {
         let apiUrl = "https://pattt2005.pythonanywhere.com/meme-ai/"
         
         do {
             let (data, _) = try await URLSession.shared.data(from: URL(string: apiUrl)!)
             let content = try JSONDecoder().decode(ApiResponse.self, from: data)
             
-            return content.OPEN_AI_API_KEY
+            AppConstants.openAiApiKey = content.OPEN_AI_API_KEY
         } catch {
-            return ""
+            print("Caught an error retrieving API key: \(error.localizedDescription)")
         }
     }
 }

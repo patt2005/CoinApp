@@ -11,7 +11,7 @@ import RevenueCat
 struct PaywallView: View {
     @State private var currentOffering: Offering?
     
-    @ObservedObject private var appProvider = AppProvider.instance
+    @ObservedObject private var appProvider = AppProvider.shared
     @EnvironmentObject private var userViewModel: UserViewModel
     
     @State private var isPurchasing = false
@@ -28,10 +28,10 @@ struct PaywallView: View {
                         Rectangle()
                             .frame(width: 35, height: 35)
                             .cornerRadius(17.5)
-                            .foregroundStyle(AppConstants.grayColor)
+                            .foregroundStyle(.gray.opacity(0.6))
                         Image(systemName: "xmark")
                             .fontWeight(.bold)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.white.opacity(0.6))
                     }
                 }
                 Spacer()
@@ -99,7 +99,7 @@ struct PaywallView: View {
                 }
                 .padding(.bottom, 10)
                 HStack {
-                    Text("Detailed Coin Analysis")
+                    Text("Personal AI Chat Assistant")
                         .font(Font.custom("Inter", size: 17))
                         .foregroundStyle(.white)
                     Image(systemName: "checkmark.circle")

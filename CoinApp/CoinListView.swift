@@ -22,7 +22,7 @@ class CoinListViewModel: ObservableObject {
             self.isLoading = true
         }
         
-        await CMCApi.instance.fetchCoinData(dateRange: self.pickedDateRange)
+        await CMCApi.shared.fetchCoinData(dateRange: self.pickedDateRange)
         
         DispatchQueue.main.async {
             self.isLoading = false
@@ -32,7 +32,7 @@ class CoinListViewModel: ObservableObject {
     init() {
         $pickedDateRange.sink { newDate in
             Task {
-                await CMCApi.instance.fetchCoinData(dateRange: self.pickedDateRange)
+                await CMCApi.shared.fetchCoinData(dateRange: self.pickedDateRange)
             }
         }
         .store(in: &cancellables)
@@ -40,14 +40,14 @@ class CoinListViewModel: ObservableObject {
 }
 
 struct CoinListView: View {
-    @ObservedObject private var appProvider = AppProvider.instance
+    @ObservedObject private var appProvider = AppProvider.shared
     
     @StateObject private var viewModel = CoinListViewModel()
     
     @State private var hasFetchedApi = false
     
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
-    private var coinListType = ["Gainers", "Losers", "Recently Added", "Trending", "Most Visited"]
+    private var coinListType = ["Gainers", "Losers","Most Visited", "Recently Added", "Trending"]
     
     @EnvironmentObject private var userViewModel: UserViewModel
     
@@ -268,15 +268,15 @@ struct CoinListView: View {
                     }
                 }
                 .refreshable {
-                    await CMCApi.instance.fetchCoinData(dateRange: viewModel.pickedDateRange)
-                    await CMCApi.instance.fetchTrendingCoins()
+                    await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
+                    await CMCApi.shared.fetchTrendingCoins()
                 }
             }
         }
         .task {
             if !hasFetchedApi {
-                await CMCApi.instance.fetchCoinData(dateRange: viewModel.pickedDateRange)
-                await CMCApi.instance.fetchTrendingCoins()
+                await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
+                await CMCApi.shared.fetchTrendingCoins()
                 hasFetchedApi = true
             }
         }

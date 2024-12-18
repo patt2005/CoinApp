@@ -10,7 +10,7 @@ import SwiftUI
 struct CoinListCard: View {
     let coin: Coin
     
-    @ObservedObject private var appProvider = AppProvider.instance
+    @ObservedObject private var appProvider = AppProvider.shared
     
     @EnvironmentObject var userViewModel: UserViewModel
     

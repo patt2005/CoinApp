@@ -20,7 +20,7 @@ class SearchViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.isLoading = true
             Task {
-                self.results = await CMCApi.instance.getCoinFromSearchQuery(self.searchText)
+                self.results = await CMCApi.shared.getCoinFromSearchQuery(self.searchText)
                 DispatchQueue.main.async {
                     self.isLoading = false
                 }
@@ -30,7 +30,7 @@ class SearchViewModel: ObservableObject {
     
     func loadInitialResults() {
         if results.isEmpty {
-            self.results = AppProvider.instance.trendingList.shuffled()
+            self.results = AppProvider.shared.trendingList.shuffled()
         }
     }
     

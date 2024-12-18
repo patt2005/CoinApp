@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseAnalytics
 
 class AppProvider: ObservableObject {
-    static let instance = AppProvider()
+    static let shared = AppProvider()
     
     private init() {
         self.showOnboarding = !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
@@ -32,4 +32,6 @@ class AppProvider: ObservableObject {
     @Published var showOnboarding = false
 
     @Published var path: [AppDestination] = []
+    
+    @Published var chatHistoryList: [MessageRow] = []
 }

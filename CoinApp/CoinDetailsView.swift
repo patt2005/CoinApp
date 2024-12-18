@@ -46,7 +46,7 @@ struct CoinDetailsView: View {
     @State private var showAlert = false
     @State private var isSharing = false
     
-    @ObservedObject var appProvider = AppProvider.instance
+    @ObservedObject var appProvider = AppProvider.shared
     
     @State private var isCopied = false
     
@@ -78,7 +78,7 @@ struct CoinDetailsView: View {
             } else {
                 marketCap = coinDetails?.statistics.marketCap ?? 0.0
             }
-            memeCoinAnalysis = try await CMCApi.instance.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
+            memeCoinAnalysis = try await OpenAiApi.shared.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
             
             DispatchQueue.main.async {
                 if self.memeCoinAnalysis != nil {
@@ -94,8 +94,8 @@ struct CoinDetailsView: View {
     }
     
     private func loadData() async {
-        priceData = await CMCApi.instance.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
-        coinDetails = await CMCApi.instance.getCoinDetails(id: coin.id)
+        priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
+        coinDetails = await CMCApi.shared.getCoinDetails(id: coin.id)
         selectedPrice = coinDetails?.statistics.price ?? 0
     }
     
@@ -112,7 +112,7 @@ struct CoinDetailsView: View {
             trimValue = 0
             selectedDateRange = dateRangeOptions[index]
             Task {
-                priceData = await CMCApi.instance.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
+                priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
                 withAnimation(.linear(duration: 1.5)) {
                     trimValue = 1
                 }

@@ -11,7 +11,6 @@ import UIKit
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
     @Binding var isImagePickerPresented: Bool
-    
     var sourceType: UIImagePickerController.SourceType
     
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -28,11 +27,17 @@ struct ImagePicker: UIViewControllerRepresentable {
             } else {
                 print("No image selected or conversion failed.")
             }
-            parent.isImagePickerPresented = false
+            
+            DispatchQueue.main.async {
+                self.parent.isImagePickerPresented = false
+            }
         }
         
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.isImagePickerPresented = false
+            
+            DispatchQueue.main.async {
+                self.parent.isImagePickerPresented = false
+            }
         }
     }
     

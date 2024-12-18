@@ -23,14 +23,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         
         Task {
-            await handleTrackingAndNotificationPermissions(application: application)
+            await handleNotificationPermissions(application: application)
+            await AppConstants.getApiKey()
         }
         
         return true
     }
     
     @MainActor
-    private func handleTrackingAndNotificationPermissions(application: UIApplication) async {
+    private func handleNotificationPermissions(application: UIApplication) async {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         do {
             let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: authOptions)

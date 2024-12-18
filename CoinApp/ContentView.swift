@@ -21,7 +21,7 @@ class ContentViewModel: ObservableObject {
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
     
-    @ObservedObject private var appProvider = AppProvider.instance
+    @ObservedObject private var appProvider = AppProvider.shared
     
     @State private var isSearchSheetPresented = false
     @State private var showAlert = false
@@ -38,11 +38,17 @@ struct ContentView: View {
                         }
                         .tag(0)
                     
-                    AnalysisView()
+                    ChatView()
                         .tabItem {
-                            Label("Analysis", systemImage: "chart.line.uptrend.xyaxis")
+                            Label("AI Chat", systemImage: "message.badge.waveform")
                         }
                         .tag(1)
+                    
+                    AnalysisView()
+                        .tabItem {
+                            Label("Analysis", systemImage: "plus.viewfinder")
+                        }
+                        .tag(2)
                 }
                 .onAppear {
                     let appearance = UITabBarAppearance()

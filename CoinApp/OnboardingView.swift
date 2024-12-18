@@ -25,7 +25,7 @@ struct OnboardingView: View {
     
     @Environment(\.requestReview) var requestReview
     
-    @ObservedObject private var appProvider = AppProvider.instance
+    @ObservedObject private var appProvider = AppProvider.shared
     
     @State private var currentStep: Int = 0
     
