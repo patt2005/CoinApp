@@ -70,7 +70,7 @@ struct MessageRowView: View {
     let retryCallback: (MessageRow) -> Void
     
     private func messageBubble(text: String, image: String, bgColor: Color, responseError: String?, isLoading: Bool, imagesList: [UIImage] = []) -> some View {
-        HStack(alignment: .top, spacing: 24) {
+        HStack(alignment: .top, spacing: 13) {
             Image(image)
                 .resizable()
                 .scaledToFit()

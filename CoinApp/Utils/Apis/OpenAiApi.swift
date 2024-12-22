@@ -242,7 +242,7 @@ class OpenAiApi {
         var messages: [[String: Any]] = [
             [
                 "role": "developer",
-                "content": systemPrompt,
+                "content": systemPrompt
             ]
         ]
         
@@ -307,11 +307,10 @@ class OpenAiApi {
         return AsyncThrowingStream<String, Error> { continuation in
             Task(priority: .userInitiated) {
                 do {
-                    var streamText = ""
+                    
                     for try await line in result.lines {
                         if line.hasPrefix("data: "), let data = line.dropFirst(6).data(using: .utf8), let response = try? JSONDecoder().decode(CompletionResponse.self, from: data), let text = response.choices.first?.delta.content {
-                            streamText += text
-                            continuation.yield(text)
+                            continuation.yield(text.replacingOccurrences(of: "**", with: ""))
                         }
                     }
                     continuation.finish()

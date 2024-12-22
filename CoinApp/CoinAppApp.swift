@@ -9,7 +9,6 @@ import SwiftUI
 import RevenueCat
 import Firebase
 import FirebaseMessaging
-import AppTrackingTransparency
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.Message_ID"
@@ -102,10 +101,6 @@ extension AppDelegate: MessagingDelegate {
         NotificationCenter.default.post(name: Notification.Name("FCMToken"),
                                         object: nil,
                                         userInfo: dataDict)
-        
-        Messaging.messaging().subscribe(toTopic: "main") { error in
-            print("Subscribed to main topic")
-        }
     }
     
     func application(_ application: UIApplication,

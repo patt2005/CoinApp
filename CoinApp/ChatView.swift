@@ -107,7 +107,7 @@ struct ChatView: View {
                                 .foregroundStyle(.secondary)
                                 .font(.body)
                         }
-                        .padding(.top, 250)
+                        .padding(.top, 200)
                     } else {
                         ForEach(viewModel.messages, id: \.id) { message in
                             MessageRowView(messageRow: message) { message in
@@ -120,6 +120,25 @@ struct ChatView: View {
                 }
                 .onTapGesture {
                     isTextFieldFocused = false
+                }
+                .sheet(isPresented: $isImagePickerPresented) {
+                    ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
+                }
+                .actionSheet(isPresented: $showActionSheet) {
+                    ActionSheet(
+                        title: Text("Choose Photo Source"),
+                        buttons: [
+                            .default(Text("From Photos")) {
+                                sourceType = .photoLibrary
+                                isImagePickerPresented = true
+                            },
+                            .default(Text("Take Photo")) {
+                                sourceType = .camera
+                                isImagePickerPresented = true
+                            },
+                            .cancel {}
+                        ]
+                    )
                 }
                 
                 VStack {
@@ -175,11 +194,11 @@ struct ChatView: View {
                             Button(action: {
                                 if viewModel.inputText.isEmpty { return }
                                 Task { @MainActor in
+                                    isTextFieldFocused = false
+                                    await viewModel.sendTapped()
                                     withAnimation {
                                         scrollToBottom(proxy: proxy)
                                     }
-                                    isTextFieldFocused = false
-                                    await viewModel.sendTapped()
                                 }
                             }) {
                                 ZStack {
@@ -204,25 +223,6 @@ struct ChatView: View {
                 .cornerRadius(20)
                 .padding(.horizontal, 13)
                 .padding(.bottom, 20)
-                .sheet(isPresented: $isImagePickerPresented) {
-                    ImagePicker(selectedImage: $viewModel.selectedImage, isImagePickerPresented: $isImagePickerPresented, sourceType: sourceType)
-                }
-                .actionSheet(isPresented: $showActionSheet) {
-                    ActionSheet(
-                        title: Text("Choose Photo Source"),
-                        buttons: [
-                            .default(Text("From Photos")) {
-                                sourceType = .photoLibrary
-                                isImagePickerPresented = true
-                            },
-                            .default(Text("Take Photo")) {
-                                sourceType = .camera
-                                isImagePickerPresented = true
-                            },
-                            .cancel {}
-                        ]
-                    )
-                }
             }
             
         }

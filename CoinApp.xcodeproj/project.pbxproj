@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0465BE20FB981980BF688D99 /* Pods_CoinAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7F8799C80CFFB17A34CA66 /* Pods_CoinAppTests.framework */; };
+		810140FE2D18251A0030BF22 /* cash-sound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 810140FD2D18251A0030BF22 /* cash-sound.caf */; };
 		81C9E1992CFCE149002BB1FF /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E1982CFCE149002BB1FF /* SuperwallKit */; };
 		81C9E19C2CFD0128002BB1FF /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E19B2CFD0128002BB1FF /* RevenueCat */; };
 		81C9E19E2CFD0128002BB1FF /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 81C9E19D2CFD0128002BB1FF /* RevenueCatUI */; };
@@ -16,8 +16,9 @@
 		81F3F6702D08B4790001BE50 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F66F2D08B4790001BE50 /* FirebaseCrashlytics */; };
 		81F3F6722D08B4790001BE50 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F6712D08B4790001BE50 /* FirebaseMessaging */; };
 		81F3F6742D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 81F3F6732D08C1BC0001BE50 /* FirebaseAnalyticsWithoutAdIdSupport */; };
-		E68CD689247E66FD4BAFB71A /* Pods_CoinApp_CoinAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7C37BE0016EB02FDD00E12 /* Pods_CoinApp_CoinAppUITests.framework */; };
-		EE170111A6CDAD9F8A7492F9 /* Pods_CoinApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC6229D437D5951B058DE41 /* Pods_CoinApp.framework */; };
+		D666211B93BE072596F6AD6F /* Pods_CoinAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A0850835A9C8301D534F53 /* Pods_CoinAppTests.framework */; };
+		DB0659FF2A880AB4EA877990 /* Pods_CoinApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB847E1256148532D71E368A /* Pods_CoinApp.framework */; };
+		ED9735A999DB0031763BC1B7 /* Pods_CoinApp_CoinAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AE29803B9AEDD42A477B35 /* Pods_CoinApp_CoinAppUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,21 +38,45 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		81101DBA2D157C6200E9BFC1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		3CC6229D437D5951B058DE41 /* Pods_CoinApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B4918307A832A05654A8106 /* Pods-CoinApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp.release.xcconfig"; path = "Target Support Files/Pods-CoinApp/Pods-CoinApp.release.xcconfig"; sourceTree = "<group>"; };
-		4B7F8799C80CFFB17A34CA66 /* Pods_CoinAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		52203E27CE658B4F0F687A4C /* Pods-CoinAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinAppTests.release.xcconfig"; path = "Target Support Files/Pods-CoinAppTests/Pods-CoinAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		6E7C37BE0016EB02FDD00E12 /* Pods_CoinApp_CoinAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinApp_CoinAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		04AE29803B9AEDD42A477B35 /* Pods_CoinApp_CoinAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinApp_CoinAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B6719CF0263BB1FB015F401 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp-CoinAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-CoinApp-CoinAppUITests/Pods-CoinApp-CoinAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		24A0850835A9C8301D534F53 /* Pods_CoinAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C235437983F8D910BD3FCE3 /* Pods-CoinAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinAppTests.release.xcconfig"; path = "Target Support Files/Pods-CoinAppTests/Pods-CoinAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		4C3F0E337483012672086C52 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp-CoinAppUITests.release.xcconfig"; path = "Target Support Files/Pods-CoinApp-CoinAppUITests/Pods-CoinApp-CoinAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		7964137C45976BFD805645EE /* Pods-ImageNotification.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageNotification.debug.xcconfig"; path = "Target Support Files/Pods-ImageNotification/Pods-ImageNotification.debug.xcconfig"; sourceTree = "<group>"; };
+		810140FD2D18251A0030BF22 /* cash-sound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cash-sound.caf"; sourceTree = "<group>"; };
+		8110227D2D1603A200E9BFC1 /* FirebaseMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8131B05E2CF3173F003A01B1 /* CoinApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoinApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8131B06E2CF31740003A01B1 /* CoinAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoinAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8131B0782CF31740003A01B1 /* CoinAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoinAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		817697DA2D0952A200B1D2FD /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		81A494962D160CCC00B89D14 /* FirebaseMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B09B252D16146B003AA8CA /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B09B272D1617DF003AA8CA /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B09B292D1617E6003AA8CA /* FirebaseInstallations.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseInstallations.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B09B2B2D1617EC003AA8CA /* FBLPromises.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FBLPromises.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81B09B2D2D1617F2003AA8CA /* GoogleUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E066732D06ED3E00D4BF85 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		8EDF643DBF941FB35AF3D840 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp-CoinAppUITests.release.xcconfig"; path = "Target Support Files/Pods-CoinApp-CoinAppUITests/Pods-CoinApp-CoinAppUITests.release.xcconfig"; sourceTree = "<group>"; };
-		B0FC4B4E8D255A9418753F21 /* Pods-CoinApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp.debug.xcconfig"; path = "Target Support Files/Pods-CoinApp/Pods-CoinApp.debug.xcconfig"; sourceTree = "<group>"; };
-		B8DDFFACF5010D7FFCADC706 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp-CoinAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-CoinApp-CoinAppUITests/Pods-CoinApp-CoinAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		F050F24D2F9AC797FB456DAE /* Pods-CoinAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinAppTests.debug.xcconfig"; path = "Target Support Files/Pods-CoinAppTests/Pods-CoinAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		853044A7728CC55C5618BA2A /* Pods-CoinApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp.release.xcconfig"; path = "Target Support Files/Pods-CoinApp/Pods-CoinApp.release.xcconfig"; sourceTree = "<group>"; };
+		994B565B5F0A7E65E9301EAB /* Pods-ImageNotification.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageNotification.release.xcconfig"; path = "Target Support Files/Pods-ImageNotification/Pods-ImageNotification.release.xcconfig"; sourceTree = "<group>"; };
+		C12AB3F87B67873D285CD5B5 /* Pods_ImageNotification.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageNotification.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5A5AD5EE04025A1F886BCD3 /* Pods-CoinAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinAppTests.debug.xcconfig"; path = "Target Support Files/Pods-CoinAppTests/Pods-CoinAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FB847E1256148532D71E368A /* Pods_CoinApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoinApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF90CC008560E0306B8ECD4 /* Pods-CoinApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoinApp.debug.xcconfig"; path = "Target Support Files/Pods-CoinApp/Pods-CoinApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -114,7 +139,7 @@
 				81C9E19E2CFD0128002BB1FF /* RevenueCatUI in Frameworks */,
 				81F3F6702D08B4790001BE50 /* FirebaseCrashlytics in Frameworks */,
 				81C9E1992CFCE149002BB1FF /* SuperwallKit in Frameworks */,
-				EE170111A6CDAD9F8A7492F9 /* Pods_CoinApp.framework in Frameworks */,
+				DB0659FF2A880AB4EA877990 /* Pods_CoinApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,7 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0465BE20FB981980BF688D99 /* Pods_CoinAppTests.framework in Frameworks */,
+				D666211B93BE072596F6AD6F /* Pods_CoinAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E68CD689247E66FD4BAFB71A /* Pods_CoinApp_CoinAppUITests.framework in Frameworks */,
+				ED9735A999DB0031763BC1B7 /* Pods_CoinApp_CoinAppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,12 +165,14 @@
 		141EBAD2D116E171FBDA28E4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B0FC4B4E8D255A9418753F21 /* Pods-CoinApp.debug.xcconfig */,
-				4B4918307A832A05654A8106 /* Pods-CoinApp.release.xcconfig */,
-				B8DDFFACF5010D7FFCADC706 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */,
-				8EDF643DBF941FB35AF3D840 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */,
-				F050F24D2F9AC797FB456DAE /* Pods-CoinAppTests.debug.xcconfig */,
-				52203E27CE658B4F0F687A4C /* Pods-CoinAppTests.release.xcconfig */,
+				FEF90CC008560E0306B8ECD4 /* Pods-CoinApp.debug.xcconfig */,
+				853044A7728CC55C5618BA2A /* Pods-CoinApp.release.xcconfig */,
+				1B6719CF0263BB1FB015F401 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */,
+				4C3F0E337483012672086C52 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */,
+				F5A5AD5EE04025A1F886BCD3 /* Pods-CoinAppTests.debug.xcconfig */,
+				3C235437983F8D910BD3FCE3 /* Pods-CoinAppTests.release.xcconfig */,
+				7964137C45976BFD805645EE /* Pods-ImageNotification.debug.xcconfig */,
+				994B565B5F0A7E65E9301EAB /* Pods-ImageNotification.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -153,11 +180,19 @@
 		65337F086940FEDD2A64E086 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81B09B2D2D1617F2003AA8CA /* GoogleUtilities.framework */,
+				81B09B2B2D1617EC003AA8CA /* FBLPromises.framework */,
+				81B09B292D1617E6003AA8CA /* FirebaseInstallations.framework */,
+				81B09B272D1617DF003AA8CA /* FirebaseCore.framework */,
+				81B09B252D16146B003AA8CA /* FirebaseCore.framework */,
+				81A494962D160CCC00B89D14 /* FirebaseMessaging.framework */,
+				8110227D2D1603A200E9BFC1 /* FirebaseMessaging.framework */,
 				817697DA2D0952A200B1D2FD /* AdSupport.framework */,
 				81E066732D06ED3E00D4BF85 /* StoreKit.framework */,
-				3CC6229D437D5951B058DE41 /* Pods_CoinApp.framework */,
-				6E7C37BE0016EB02FDD00E12 /* Pods_CoinApp_CoinAppUITests.framework */,
-				4B7F8799C80CFFB17A34CA66 /* Pods_CoinAppTests.framework */,
+				FB847E1256148532D71E368A /* Pods_CoinApp.framework */,
+				04AE29803B9AEDD42A477B35 /* Pods_CoinApp_CoinAppUITests.framework */,
+				24A0850835A9C8301D534F53 /* Pods_CoinAppTests.framework */,
+				C12AB3F87B67873D285CD5B5 /* Pods_ImageNotification.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,6 +200,7 @@
 		8131B0552CF3173F003A01B1 = {
 			isa = PBXGroup;
 			children = (
+				810140FD2D18251A0030BF22 /* cash-sound.caf */,
 				8131B0602CF3173F003A01B1 /* CoinApp */,
 				8131B0712CF31740003A01B1 /* CoinAppTests */,
 				8131B07B2CF31740003A01B1 /* CoinAppUITests */,
@@ -191,10 +227,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8131B0822CF31740003A01B1 /* Build configuration list for PBXNativeTarget "CoinApp" */;
 			buildPhases = (
-				CFA1F7AA1B96642B87869E4A /* [CP] Check Pods Manifest.lock */,
+				EDA13C5847B9991090DA7523 /* [CP] Check Pods Manifest.lock */,
 				8131B05A2CF3173F003A01B1 /* Sources */,
 				8131B05B2CF3173F003A01B1 /* Frameworks */,
 				8131B05C2CF3173F003A01B1 /* Resources */,
+				81101DBA2D157C6200E9BFC1 /* Embed Foundation Extensions */,
 				8164B8C92D0948630039252D /* ShellScript */,
 			);
 			buildRules = (
@@ -222,7 +259,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8131B0852CF31740003A01B1 /* Build configuration list for PBXNativeTarget "CoinAppTests" */;
 			buildPhases = (
-				F395457242646541A8CA87EE /* [CP] Check Pods Manifest.lock */,
+				D38416A70F1BC9955A9FD603 /* [CP] Check Pods Manifest.lock */,
 				8131B06A2CF31740003A01B1 /* Sources */,
 				8131B06B2CF31740003A01B1 /* Frameworks */,
 				8131B06C2CF31740003A01B1 /* Resources */,
@@ -244,7 +281,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8131B0882CF31740003A01B1 /* Build configuration list for PBXNativeTarget "CoinAppUITests" */;
 			buildPhases = (
-				429E6FAB3B81BF22185961CC /* [CP] Check Pods Manifest.lock */,
+				365C7B37CDE9491FF7B30DCA /* [CP] Check Pods Manifest.lock */,
 				8131B0742CF31740003A01B1 /* Sources */,
 				8131B0752CF31740003A01B1 /* Frameworks */,
 				8131B0762CF31740003A01B1 /* Resources */,
@@ -269,8 +306,8 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
-				LastUpgradeCheck = 1610;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					8131B05D2CF3173F003A01B1 = {
 						CreatedOnToolsVersion = 16.1;
@@ -316,6 +353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				810140FE2D18251A0030BF22 /* cash-sound.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +374,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		429E6FAB3B81BF22185961CC /* [CP] Check Pods Manifest.lock */ = {
+		365C7B37CDE9491FF7B30DCA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -380,29 +418,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
-		CFA1F7AA1B96642B87869E4A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CoinApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F395457242646541A8CA87EE /* [CP] Check Pods Manifest.lock */ = {
+		D38416A70F1BC9955A9FD603 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -418,6 +434,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-CoinAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EDA13C5847B9991090DA7523 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CoinApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -585,18 +623,31 @@
 		};
 		8131B0832CF31740003A01B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0FC4B4E8D255A9418753F21 /* Pods-CoinApp.debug.xcconfig */;
+			baseConfigurationReference = FEF90CC008560E0306B8ECD4 /* Pods-CoinApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = MainAppColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CoinApp/CoinApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = VGKDATW82L;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoinApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Meme AI";
@@ -612,8 +663,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.16;
-				OTHER_LDFLAGS = "-ObjC";
+				MARKETING_VERSION = 1.0.17;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.codbun.meme.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -624,17 +678,30 @@
 		};
 		8131B0842CF31740003A01B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4B4918307A832A05654A8106 /* Pods-CoinApp.release.xcconfig */;
+			baseConfigurationReference = 853044A7728CC55C5618BA2A /* Pods-CoinApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = MainAppColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CoinApp/CoinApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = VGKDATW82L;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoinApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Meme AI";
@@ -650,8 +717,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.16;
-				OTHER_LDFLAGS = "-ObjC";
+				MARKETING_VERSION = 1.0.17;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.codbun.meme.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -663,14 +733,14 @@
 		};
 		8131B0862CF31740003A01B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F050F24D2F9AC797FB456DAE /* Pods-CoinAppTests.debug.xcconfig */;
+			baseConfigurationReference = F5A5AD5EE04025A1F886BCD3 /* Pods-CoinAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LFM9U35578;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goatapps.CoinAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -683,14 +753,14 @@
 		};
 		8131B0872CF31740003A01B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52203E27CE658B4F0F687A4C /* Pods-CoinAppTests.release.xcconfig */;
+			baseConfigurationReference = 3C235437983F8D910BD3FCE3 /* Pods-CoinAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LFM9U35578;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goatapps.CoinAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -703,12 +773,13 @@
 		};
 		8131B0892CF31740003A01B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8DDFFACF5010D7FFCADC706 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */;
+			baseConfigurationReference = 1B6719CF0263BB1FB015F401 /* Pods-CoinApp-CoinAppUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LFM9U35578;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goatapps.CoinAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -721,12 +792,13 @@
 		};
 		8131B08A2CF31740003A01B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8EDF643DBF941FB35AF3D840 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */;
+			baseConfigurationReference = 4C3F0E337483012672086C52 /* Pods-CoinApp-CoinAppUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LFM9U35578;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goatapps.CoinAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

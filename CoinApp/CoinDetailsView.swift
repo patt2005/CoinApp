@@ -105,8 +105,6 @@ struct CoinDetailsView: View {
     
     private func getDateRangeButton(index: Int) -> some View {
         Button(action: {
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.prepare()
             impactFeedback.impactOccurred()
             
             trimValue = 0
@@ -572,6 +570,7 @@ struct CoinDetailsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
+                    impactFeedback.impactOccurred()
                     isSharing = true
                 }) {
                     ZStack {

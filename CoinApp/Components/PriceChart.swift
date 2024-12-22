@@ -107,6 +107,7 @@ struct PriceChart: View {
                 }.onEnded { _ in
                     withAnimation {
                         showPlot = false
+                        selectedPrice = priceList.last ?? 0
                     }
                 })
             }

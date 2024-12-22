@@ -30,6 +30,26 @@ class CoinListViewModel: ObservableObject {
     }
     
     init() {
+        impactFeedback.prepare()
+        
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor(.white),
+            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+        ]
+        
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor(.white),
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        
+        appearance.backgroundColor = UIColor(AppConstants.backgroundColor)
+        appearance.shadowColor = .clear
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        
         $pickedDateRange.sink { newDate in
             Task {
                 await CMCApi.shared.fetchCoinData(dateRange: self.pickedDateRange)
@@ -65,7 +85,6 @@ struct CoinListView: View {
     
     private func getCoinListTypeCard(_ type: String) -> some View {
         Button(action: {
-            viewModel.impactFeedback.prepare()
             viewModel.impactFeedback.impactOccurred()
             viewModel.pickedCoinListType = type
         }) {
@@ -107,28 +126,9 @@ struct CoinListView: View {
         }
     }
     
-    init() {
-        let appearance = UINavigationBarAppearance()
-        
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor(.white),
-            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
-        ]
-        
-        appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor(.white),
-            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
-        ]
-        
-        appearance.backgroundColor = UIColor(AppConstants.backgroundColor)
-        appearance.shadowColor = .clear
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-    }
-    
     private func getCoinScrollCard(coin: Coin) -> some View {
         Button(action: {
+            viewModel.impactFeedback.impactOccurred()
             if userViewModel.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {

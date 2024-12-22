@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseAnalytics
+import FirebaseMessaging
 
 class AppProvider: ObservableObject {
     static let shared = AppProvider()
@@ -17,6 +18,9 @@ class AppProvider: ObservableObject {
     }
     
     func completeOnboarding() {
+        Messaging.messaging().subscribe(toTopic: "main") { error in
+            print("Subscribed to main topic")
+        }
         AnalyticsManager.shared.logEvent(name: AnalyticsEventTutorialComplete)
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         self.showOnboarding = false
