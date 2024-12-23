@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import SuperwallKit
 
 class AnalysisViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
@@ -55,8 +56,6 @@ struct AnalysisView: View {
     
     @State private var showActionSheet = false
     
-    @EnvironmentObject private var userViewModel: UserViewModel
-    
     var body: some View {
         ScrollView {
             VStack {
@@ -91,27 +90,27 @@ struct AnalysisView: View {
                     .padding(.horizontal, 30)
                 
                 Button(action: {
-                    if userViewModel.isUserSubscribed {
+                    if AppProvider.shared.isUserSubscribed {
                         showActionSheet = true
                     } else {
-                        withAnimation {
-                            viewModel.appProvider.showPaywall = true
-                        }
+                        Superwall.shared.register(event: "campaign_trigger")
                     }
                 }) {
-                    HStack(spacing: 7) {
-                        Image(systemName: "plus.viewfinder")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                        
+                    HStack(spacing: 10) { // Add spacing between the icon and text
+                        Image(systemName: "chart.bar") // Add an icon (choose a suitable SF Symbol)
+                            .font(.title2) // Adjust size
+                            .foregroundColor(.white) // Match icon color with text
                         Text("Analyze Chart")
                             .font(Font.custom("Inter", size: 17).weight(.bold))
-                            .foregroundStyle(.white)
+                            .foregroundColor(.white)
                     }
-                    .padding(.vertical, 14)
-                    .padding(.horizontal, 100 )
-                    .background(AppConstants.primaryColor)
-                    .cornerRadius(14)
+                    .padding(.vertical, 16) // Increased vertical padding for better touch target
+                    .padding(.horizontal, 80) // Adjust horizontal padding for a better balance
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .leading, endPoint: .trailing) // Add a gradient background
+                    )
+                    .cornerRadius(20) // Slightly larger corner radius for a smoother look
+                    .shadow(color: .gray.opacity(0.5), radius: 8, x: 0, y: 4) // Add a subtle shadow for depth
                     .padding(.top, 60)
                 }
                 

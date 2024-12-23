@@ -26,8 +26,6 @@ struct ContentView: View {
     @State private var isSearchSheetPresented = false
     @State private var showAlert = false
     
-    @EnvironmentObject private var userViewModel: UserViewModel
-    
     var body: some View {
         ZStack {
             NavigationStack(path: $appProvider.path) {
@@ -90,13 +88,11 @@ struct ContentView: View {
                     case .searchCoin: SearchView()
                     }
                 }
-                .blur(radius: appProvider.showPaywall || appProvider.showOnboarding ? 4 : 0)
+                .blur(radius: appProvider.showOnboarding ? 4 : 0)
             }
             
             if appProvider.showOnboarding {
                 OnboardingView()
-            } else if appProvider.showPaywall {
-                PaywallView()
             }
         }
     }

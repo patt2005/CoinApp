@@ -6,13 +6,12 @@
 //
 
 import SwiftUI
+import SuperwallKit
 
 struct CoinListCard: View {
     let coin: Coin
     
     @ObservedObject private var appProvider = AppProvider.shared
-    
-    @EnvironmentObject var userViewModel: UserViewModel
     
     @Binding var pickedDateRange: String
     
@@ -29,12 +28,10 @@ struct CoinListCard: View {
     var body: some View {
         Button(action: {
             impactFeedback.impactOccurred()
-            if userViewModel.isUserSubscribed {
+            if appProvider.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {
-                withAnimation {
-                    appProvider.showPaywall = true
-                }
+                Superwall.shared.register(event: "campaign_trigger")
             }
         }) {
             VStack {
@@ -49,7 +46,7 @@ struct CoinListCard: View {
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(25)
-                                .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
+                                .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
                             Rectangle()
                                 .frame(width: 50, height: 50)
@@ -64,7 +61,7 @@ struct CoinListCard: View {
                         Text(coin.symbol)
                             .font(.headline)
                             .foregroundStyle(.white)
-                            .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
+                            .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                         HStack(spacing: 0) {
                             Text("$\(formatNumber(coin.volume24h))")
                                 .font(.subheadline)

@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+let purchaseController = RCPurchaseController()
+
 class AppConstants {
     static let backgroundColor: Color = Color(hex: "#050506")
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
@@ -15,6 +17,7 @@ class AppConstants {
     
     static let revenueCatApiKey = "appl_uJbYFaiwBZHJPOMizXgSqOvSqbV"
     static var openAiApiKey: String = ""
+    static let superWallApiKey = "pk_bcb43ffa68186798f9b0f326960269a1c9e41b2a404cda6d"
     
     struct ApiResponse: Decodable {
         let OPEN_AI_API_KEY: String

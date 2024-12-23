@@ -105,11 +105,11 @@ struct Coin: Decodable, Identifiable, Hashable {
             let priceContainer = try container.nestedContainer(keyedBy: PriceChangeKeys.self, forKey: .priceChange)
             let price = try priceContainer.decode(Double.self, forKey: .price)
             let priceChange1h = try? priceContainer.decode(Double.self, forKey: .priceChange1h)
-            let priceChange24h = try priceContainer.decode(Double.self, forKey: .priceChange24h)
+            let priceChange24h = try? priceContainer.decode(Double.self, forKey: .priceChange24h)
             let priceChange7d = try? priceContainer.decode(Double.self, forKey: .priceChange7d)
             let priceChange30d = try? priceContainer.decode(Double.self, forKey: .priceChange30d)
-            let volume24h = try priceContainer.decode(Double.self, forKey: .volume24h)
-            let marketCap = try container.decode(Double.self, forKey: .marketCap)
+            let volume24h = try? priceContainer.decode(Double.self, forKey: .volume24h)
+            let marketCap = try? container.decode(Double.self, forKey: .marketCap)
             let selfReportedMarketCap = try container.decode(Double.self, forKey: .selfReportedMarketCap)
             
             self.id = id
@@ -117,11 +117,11 @@ struct Coin: Decodable, Identifiable, Hashable {
             self.symbol = symbol
             self.price = price
             self.priceChange1h = priceChange1h
-            self.priceChange24h = priceChange24h
+            self.priceChange24h = priceChange24h ?? 0
             self.priceChange7d = priceChange7d
             self.priceChange30d = priceChange30d
-            self.volume24h = volume24h
-            self.marketCap = marketCap
+            self.volume24h = volume24h ?? 0.0
+            self.marketCap = marketCap ?? 0.0
             self.selfReportedMarketCap = selfReportedMarketCap
         } catch {
             let container = try decoder.container(keyedBy: PairKeys.self)

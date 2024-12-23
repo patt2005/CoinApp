@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import SuperwallKit
 
 class CoinListViewModel: ObservableObject {
     @Published var pickedDateRange = "1h"
@@ -69,8 +70,6 @@ struct CoinListView: View {
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
     private var coinListType = ["Gainers", "Losers","Most Visited", "Recently Added", "Trending"]
     
-    @EnvironmentObject private var userViewModel: UserViewModel
-    
     private func getIcon(_ type: String) -> some View {
         switch type {
         case "Gainers": return Image(systemName: "chart.line.uptrend.xyaxis.circle").foregroundStyle(.green)
@@ -122,19 +121,16 @@ struct CoinListView: View {
             return appProvider.trendingList
         default:
             return []
-            
         }
     }
     
     private func getCoinScrollCard(coin: Coin) -> some View {
         Button(action: {
             viewModel.impactFeedback.impactOccurred()
-            if userViewModel.isUserSubscribed {
+            if appProvider.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {
-                withAnimation {
-                    appProvider.showPaywall = true
-                }
+                Superwall.shared.register(event: "campaign_trigger")
             }
         }) {
             HStack {
@@ -145,7 +141,7 @@ struct CoinListView: View {
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
-                            .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
+                            .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                     } else if phase.error != nil {
                         Image(systemName: "circle.fill")
                             .foregroundColor(.gray)
@@ -164,7 +160,7 @@ struct CoinListView: View {
                     Text(coin.symbol)
                         .font(.headline)
                         .foregroundStyle(.white)
-                        .blur(radius: !userViewModel.isUserSubscribed ? 4 : 0)
+                        .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                     coin.getPriceChangeText("24h")
                 }
             }
@@ -185,11 +181,9 @@ struct CoinListView: View {
                             .fontWeight(.bold)
                             .font(.title2)
                         Spacer()
-                        if !userViewModel.isUserSubscribed {
+                        if !appProvider.isUserSubscribed {
                             Button(action: {
-                                withAnimation {
-                                    appProvider.showPaywall = true
-                                }
+                                Superwall.shared.register(event: "campaign_trigger")
                             }) {
                                 ZStack {
                                     Circle()

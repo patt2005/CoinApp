@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import Firebase
 import FirebaseMessaging
+import SuperwallKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.Message_ID"
@@ -25,6 +26,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             await handleNotificationPermissions(application: application)
             await AppConstants.getApiKey()
         }
+        
+        Superwall.configure(apiKey: AppConstants.superWallApiKey, purchaseController: purchaseController)
+        
+        purchaseController.syncSubscriptionStatus()
         
         return true
     }
@@ -47,14 +52,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct CoinAppApp: App {
-    @StateObject var userViewModel = UserViewModel()
-    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(userViewModel)
         }
     }
 }

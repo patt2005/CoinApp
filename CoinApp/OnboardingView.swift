@@ -8,6 +8,7 @@
 import SwiftUI
 import StoreKit
 import FirebaseAnalytics
+import SuperwallKit
 
 struct OnboardingStep {
     let image: String
@@ -110,7 +111,7 @@ struct OnboardingView: View {
                 } else {
                     withAnimation {
                         appProvider.completeOnboarding()
-                        appProvider.showPaywall = true
+                        Superwall.shared.register(event: "campaign_trigger")
                     }
                 }
             }) {
