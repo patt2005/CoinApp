@@ -15,7 +15,7 @@ class AppConstants {
     static let grayColor: Color = Color(hex: "#FFFFFF").opacity(0.1)
     static var primaryColor: Color = Color(hex: "#FF6500")
     
-    static let revenueCatApiKey = "appl_uJbYFaiwBZHJPOMizXgSqOvSqbV"
+    static let revenueCatApiKey = "appl_JvpFINDddbyqKGswPhgybKrZwgb"
     static var openAiApiKey: String = ""
     static let superWallApiKey = "pk_bcb43ffa68186798f9b0f326960269a1c9e41b2a404cda6d"
     

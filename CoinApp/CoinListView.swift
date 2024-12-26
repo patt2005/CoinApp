@@ -33,24 +33,6 @@ class CoinListViewModel: ObservableObject {
     init() {
         impactFeedback.prepare()
         
-        let appearance = UINavigationBarAppearance()
-        
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor(.white),
-            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
-        ]
-        
-        appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor(.white),
-            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
-        ]
-        
-        appearance.backgroundColor = UIColor(AppConstants.backgroundColor)
-        appearance.shadowColor = .clear
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        
         $pickedDateRange.sink { newDate in
             Task {
                 await CMCApi.shared.fetchCoinData(dateRange: self.pickedDateRange)
@@ -68,7 +50,7 @@ struct CoinListView: View {
     @State private var hasFetchedApi = false
     
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
-    private var coinListType = ["Gainers", "Losers","Most Visited", "Recently Added", "Trending"]
+    private var coinListType = ["Gainers", "Losers", "Most Visited", "Recently Added", "Trending"]
     
     private func getIcon(_ type: String) -> some View {
         switch type {
@@ -109,15 +91,15 @@ struct CoinListView: View {
     
     private func getList(_ type: String) -> [Coin] {
         switch type {
-        case coinListType[0]:
+        case "Gainers":
             return appProvider.gainersList
-        case coinListType[1]:
+        case "Losers":
             return appProvider.losersList
-        case coinListType[2]:
+        case "Recently Added":
             return appProvider.recentlyAddedList
-        case coinListType[3]:
+        case "Most Visited":
             return appProvider.mostVisitedList
-        case coinListType[4]:
+        case "Trending":
             return appProvider.trendingList
         default:
             return []
@@ -168,6 +150,26 @@ struct CoinListView: View {
         }
     }
     
+    init() {
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor(.white),
+            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+        ]
+        
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor(.white),
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        
+        appearance.backgroundColor = UIColor(AppConstants.backgroundColor)
+        appearance.shadowColor = .clear
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
     var body: some View {
         VStack {
             if viewModel.isLoading {
@@ -203,7 +205,7 @@ struct CoinListView: View {
                             Rectangle()
                                 .foregroundStyle(.clear)
                                 .frame(width: 4)
-                            ForEach(appProvider.mostVisitedList, id: \.self) { item in
+                            ForEach(appProvider.trendingList, id: \.self) { item in
                                 getCoinScrollCard(coin: item)
                                     .padding(.trailing, 10)
                             }

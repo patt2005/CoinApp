@@ -96,18 +96,26 @@ struct ChatView: View {
             VStack {
                 ScrollView {
                     if viewModel.messages.isEmpty {
-                        VStack(spacing: 15) {
-                            Image(systemName: "ellipsis.message.fill")
+                        VStack(spacing: 20) {
+                            Image(systemName: "bitcoinsign.circle.fill")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 60, height: 60)
-                                .foregroundStyle(.gray)
+                                .frame(width: 70, height: 70)
+                                .foregroundStyle(Color.orange, Color.yellow)
                             
-                            Text("Message something to start the chat.")
-                                .foregroundStyle(.secondary)
-                                .font(.body)
+                            Text("Start Exploring Meme Coins!")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 30)
+                                .multilineTextAlignment(.center)
+                            
+                            Text("Ask about trends, prices, or the latest meme coins!")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
                         }
-                        .padding(.top, 200)
+                        .padding(.top, 150)
                     } else {
                         ForEach(viewModel.messages, id: \.id) { message in
                             MessageRowView(messageRow: message) { message in
@@ -174,18 +182,18 @@ struct ChatView: View {
                         Button(action: {
                             showActionSheet = true
                         }) {
-                            Image(systemName: "photo.badge.plus")
+                            Image(systemName: "photo.on.rectangle.angled")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
-                                .foregroundStyle(.white)
+                                .foregroundColor(.white)
                         }
                         
-                        TextField("Message", text: $viewModel.inputText)
+                        TextField("Ask about meme coins...", text: $viewModel.inputText)
+                            .padding(.horizontal, 5)
+                            .background(.clear)
+                            .cornerRadius(15)
                             .foregroundColor(.white)
-                            .disableAutocorrection(true)
-                            .focused($isTextFieldFocused)
-                            .disabled(viewModel.isInteracting)
                         
                         if viewModel.isInteracting {
                             LoadingAnimation()
@@ -202,16 +210,15 @@ struct ChatView: View {
                                 }
                             }) {
                                 ZStack {
-                                    Rectangle()
-                                        .foregroundStyle(.white)
-                                        .frame(width: 30, height: 30)
-                                        .cornerRadius(15)
+                                    Circle()
+                                        .fill(.white)
+                                        .frame(width: 32.5, height: 32.5)
                                     
                                     Image(systemName: "arrow.up")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 15, height: 15)
-                                        .foregroundStyle(.black)
+                                        .foregroundColor(.black.opacity(0.8))
                                 }
                             }
                         }
