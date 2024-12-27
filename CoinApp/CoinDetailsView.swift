@@ -76,7 +76,7 @@ struct CoinDetailsView: View {
             if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
                 marketCap = selfReportedMarketCap
             } else {
-                marketCap = coinDetails?.statistics.marketCap ?? 0.0
+                marketCap = coinDetails?.statistics.fullyDilutedMarketCap ?? 0.0
             }
             memeCoinAnalysis = try await OpenAiApi.shared.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
             
@@ -126,7 +126,7 @@ struct CoinDetailsView: View {
         ZStack {
             VStack {
                 if let coinDetails = coinDetails {
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(alignment: .center, spacing: 10) {
                                 AsyncImage(url: URL(string: coin.imageUrl)) { phase in
@@ -582,6 +582,31 @@ struct CoinDetailsView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 17.5, height: 17.5)
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    impactFeedback.impactOccurred()
+                    if appProvider.coinWatchList.contains(coin) {
+                        appProvider.coinWatchList.removeAll(where: { $0 == coin })
+                    } else {
+                        appProvider.addToWatchlist(coin)
+                    }
+                }) {
+                    if appProvider.coinWatchList.contains(coin) {
+                        Image(systemName: "bookmark.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 33, height: 33)
+                            .foregroundStyle(.white)
+                    } else {
+                        Image(systemName: "bookmark.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 33, height: 33)
+                            .foregroundStyle(.white)
                     }
                 }
             }

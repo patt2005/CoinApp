@@ -31,6 +31,31 @@ class AppProvider: ObservableObject {
         self.showOnboarding = false
     }
     
+    func loadWatchList() async {
+        let watchListArray = UserDefaults.standard.array(forKey: "watchList") as? [Int] ?? []
+        self.watchListId = watchListArray
+        var coinArray: [Coin] = []
+        for id in watchListArray {
+            if let coinDetails = await CMCApi.shared.getCoinDetails(id: id) {
+                if let coin = try? Coin(fromCoinDetails: coinDetails) {
+                    coinArray.append(coin)
+                }
+            }
+        }
+        DispatchQueue.main.async {
+            self.coinWatchList = coinArray
+        }
+    }
+    
+    func addToWatchlist(_ coin: Coin) {
+        self.watchListId.append(coin.id)
+        self.coinWatchList.append(coin)
+        UserDefaults.standard.set(watchListId, forKey: "watchList")
+    }
+    
+    private var watchListId: [Int] = []
+    @Published var coinWatchList: [Coin] = []
+    
     @Published var gainersList: [Coin] = []
     @Published var trendingList: [Coin] = []
     @Published var losersList: [Coin] = []

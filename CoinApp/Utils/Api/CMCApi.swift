@@ -151,6 +151,20 @@ struct Coin: Decodable, Identifiable, Hashable {
             self.marketCap = Double(marketcap ?? "0.0") ?? 0.0
         }
     }
+    
+    init (fromCoinDetails details: CoinDetails) throws {
+        self.id = details.id
+        self.name = details.name
+        self.selfReportedMarketCap = nil
+        self.symbol = details.symbol
+        self.price = details.statistics.price
+        self.volume24h = details.volume
+        self.priceChange24h = details.statistics.priceChangePercentage24h
+        self.marketCap = details.statistics.fullyDilutedMarketCap
+        self.priceChange1h = nil
+        self.priceChange7d = nil
+        self.priceChange30d = nil
+    }
 }
 
 struct MemeCoinAnalysisResponse: Codable, Hashable {
@@ -204,7 +218,7 @@ struct CoinDetails: Codable, Identifiable {
     
     struct Statistics: Codable {
         let price: Double
-        let marketCap: Double
+        let fullyDilutedMarketCap: Double
         let totalSupply: Double
         let rank: Int
         let priceChangePercentage1h: Double

@@ -50,17 +50,17 @@ struct CoinListView: View {
     @State private var hasFetchedApi = false
     
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
-    private var coinListType = ["Gainers", "Losers", "Most Visited", "Recently Added", "Trending"]
+    private var coinListType = ["Gainers", "Losers", "Most Visited", "Recently Added", "Watch List"]
     
     private func getIcon(_ type: String) -> some View {
         switch type {
         case "Gainers": return Image(systemName: "chart.line.uptrend.xyaxis.circle").foregroundStyle(.green)
         case "Losers": return Image(systemName: "chart.line.downtrend.xyaxis.circle").foregroundStyle(.red)
-        case "Recently Added": return Image(systemName: "clock.fill").foregroundStyle(.orange)
+        case "Recently Added": return Image(systemName: "clock").foregroundStyle(.orange)
         case "Most Visited": return Image(systemName: "star.fill").foregroundStyle(.yellow)
-        case "Trending": return Image(systemName: "flame.fill").foregroundStyle(.red)
+        case "Watch List": return Image(systemName: "bookmark").foregroundStyle(.blue)
         default:
-            return Image(systemName: "arrow.up.circle.fill").foregroundStyle(.white)
+            return Image(systemName: "arrow.up.circle.fill").foregroundStyle(.blue)
         }
     }
     
@@ -99,8 +99,8 @@ struct CoinListView: View {
             return appProvider.recentlyAddedList
         case "Most Visited":
             return appProvider.mostVisitedList
-        case "Trending":
-            return appProvider.trendingList
+        case "Watch List":
+            return appProvider.coinWatchList
         default:
             return []
         }
@@ -179,7 +179,7 @@ struct CoinListView: View {
             } else {
                 ScrollView {
                     HStack {
-                        Text("Trending now")
+                        Text("Trending now 🔥")
                             .fontWeight(.bold)
                             .font(.title2)
                         Spacer()
@@ -200,22 +200,32 @@ struct CoinListView: View {
                     .padding(.top, 20)
                     .padding(.horizontal, 16)
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            Rectangle()
-                                .foregroundStyle(.clear)
-                                .frame(width: 4)
-                            ForEach(appProvider.trendingList, id: \.self) { item in
-                                getCoinScrollCard(coin: item)
-                                    .padding(.trailing, 10)
+                    if appProvider.trendingList.isEmpty {
+                        HStack {
+                            ProgressView()
+                        }
+                        .frame(width: UIScreen.main.bounds.width)
+                        .frame(height: 30)
+                        .padding(.top)
+                    } else {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                Rectangle()
+                                    .foregroundStyle(.clear)
+                                    .frame(width: 4)
+                                ForEach(appProvider.trendingList, id: \.self) { item in
+                                    getCoinScrollCard(coin: item)
+                                        .padding(.trailing, 10)
+                                }
                             }
                         }
+                        .frame(height: 30)
+                        .padding(.top)
                     }
-                    .frame(height: 30)
-                    .padding(.top)
+                    
                     
                     HStack {
-                        Text("Discover")
+                        Text("Discover 🚀")
                             .fontWeight(.bold)
                             .font(.title2)
                         Spacer()
@@ -259,8 +269,24 @@ struct CoinListView: View {
                         }
                         .padding(.horizontal, 20)
                     }
-                    ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
-                        CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
+                    if viewModel.pickedCoinListType == "Watch List" && getList(viewModel.pickedCoinListType).isEmpty {
+                        VStack(spacing: 20) {
+                            Image(systemName: "bookmark.slash.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.white)
+                            
+                            Text("Your coin watch list is empty now!")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.top, 100)
+                    } else {
+                        ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
+                            CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
+                        }
                     }
                 }
                 .refreshable {
@@ -273,6 +299,7 @@ struct CoinListView: View {
             if !hasFetchedApi {
                 await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
                 await CMCApi.shared.fetchTrendingCoins()
+                await appProvider.loadWatchList()
                 hasFetchedApi = true
             }
         }
