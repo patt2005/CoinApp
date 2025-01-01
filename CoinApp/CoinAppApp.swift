@@ -12,8 +12,6 @@ import FirebaseMessaging
 import SuperwallKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    let gcmMessageIDKey = "gcm.Message_ID"
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Purchases.logLevel = .debug
         Purchases.configure(withAPIKey: AppConstants.revenueCatApiKey)
@@ -63,29 +61,21 @@ struct CoinAppApp: App {
 
 // MARK: - UNUserNotificationCenterDelegate
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    @MainActor
-    private func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification) -> UNNotificationPresentationOptions {
-        let userInfo = notification.request.content.userInfo
-        print("Notification received while app is in foreground: \(userInfo)")
-        return [.sound, .badge]
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification) async
+    -> UNNotificationPresentationOptions {
+        return [[.badge, .sound]]
     }
     
-    @MainActor
-    private func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse) async {
         let userInfo = response.notification.request.content.userInfo
-        print("User interacted with the notification: \(userInfo)")
-    }
-    
-    @MainActor
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) -> UIBackgroundFetchResult {
-        if let messageID = userInfo[gcmMessageIDKey] {
-            print("Message ID: \(messageID)")
-        }
-        print("Received remote notification: \(userInfo)")
-        return .newData
+        
+        let coin = Coin(fromNotificationData: userInfo)
+        
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        
+        AppProvider.shared.path.append(.coinDetail(coin: coin))
     }
 }
 

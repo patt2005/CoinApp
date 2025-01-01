@@ -545,6 +545,7 @@ struct CoinDetailsView: View {
             .toolbarBackground(Color.clear, for: .navigationBar)
             .task {
                 impactFeedback.prepare()
+                appProvider.gainersList = appProvider.gainersList
                 await loadData()
             }
             .alert(isPresented: $showAlert) {

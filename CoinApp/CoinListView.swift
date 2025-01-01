@@ -182,6 +182,7 @@ struct CoinListView: View {
                         Text("Trending now 🔥")
                             .fontWeight(.bold)
                             .font(.title2)
+                        
                         Spacer()
                         if !appProvider.isUserSubscribed {
                             Button(action: {
@@ -257,7 +258,12 @@ struct CoinListView: View {
                                     Button(action: {
                                         viewModel.pickedDateRange = item
                                     }) {
-                                        Text(item)
+                                        HStack {
+                                            Text(item)
+                                            if item == viewModel.pickedDateRange {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
                             } label: {

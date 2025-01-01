@@ -81,13 +81,12 @@ struct OnboardingView: View {
             HStack {
                 ForEach(0..<onboardingSteps.count, id: \.self) { index in
                     if index == currentStep {
-                        Rectangle()
-                            .frame(width: 60, height: 10)
-                            .cornerRadius(10)
+                        Circle()
+                            .frame(width: 13, height: 13)
                             .foregroundStyle(AppConstants.primaryColor)
                     } else {
                         Circle()
-                            .frame(width: 10, height: 10)
+                            .frame(width: 13, height: 13)
                             .foregroundStyle(Color(hex: "#2F2F30"))
                     }
                 }

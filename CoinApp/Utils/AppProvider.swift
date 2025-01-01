@@ -37,11 +37,11 @@ class AppProvider: ObservableObject {
         var coinArray: [Coin] = []
         for id in watchListArray {
             if let coinDetails = await CMCApi.shared.getCoinDetails(id: id) {
-                if let coin = try? Coin(fromCoinDetails: coinDetails) {
-                    coinArray.append(coin)
-                }
+                let coin = Coin(fromCoinDetails: coinDetails)
+                coinArray.append(coin)
             }
         }
+        
         DispatchQueue.main.async {
             self.coinWatchList = coinArray
         }
@@ -63,7 +63,7 @@ class AppProvider: ObservableObject {
     @Published var mostVisitedList: [Coin] = []
     
     @Published var showOnboarding = false
-
+    
     @Published var path: [AppDestination] = []
     
     @Published var chatHistoryList: [MessageRow] = []

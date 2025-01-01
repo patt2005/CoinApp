@@ -77,7 +77,7 @@ struct CoinListCard: View {
                         coin.getPriceChangeText(type == "Gainers" || type == "Losers" ? pickedDateRange : "24h")
                     }
                 }
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 13)
             }
         }
         .onAppear {

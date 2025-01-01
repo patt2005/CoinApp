@@ -185,11 +185,11 @@ struct ChatView: View {
                             Image(systemName: "photo.on.rectangle.angled")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 30, height: 30)
+                                .frame(width: 27.5, height: 27.5)
                                 .foregroundColor(.white)
                         }
                         
-                        TextField("Ask about meme coins...", text: $viewModel.inputText)
+                        TextField("Type here...", text: $viewModel.inputText)
                             .padding(.horizontal, 5)
                             .background(.clear)
                             .cornerRadius(15)
@@ -225,7 +225,7 @@ struct ChatView: View {
                     }
                 }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 10)
+                .padding(.vertical, 8)
                 .background(.gray.opacity(0.2))
                 .cornerRadius(20)
                 .padding(.horizontal, 13)
