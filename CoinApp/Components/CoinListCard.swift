@@ -46,7 +46,6 @@ struct CoinListCard: View {
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(25)
-                                .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                         } else if phase.error != nil {
                             Rectangle()
                                 .frame(width: 50, height: 50)
@@ -61,7 +60,7 @@ struct CoinListCard: View {
                         Text(coin.symbol)
                             .font(.headline)
                             .foregroundStyle(.white)
-                            .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
+                        
                         HStack(spacing: 0) {
                             Text("$\(formatNumber(coin.volume24h))")
                                 .font(.subheadline)

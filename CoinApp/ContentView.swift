@@ -86,6 +86,7 @@ struct ContentView: View {
                     case .coinDetail(let coin): CoinDetailsView(coin: coin)
                     case .chartAnalysis(let image, let analysis): ChartAnalysisView(image: image, analysis: analysis)
                     case .searchCoin: SearchView()
+                    case .postDetails(let post): PostDetailsView(post: post)
                     }
                 }
                 .blur(radius: appProvider.showOnboarding ? 4 : 0)

@@ -18,6 +18,8 @@ class ChatViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     @MainActor
     func sendTapped() async {
         let text = inputText
@@ -26,6 +28,7 @@ class ChatViewModel: ObservableObject {
     }
     
     init() {
+        self.impactFeedback.prepare()
         $selectedImage.sink { newImage in
             if let image = newImage {
                 self.uploadedImages.append(image)
@@ -96,26 +99,26 @@ struct ChatView: View {
             VStack {
                 ScrollView {
                     if viewModel.messages.isEmpty {
-                        VStack(spacing: 20) {
-                            Image(systemName: "bitcoinsign.circle.fill")
+                        VStack(spacing: 15) {
+                            Image("icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 70, height: 70)
-                                .foregroundStyle(Color.orange, Color.yellow)
+                                .cornerRadius(35)
                             
-                            Text("Start Exploring Meme Coins!")
+                            Text("Chat with your personal AI!")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 30)
                                 .multilineTextAlignment(.center)
                             
-                            Text("Ask about trends, prices, or the latest meme coins!")
+                            Text("Upload price chart images and get detailed analysis on trends, prices, and the latest meme coins!")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 40)
                         }
-                        .padding(.top, 150)
+                        .padding(.top, isTextFieldFocused ? 150 : 200)
                     } else {
                         ForEach(viewModel.messages, id: \.id) { message in
                             MessageRowView(messageRow: message) { message in
@@ -194,6 +197,7 @@ struct ChatView: View {
                             .background(.clear)
                             .cornerRadius(15)
                             .foregroundColor(.white)
+                            .focused($isTextFieldFocused)
                         
                         if viewModel.isInteracting {
                             LoadingAnimation()
@@ -202,6 +206,7 @@ struct ChatView: View {
                             Button(action: {
                                 if viewModel.inputText.isEmpty { return }
                                 Task { @MainActor in
+                                    viewModel.impactFeedback.impactOccurred()
                                     isTextFieldFocused = false
                                     await viewModel.sendTapped()
                                     withAnimation {
@@ -212,12 +217,13 @@ struct ChatView: View {
                                 ZStack {
                                     Circle()
                                         .fill(.white)
-                                        .frame(width: 32.5, height: 32.5)
+                                        .frame(width: 31, height: 31)
                                     
                                     Image(systemName: "arrow.up")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 15, height: 15)
+                                        .fontWeight(.bold)
+                                        .frame(width: 15.5, height: 15.5)
                                         .foregroundColor(.black.opacity(0.8))
                                 }
                             }

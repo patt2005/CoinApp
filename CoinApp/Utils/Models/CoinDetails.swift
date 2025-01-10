@@ -60,6 +60,9 @@ struct CoinDetails: Codable, Identifiable {
         let priceChangePercentage7d: Double
         let priceChangePercentage30d: Double
         let priceChangePercentage1y: Double
+        let lowAllTime: Double
+        let highAllTime: Double
+        let volumeRank: Int
     }
     
     let id: Int
@@ -72,6 +75,7 @@ struct CoinDetails: Codable, Identifiable {
     let statistics: Statistics
     let platforms: [ContractInfo]?
     let holders: Holders?
+    let watchCount: String
     
     func getPriceChangeText(_ dateRange: String) -> some View {
         let priceChangePercentage: Double
@@ -128,5 +132,6 @@ struct CoinDetails: Codable, Identifiable {
         self.statistics = try container.decode(Statistics.self, forKey: .statistics)
         self.platforms = try? container.decode([ContractInfo].self, forKey: .platforms)
         self.holders = try? container.decode(Holders.self, forKey: .holders)
+        self.watchCount = try container.decode(String.self, forKey: .watchCount)
     }
 }

@@ -41,53 +41,55 @@ enum AppDestination: Hashable {
     case coinDetail(coin: Coin)
     case chartAnalysis(image: UIImage?, analysis: MemeCoinAnalysisResponse?)
     case searchCoin
+    case postDetails(post: Post)
 }
 
 func buildFormattedPrice(_ price: Double) -> some View {
-    let numberFormatter = NumberFormatter()
-    numberFormatter.numberStyle = .decimal
-    numberFormatter.minimumFractionDigits = 5
-    numberFormatter.maximumFractionDigits = 15
-    
-    let formattedPrice = numberFormatter.string(from: NSNumber(value: price)) ?? "\(price)"
-    
-    let parts = formattedPrice.split(separator: ",")
-    
-    let wholePart = String(parts.first ?? "")
-    
-    if Int(wholePart) ?? 0 > 0 {
-        return AnyView(Text("$\(String(format: "%.4f", price))").foregroundStyle(.white))
-    }
-    
-    let decimalPart = String(parts.last ?? "")
-    var zeroCount = 0
-    var tempDecimalPart = decimalPart
-    
-    for _ in tempDecimalPart {
-        if tempDecimalPart.starts(with: "0") {
-            zeroCount += 1
-            tempDecimalPart.removeFirst()
-        } else {
-            break
-        }
-    }
-    
-    if zeroCount > 4 {
-        let zeroPart = decimalPart.dropFirst(zeroCount)
+    if price < 1e-5 {
+        let formattedPrice = String(format: "%.15f", price)
+        let parts = formattedPrice.split(separator: ".")
         
+        guard parts.count == 2 else {
+            return AnyView(Text("$0.00000").foregroundStyle(.white))
+        }
+
+        let wholePart = String(parts[0])
+        let decimalPart = String(parts[1])
+
+        var zeroCount = 0
+        var remainingDecimalPart = decimalPart
+
+        for char in decimalPart {
+            if char == "0" {
+                zeroCount += 1
+                remainingDecimalPart.removeFirst()
+            } else {
+                break
+            }
+        }
+
+        let significantPart = remainingDecimalPart.prefix(4)
+
         return AnyView(
             HStack(spacing: 0) {
                 Text("$\(wholePart).0")
                 Text("\(zeroCount)")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .padding(.top, 10)
-                Text(zeroPart.suffix(4))
+                Text(significantPart)
             }
-                .foregroundStyle(.white)
+            .foregroundStyle(.white)
         )
     }
-    
-    return AnyView(Text("$\(String(format: "%.6f", price))").foregroundStyle(.white))
+
+    let numberFormatter = NumberFormatter()
+    numberFormatter.numberStyle = .decimal
+    numberFormatter.minimumFractionDigits = 5
+    numberFormatter.maximumFractionDigits = 15
+
+    let formattedPrice = numberFormatter.string(from: NSNumber(value: price)) ?? "\(price)"
+
+    return AnyView(Text("$\(formattedPrice.prefix(8))").foregroundStyle(.white))
 }
 
 func formatNumber(_ number: Double) -> String {
@@ -122,7 +124,7 @@ func convertImageToBase64(image: UIImage) -> String? {
     return imageData.base64EncodedString()
 }
 
-func getFormatedDate(date: Date) -> String {
+func getFormattedDate(date: Date) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "dd MMM, yyyy"
     let formattedDate = dateFormatter.string(from: date)

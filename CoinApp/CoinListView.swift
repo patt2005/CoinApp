@@ -50,7 +50,7 @@ struct CoinListView: View {
     @State private var hasFetchedApi = false
     
     private var dateRangeList = ["1h", "24h", "7d", "30d"]
-    private var coinListType = ["Gainers", "Losers", "Most Visited", "Recently Added", "Watch List"]
+    private var coinListType = ["Watch List", "Gainers", "Losers", "Most Visited", "Recently Added"]
     
     private func getIcon(_ type: String) -> some View {
         switch type {
@@ -100,7 +100,7 @@ struct CoinListView: View {
         case "Most Visited":
             return appProvider.mostVisitedList
         case "Watch List":
-            return appProvider.coinWatchList
+            return appProvider.coinWatchList.reversed()
         default:
             return []
         }
@@ -123,7 +123,6 @@ struct CoinListView: View {
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
-                            .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                     } else if phase.error != nil {
                         Image(systemName: "circle.fill")
                             .foregroundColor(.gray)
@@ -142,12 +141,18 @@ struct CoinListView: View {
                     Text(coin.symbol)
                         .font(.headline)
                         .foregroundStyle(.white)
-                        .blur(radius: !appProvider.isUserSubscribed ? 4 : 0)
                     coin.getPriceChangeText("24h")
                 }
             }
             .padding(.leading, 5)
         }
+    }
+    
+    private func refreshList() async {
+        await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
+        await CMCApi.shared.fetchTrendingCoins(selectedTimeFrame: viewModel.pickedDateRange)
+        await CMCApi.shared.fetchMostVisitedCoins()
+        await CMCApi.shared.fetchRecentlyAddedCoins()
     }
     
     init() {
@@ -179,7 +184,7 @@ struct CoinListView: View {
             } else {
                 ScrollView {
                     HStack {
-                        Text("Trending now 🔥")
+                        Text("Trending 🔥")
                             .fontWeight(.bold)
                             .font(.title2)
                         
@@ -246,7 +251,7 @@ struct CoinListView: View {
                         .padding(.bottom, 18)
                     }
                     
-                    if viewModel.pickedCoinListType == coinListType[0] || viewModel.pickedCoinListType == coinListType[1] {
+                    if viewModel.pickedCoinListType == coinListType[2] || viewModel.pickedCoinListType == coinListType[1] {
                         HStack(spacing: 0) {
                             Text("Time range: ")
                                 .fontWeight(.bold)
@@ -257,6 +262,9 @@ struct CoinListView: View {
                                 ForEach(dateRangeList, id: \.self) { item in
                                     Button(action: {
                                         viewModel.pickedDateRange = item
+                                        Task {
+                                            await refreshList()
+                                        }
                                     }) {
                                         HStack {
                                             Text(item)
@@ -273,7 +281,7 @@ struct CoinListView: View {
                                     .frame(width: 25, height: 25)
                             }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 15)
                     }
                     if viewModel.pickedCoinListType == "Watch List" && getList(viewModel.pickedCoinListType).isEmpty {
                         VStack(spacing: 20) {
@@ -296,15 +304,16 @@ struct CoinListView: View {
                     }
                 }
                 .refreshable {
-                    await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
-                    await CMCApi.shared.fetchTrendingCoins()
+                    await refreshList()
                 }
             }
         }
         .task {
             if !hasFetchedApi {
                 await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
-                await CMCApi.shared.fetchTrendingCoins()
+                await CMCApi.shared.fetchTrendingCoins(selectedTimeFrame: viewModel.pickedDateRange)
+                await CMCApi.shared.fetchRecentlyAddedCoins()
+                await CMCApi.shared.fetchMostVisitedCoins()
                 await appProvider.loadWatchList()
                 hasFetchedApi = true
             }

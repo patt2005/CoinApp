@@ -46,6 +46,8 @@ struct CoinDetailsView: View {
     @State private var showAlert = false
     @State private var isSharing = false
     
+    @State private var postsList: [Post] = []
+    
     @ObservedObject var appProvider = AppProvider.shared
     
     @State private var isCopied = false
@@ -97,6 +99,7 @@ struct CoinDetailsView: View {
         priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
         coinDetails = await CMCApi.shared.getCoinDetails(id: coin.id)
         selectedPrice = coinDetails?.statistics.price ?? 0
+        postsList = await CMCApi.shared.getTrendingPosts(id: coinDetails?.id ?? 1)
     }
     
     init(coin: Coin) {
@@ -260,7 +263,7 @@ struct CoinDetailsView: View {
                                             Image(systemName: "calendar")
                                                 .font(.headline)
                                                 .foregroundColor(.white)
-                                            Text(getFormatedDate(date: coinDetails.dateAdded))
+                                            Text(getFormattedDate(date: coinDetails.dateAdded))
                                                 .font(.headline.bold())
                                                 .foregroundStyle(.white)
                                         }
@@ -272,6 +275,74 @@ struct CoinDetailsView: View {
                                     .background(AppConstants.grayColor)
                                     .cornerRadius(15)
                                 }
+                                HStack {
+                                    VStack(spacing: 5) {
+                                        HStack(spacing: 0) {
+                                            Image(systemName: "star.fill")
+                                                .font(.headline)
+                                                .foregroundColor(.white)
+                                            Text(formatNumber(Double(coinDetails.watchCount) ?? 0.0))
+                                                .font(.headline.bold())
+                                                .foregroundStyle(.white)
+                                        }
+                                        Text("watch count")
+                                            .frame(maxWidth: .infinity)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .padding(.vertical, 15)
+                                    .background(AppConstants.grayColor)
+                                    .cornerRadius(15)
+                                    
+                                    VStack(spacing: 5) {
+                                        HStack(spacing: 0) {
+                                            Image(systemName: "waveform.path.ecg")
+                                                .font(.headline)
+                                                .foregroundColor(.white)
+                                            Text("\(coinDetails.statistics.volumeRank)")
+                                                .font(.headline.bold())
+                                                .foregroundStyle(.white)
+                                        }
+                                        Text("volume rank")
+                                            .frame(maxWidth: .infinity)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .padding(.vertical, 15)
+                                    .background(AppConstants.grayColor)
+                                    .cornerRadius(15)
+                                }
+                                HStack {
+                                    VStack(spacing: 3) {
+                                        HStack(spacing: 3) {
+                                            Image(systemName: "arrow.up.right.circle.fill")
+                                                .font(.headline)
+                                                .foregroundColor(.green)
+                                            buildFormattedPrice(coinDetails.statistics.highAllTime)
+                                        }
+                                        Text("all-time high")
+                                            .frame(maxWidth: .infinity)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(AppConstants.grayColor)
+                                    .cornerRadius(15)
+                                    
+                                    VStack(spacing: 3) {
+                                        HStack(spacing: 3) {
+                                            Image(systemName: "arrow.down.right.circle.fill")
+                                                .font(.headline)
+                                                .foregroundColor(.red)
+                                            buildFormattedPrice(coinDetails.statistics.lowAllTime)
+                                        }
+                                        Text("all-time low")
+                                            .frame(maxWidth: .infinity)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(AppConstants.grayColor)
+                                    .cornerRadius(15)
+                                }
+                                .frame(height: 75)
+                                
                                 HStack {
                                     if !coinDetails.urls.website.isEmpty {
                                         Link(destination: URL(string: coinDetails.urls.website.first!)!) {
@@ -371,6 +442,27 @@ struct CoinDetailsView: View {
                                             HolderRatioCard(title: "Top 100 ", ratio: coinDetails.holders!.topHundredHolderRatio)
                                         }
                                         .padding(.top, 7)
+                                    }
+                                }
+                                
+                                if !postsList.isEmpty {
+                                    Text("Trending posts")
+                                        .font(Font.custom("Inter", size: 18).weight(.bold))
+                                        .foregroundStyle(.white)
+                                        .padding(.top, 15)
+                                    
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 13) {
+                                            ForEach(postsList, id: \.textContent) { post in
+                                                Button(action: {
+                                                    appProvider.path.append(.postDetails(post: post))
+                                                }) {
+                                                    PostCard(post: post)
+                                                        .frame(width: 280, height: 160)
+                                                        .cornerRadius(15)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 
@@ -478,7 +570,11 @@ struct CoinDetailsView: View {
                                             default:
                                                 break
                                             }
-                                            let link = "https://app.uniswap.org/swap?chain=\(chain)&outputCurrency=\(contractInfo.contractAddress)"
+                                            
+                                            var link = "https://app.uniswap.org/swap?chain=\(chain)&outputCurrency=\(contractInfo.contractAddress)"
+                                            if chain.isEmpty {
+                                                link = "https://app.uniswap.org/swap?outputCurrency=\(contractInfo.contractAddress)"
+                                            }
                                             if let url = URL(string: link) {
                                                 UIApplication.shared.open(url)
                                             }
@@ -545,7 +641,6 @@ struct CoinDetailsView: View {
             .toolbarBackground(Color.clear, for: .navigationBar)
             .task {
                 impactFeedback.prepare()
-                appProvider.gainersList = appProvider.gainersList
                 await loadData()
             }
             .alert(isPresented: $showAlert) {

@@ -34,7 +34,6 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            
             DispatchQueue.main.async {
                 self.parent.isImagePickerPresented = false
             }
