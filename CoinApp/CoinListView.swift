@@ -284,7 +284,7 @@ struct CoinListView: View {
                         .padding(.horizontal, 15)
                     }
                     if viewModel.pickedCoinListType == "Watch List" && getList(viewModel.pickedCoinListType).isEmpty {
-                        VStack(spacing: 20) {
+                        LazyVStack(spacing: 20) {
                             Image(systemName: "bookmark.slash.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -298,8 +298,10 @@ struct CoinListView: View {
                         }
                         .padding(.top, 100)
                     } else {
-                        ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
-                            CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
+                        LazyVStack {
+                            ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
+                                CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
+                            }
                         }
                     }
                 }
@@ -310,10 +312,7 @@ struct CoinListView: View {
         }
         .task {
             if !hasFetchedApi {
-                await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
-                await CMCApi.shared.fetchTrendingCoins(selectedTimeFrame: viewModel.pickedDateRange)
-                await CMCApi.shared.fetchRecentlyAddedCoins()
-                await CMCApi.shared.fetchMostVisitedCoins()
+                await refreshList()
                 await appProvider.loadWatchList()
                 hasFetchedApi = true
             }

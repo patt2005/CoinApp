@@ -10,13 +10,13 @@ import StoreKit
 import FirebaseAnalytics
 import SuperwallKit
 
-struct OnboardingStep {
-    let image: String
-    let title: String
-    let description: String
-}
-
 struct OnboardingView: View {
+    struct OnboardingStep {
+        let image: String
+        let title: String
+        let description: String
+    }
+    
     private let onboardingSteps: [OnboardingStep] = [
         .init(image: "onboarding1", title: "Welcome to MemeAI!", description: "Discover the world of meme coins with MemeAI! Whether you’re a crypto enthusiast or new to the market, MemeAI helps you identify meme coins and understand their behavior in the market."),
         OnboardingStep(image: "onboarding2", title: "Analyze Meme Coins with Ease", description: "With MemeAI, analyzing meme coins is simple and effective. Just upload an image of the chart, or snap a picture of it using your phone—it’s that easy!"),

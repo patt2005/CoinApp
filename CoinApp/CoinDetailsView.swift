@@ -7,6 +7,52 @@
 
 import SwiftUI
 
+class CoinDetailsViewModel: ObservableObject {
+    @Published var priceData: [Double] = []
+    @Published var coinDetails: CoinDetails?
+    @Published var selectedPrice = 0.0
+    
+    @Published var selectedDateRange = "1d"
+    
+    @Published var isLoading = false
+    @Published var showAlert = false
+    @Published var isSharing = false
+    
+    @Published var postsList: [Post] = []
+    
+    @Published var isCopied = false
+    
+    @Published var showFullDescription = false
+    
+    var dateRangeOptions: [String] = ["1h", "1d", "7d", "1m", "1y"]
+    
+    @Published var trimValue: CGFloat = 0
+    @Published var memeCoinAnalysis: MemeCoinAnalysisResponse? = nil
+    
+    let coin: Coin
+    
+    init(coin: Coin) {
+        self.coin = coin
+        self.impactFeedback.prepare()
+        Task {
+            await loadData()
+        }
+    }
+
+    func loadData() async {
+        DispatchQueue.main.async {
+            Task {
+                self.priceData = await CMCApi.shared.getCoinPriceList(id: self.coin.id, dateRange: self.selectedDateRange)
+                self.coinDetails = await CMCApi.shared.getCoinDetails(id: self.coin.id)
+                self.selectedPrice = self.coinDetails?.statistics.price ?? 0
+                self.postsList = await CMCApi.shared.getTrendingPosts(id: self.coinDetails?.id ?? 1)
+            }
+        }
+    }
+    
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+}
+
 struct CoinDetailsView: View {
     struct HolderRatioCard: View {
         let title: String
@@ -31,45 +77,31 @@ struct CoinDetailsView: View {
     
     let coin: Coin
     
-    @State private var priceData: [Double] = []
-    @State private var selectedDateRange = "1d"
-    @State private var showFullDescription = false
-    
-    private var dateRangeOptions: [String] = ["1h", "1d", "7d", "1m", "1y"]
-    
-    @State private var coinDetails: CoinDetails?
-    @State private var trimValue: CGFloat = 0
-    @State private var selectedPrice = 0.0
-    @State private var memeCoinAnalysis: MemeCoinAnalysisResponse? = nil
-    
-    @State private var isLoading = false
-    @State private var showAlert = false
-    @State private var isSharing = false
-    
-    @State private var postsList: [Post] = []
+    @StateObject private var viewModel: CoinDetailsViewModel
     
     @ObservedObject var appProvider = AppProvider.shared
     
-    @State private var isCopied = false
-    
-    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    init(coin: Coin) {
+        self.coin = coin
+        _viewModel = StateObject(wrappedValue: CoinDetailsViewModel(coin: coin))
+    }
     
     private func getAnalysis() async {
-        isLoading = true
+        viewModel.isLoading = true
         
         do {
             let priceChangePercentage: Double
-            switch selectedDateRange {
+            switch viewModel.selectedDateRange {
             case "1h":
-                priceChangePercentage = coinDetails!.statistics.priceChangePercentage1h
+                priceChangePercentage = viewModel.coinDetails!.statistics.priceChangePercentage1h
             case "1d":
-                priceChangePercentage = coinDetails!.statistics.priceChangePercentage24h
+                priceChangePercentage = viewModel.coinDetails!.statistics.priceChangePercentage24h
             case "7d":
-                priceChangePercentage = coinDetails!.statistics.priceChangePercentage7d
+                priceChangePercentage = viewModel.coinDetails!.statistics.priceChangePercentage7d
             case "1m":
-                priceChangePercentage = coinDetails!.statistics.priceChangePercentage30d
+                priceChangePercentage = viewModel.coinDetails!.statistics.priceChangePercentage30d
             case "1y":
-                priceChangePercentage = coinDetails!.statistics.priceChangePercentage1y
+                priceChangePercentage = viewModel.coinDetails!.statistics.priceChangePercentage1y
             default:
                 priceChangePercentage = 0
             }
@@ -78,49 +110,38 @@ struct CoinDetailsView: View {
             if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
                 marketCap = selfReportedMarketCap
             } else {
-                marketCap = coinDetails?.statistics.fullyDilutedMarketCap ?? 0.0
+                marketCap = viewModel.coinDetails?.statistics.fullyDilutedMarketCap ?? 0.0
             }
-            memeCoinAnalysis = try await OpenAiApi.shared.getCoinAnalysis(coin: coin, priceList: priceData, dateRange: selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
+            viewModel.memeCoinAnalysis = try await OpenAiApi.shared.getCoinAnalysis(coin: coin, priceList: viewModel.priceData, dateRange: viewModel.selectedDateRange, marketCap: marketCap, priceChange: priceChangePercentage)
             
             DispatchQueue.main.async {
-                if self.memeCoinAnalysis != nil {
-                    self.appProvider.path.append(.chartAnalysis(image: nil, analysis: self.memeCoinAnalysis!))
+                if let analysis = viewModel.memeCoinAnalysis {
+                    appProvider.path.append(.chartAnalysis(image: nil, analysis: analysis))
                 }
             }
         } catch {
             DispatchQueue.main.async {
-                showAlert = true
+                viewModel.showAlert = true
             }
         }
-        isLoading = false
-    }
-    
-    private func loadData() async {
-        priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
-        coinDetails = await CMCApi.shared.getCoinDetails(id: coin.id)
-        selectedPrice = coinDetails?.statistics.price ?? 0
-        postsList = await CMCApi.shared.getTrendingPosts(id: coinDetails?.id ?? 1)
-    }
-    
-    init(coin: Coin) {
-        self.coin = coin
+        viewModel.isLoading = false
     }
     
     private func getDateRangeButton(index: Int) -> some View {
         Button(action: {
-            impactFeedback.impactOccurred()
+            viewModel.impactFeedback.impactOccurred()
             
-            trimValue = 0
-            selectedDateRange = dateRangeOptions[index]
+            viewModel.trimValue = 0
+            viewModel.selectedDateRange = viewModel.dateRangeOptions[index]
             Task {
-                priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: selectedDateRange)
+                viewModel.priceData = await CMCApi.shared.getCoinPriceList(id: coin.id, dateRange: viewModel.selectedDateRange)
                 withAnimation(.linear(duration: 1.5)) {
-                    trimValue = 1
+                    viewModel.trimValue = 1
                 }
             }
         }) {
-            Text(dateRangeOptions[index])
-                .foregroundColor(selectedDateRange == dateRangeOptions[index] ? .white : .secondary)
+            Text(viewModel.dateRangeOptions[index])
+                .foregroundColor(viewModel.selectedDateRange == viewModel.dateRangeOptions[index] ? .white : .secondary)
                 .frame(maxWidth: .infinity)
         }
     }
@@ -128,7 +149,7 @@ struct CoinDetailsView: View {
     var body: some View {
         ZStack {
             VStack {
-                if let coinDetails = coinDetails {
+                if let coinDetails = viewModel.coinDetails {
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(alignment: .center, spacing: 10) {
@@ -152,17 +173,17 @@ struct CoinDetailsView: View {
                                     HStack(spacing: 10) {
                                         Text(coinDetails.symbol)
                                             .font(.title.bold())
-                                        buildFormattedPrice(selectedPrice)
+                                        buildFormattedPrice(viewModel.selectedPrice)
                                     }
-                                    coinDetails.getPriceChangeText(selectedDateRange)
+                                    coinDetails.getPriceChangeText(viewModel.selectedDateRange)
                                 }
                             }
                             .padding(.horizontal, 10)
                             .padding(.vertical, 20)
-                            PriceChart(priceList: priceData.reversed(), trimValue: $trimValue, selectedPrice: $selectedPrice)
+                            PriceChart(priceList: viewModel.priceData.reversed(), trimValue: $viewModel.trimValue, selectedPrice: $viewModel.selectedPrice)
                                 .frame(height: 150)
                             HStack {
-                                ForEach(0..<dateRangeOptions.count, id: \.self) { i in
+                                ForEach(0..<viewModel.dateRangeOptions.count, id: \.self) { i in
                                     getDateRangeButton(index: i)
                                 }
                             }
@@ -175,10 +196,10 @@ struct CoinDetailsView: View {
                                 VStack(alignment: .leading) {
                                     Text(coinDetails.description)
                                         .foregroundStyle(.secondary)
-                                        .lineLimit(showFullDescription ? nil : 6)
-                                    Button(showFullDescription ? "Show less" : "Read more") {
+                                        .lineLimit(viewModel.showFullDescription ? nil : 6)
+                                    Button(viewModel.showFullDescription ? "Show less" : "Read more") {
                                         withAnimation {
-                                            showFullDescription = !showFullDescription
+                                            viewModel.showFullDescription = !viewModel.showFullDescription
                                         }
                                     }
                                     .foregroundStyle(.white)
@@ -404,7 +425,7 @@ struct CoinDetailsView: View {
                                                             .foregroundColor(.white)
                                                         
                                                         Button(action: {
-                                                            impactFeedback.impactOccurred()
+                                                            viewModel.impactFeedback.impactOccurred()
                                                             UIPasteboard.general.string = holder.address
                                                         }) {
                                                             Image(systemName: "doc.on.doc")
@@ -444,28 +465,43 @@ struct CoinDetailsView: View {
                                         .padding(.top, 7)
                                     }
                                 }
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.top, 20)
+                            
+                            if !viewModel.postsList.isEmpty {
+                                Text("Trending posts")
+                                    .font(Font.custom("Inter", size: 18).weight(.bold))
+                                    .foregroundStyle(.white)
+                                    .padding(.top, 15)
+                                    .padding(.horizontal, 13)
+                                    .padding(.bottom, 7)
                                 
-                                if !postsList.isEmpty {
-                                    Text("Trending posts")
-                                        .font(Font.custom("Inter", size: 18).weight(.bold))
-                                        .foregroundStyle(.white)
-                                        .padding(.top, 15)
-                                    
-                                    ScrollView(.horizontal, showsIndicators: false) {
-                                        HStack(spacing: 13) {
-                                            ForEach(postsList, id: \.textContent) { post in
-                                                Button(action: {
-                                                    appProvider.path.append(.postDetails(post: post))
-                                                }) {
-                                                    PostCard(post: post)
-                                                        .frame(width: 280, height: 160)
-                                                        .cornerRadius(15)
-                                                }
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 13) {
+                                        Rectangle()
+                                            .foregroundStyle(.clear)
+                                            .frame(width: 0)
+                                        
+                                        ForEach(viewModel.postsList, id: \.postTime) { post in
+                                            Button(action: {
+                                                viewModel.impactFeedback.impactOccurred()
+                                                appProvider.path.append(.postDetails(post: post))
+                                            }) {
+                                                PostCard(post: post)
+                                                    .frame(width: 280, height: 160)
+                                                    .cornerRadius(15)
                                             }
                                         }
+                                        
+                                        Rectangle()
+                                            .foregroundStyle(.clear)
+                                            .frame(width: 6)
                                     }
                                 }
-                                
+                            }
+                            
+                            VStack {
                                 if let contractInfo = coinDetails.platforms?.first {
                                     VStack(alignment: .leading, spacing: 15) {
                                         HStack {
@@ -509,21 +545,21 @@ struct CoinDetailsView: View {
                                                     .foregroundColor(.white)
                                                 Spacer()
                                                 Button(action: {
-                                                    impactFeedback.impactOccurred()
+                                                    viewModel.impactFeedback.impactOccurred()
                                                     UIPasteboard.general.string = contractInfo.contractAddress
                                                     withAnimation {
-                                                        isCopied = true
+                                                        viewModel.isCopied = true
                                                     }
                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                         withAnimation {
-                                                            isCopied = false
+                                                            viewModel.isCopied = false
                                                         }
                                                     }
                                                 }) {
                                                     HStack {
                                                         Image(systemName: "doc.on.doc")
                                                             .foregroundColor(.blue)
-                                                        Text(isCopied ? "Copied" : "Copy")
+                                                        Text(viewModel.isCopied ? "Copied" : "Copy")
                                                             .font(.body)
                                                             .foregroundStyle(.blue)
                                                     }
@@ -619,7 +655,12 @@ struct CoinDetailsView: View {
                                 }
                             }
                             .padding(.horizontal, 10)
-                            .padding(.vertical, 20)
+                            .padding(.bottom, 20)
+                        }
+                    }
+                    .refreshable {
+                        Task {
+                            await viewModel.loadData()
                         }
                     }
                 } else {
@@ -631,19 +672,15 @@ struct CoinDetailsView: View {
                     .background(AppConstants.backgroundColor)
                 }
             }
-            .blur(radius: isLoading ? 4 : 0)
-            .disabled(isLoading)
+            .blur(radius: viewModel.isLoading ? 4 : 0)
+            .disabled(viewModel.isLoading)
             .preferredColorScheme(.dark)
             .background(AppConstants.backgroundColor)
             .navigationTitle(coin.symbol)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.thinMaterial, for: .navigationBar)
             .toolbarBackground(Color.clear, for: .navigationBar)
-            .task {
-                impactFeedback.prepare()
-                await loadData()
-            }
-            .alert(isPresented: $showAlert) {
+            .alert(isPresented: $viewModel.showAlert) {
                 Alert(
                     title: Text("Analysis Error"),
                     message: Text("Failed to analyze the meme coin. Please try again later."),
@@ -651,7 +688,7 @@ struct CoinDetailsView: View {
                 )
             }
             
-            if isLoading {
+            if viewModel.isLoading {
                 VStack {
                     ProgressView("Analyzing...")
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -660,14 +697,14 @@ struct CoinDetailsView: View {
                 }
             }
         }
-        .sheet(isPresented: $isSharing) {
+        .sheet(isPresented: $viewModel.isSharing) {
             ActivityView(activityItems: ["Check out \(coin.symbol) on Meme AI app: https://apps.apple.com/us/app/meme-ai-meme-coin-tracker-app/id6738891806"])
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    impactFeedback.impactOccurred()
-                    isSharing = true
+                    viewModel.impactFeedback.impactOccurred()
+                    viewModel.isSharing = true
                 }) {
                     ZStack {
                         Rectangle()
@@ -684,7 +721,7 @@ struct CoinDetailsView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    impactFeedback.impactOccurred()
+                    viewModel.impactFeedback.impactOccurred()
                     if appProvider.coinWatchList.contains(coin) {
                         appProvider.coinWatchList.removeAll(where: { $0 == coin })
                     } else {
