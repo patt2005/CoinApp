@@ -302,6 +302,9 @@ struct CoinListView: View {
                             ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
                                 CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
                             }
+                            Divider()
+                                .background(Color.gray.opacity(0.25))
+                                .padding(.leading, 71)
                         }
                     }
                 }

@@ -27,114 +27,120 @@ struct SettingsView: View {
     @Environment(\.requestReview) var requestReview
     
     var body: some View {
-        Form {
-            Section(header: Text("Feedback")) {
-                Button(action: {
-                    isSharing = true
-                }) {
-                    HStack {
-                        Image("share-2")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22.5, height: 22.5)
-                        Text("Share App")
-                            .foregroundColor(.gray)
-                            .padding(.leading, 8.5)
-                    }
-                }
-                
-                Button(action: {
-                    let email = "mihai@codbun.com"
-                    let subject = "Support Request"
-                    let body = "Hi, I need help with..."
-                    let mailtoURL = "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
-                    
-                    if let url = URL(string: mailtoURL) {
-                        if UIApplication.shared.canOpenURL(url) {
-                            UIApplication.shared.open(url)
-                        } else {
-                            print("Mail app is not available")
+        ZStack {
+            AppConstants.backgroundColor
+                .edgesIgnoringSafeArea(.all)
+            
+            Form {
+                Section(header: Text("Feedback")) {
+                    Button(action: {
+                        isSharing = true
+                    }) {
+                        HStack {
+                            Image("share-2")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22.5, height: 22.5)
+                            Text("Share App")
+                                .foregroundColor(.gray)
+                                .padding(.leading, 8.5)
                         }
                     }
-                }) {
-                    HStack {
-                        Image(systemName: "envelope")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Contact us")
-                            .foregroundColor(.gray)
+                    
+                    Button(action: {
+                        let email = "mihai@codbun.com"
+                        let subject = "Support Request"
+                        let body = "Hi, I need help with..."
+                        let mailtoURL = "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
+                        
+                        if let url = URL(string: mailtoURL) {
+                            if UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            } else {
+                                print("Mail app is not available")
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "envelope")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Contact us")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    
+                    Button(action: {
+                        requestReview()
+                    }) {
+                        HStack {
+                            Image(systemName: "hand.thumbsup")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Rate us")
+                                .foregroundColor(.gray)
+                                .padding(.leading, 5)
+                        }
                     }
                 }
                 
-                Button(action: {
-                    requestReview()
-                }) {
-                    HStack {
-                        Image(systemName: "hand.thumbsup")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Rate us")
-                            .foregroundColor(.gray)
-                            .padding(.leading, 5)
+                Section(header: Text("Legal")) {
+                    Link(destination: URL(string: "https://docs.google.com/document/d/1uth_ytIH6sL8eJu1w2loQkPMonuRYz-c1yq5xkVK71k/edit?usp=sharing")!) {
+                        HStack {
+                            Image(systemName: "lock.shield")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Privacy Policy")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    
+                    Link(destination: URL(string: "https://docs.google.com/document/d/1VbemNFyZpawCaigbmEPzndAt3HN-iH4VsMH0Znsi-gU/edit?usp=sharing")!) {
+                        HStack {
+                            Image(systemName: "doc.text")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Terms of Use")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    
+                    Button(action: {
+                        showDisclaimer = true
+                    }) {
+                        HStack {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Disclaimer")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                
+                Section(header: Text("About Us")) {
+                    Link(destination: URL(string: "https://codbun.com/About")!) {
+                        HStack {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("About us")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    
+                    Link(destination: URL(string: "https://codbun.com/Work")!) {
+                        HStack {
+                            Image(systemName: "app.badge")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.title2)
+                            Text("Our Apps")
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
             }
-            
-            Section(header: Text("Legal")) {
-                Link(destination: URL(string: "https://docs.google.com/document/d/1uth_ytIH6sL8eJu1w2loQkPMonuRYz-c1yq5xkVK71k/edit?usp=sharing")!) {
-                    HStack {
-                        Image(systemName: "lock.shield")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Privacy Policy")
-                            .foregroundColor(.gray)
-                    }
-                }
-                
-                Link(destination: URL(string: "https://docs.google.com/document/d/1VbemNFyZpawCaigbmEPzndAt3HN-iH4VsMH0Znsi-gU/edit?usp=sharing")!) {
-                    HStack {
-                        Image(systemName: "doc.text")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Terms of Use")
-                            .foregroundColor(.gray)
-                    }
-                }
-                
-                Button(action: {
-                    showDisclaimer = true
-                }) {
-                    HStack {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Disclaimer")
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            
-            Section(header: Text("About Us")) {
-                Link(destination: URL(string: "https://codbun.com/About")!) {
-                    HStack {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("About us")
-                            .foregroundColor(.gray)
-                    }
-                }
-                
-                Link(destination: URL(string: "https://codbun.com/Work")!) {
-                    HStack {
-                        Image(systemName: "app.badge")
-                            .foregroundColor(AppConstants.primaryColor)
-                            .font(.title2)
-                        Text("Our Apps")
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
+            .scrollContentBackground(.hidden)
         }
         .sheet(isPresented: $isSharing) {
             ActivityView(activityItems: [

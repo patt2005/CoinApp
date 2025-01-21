@@ -307,10 +307,11 @@ class OpenAiApi {
         return AsyncThrowingStream<String, Error> { continuation in
             Task(priority: .userInitiated) {
                 do {
-                    
                     for try await line in result.lines {
-                        if line.hasPrefix("data: "), let data = line.dropFirst(6).data(using: .utf8), let response = try? JSONDecoder().decode(CompletionResponse.self, from: data), let text = response.choices.first?.delta.content {
-                            continuation.yield(text.replacingOccurrences(of: "**", with: ""))
+                        if line.hasPrefix("data: "), let data = line.dropFirst(6).data(using: .utf8), let response = try? JSONDecoder().decode(CompletionResponse.self, from: data), var text = response.choices.first?.delta.content {
+                            text = text.replacingOccurrences(of: "**", with: "")
+                            text = text.replacingOccurrences(of: "###", with: "")
+                            continuation.yield(text)
                         }
                     }
                     continuation.finish()

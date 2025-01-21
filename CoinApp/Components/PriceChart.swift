@@ -87,6 +87,16 @@ struct PriceChart: View {
                         Circle()
                             .frame(width: 10, height: 10)
                             .foregroundStyle(lineColor)
+                            .background(
+                                Circle()
+                                    .fill(Color.black.opacity(0.6))
+                                    .blur(radius: 1)
+                            )
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white.opacity(0.8), lineWidth: 1)
+                            )
+                            .shadow(color: lineColor.opacity(0.5), radius: 4, x: 0, y: 2)
                             .offset(y: offset.height)
                     }
                     .offset(x: offset.width)

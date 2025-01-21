@@ -23,9 +23,6 @@ class AppProvider: ObservableObject {
     }
     
     func completeOnboarding() {
-        Messaging.messaging().subscribe(toTopic: "main") { error in
-            print("Subscribed to main topic")
-        }
         AnalyticsManager.shared.logEvent(name: AnalyticsEventTutorialComplete)
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         self.showOnboarding = false
@@ -50,6 +47,12 @@ class AppProvider: ObservableObject {
     func addToWatchlist(_ coin: Coin) {
         self.watchListId.append(coin.id)
         self.coinWatchList.append(coin)
+        UserDefaults.standard.set(watchListId, forKey: "watchList")
+    }
+    
+    func removeFromWatchlist(_ coin: Coin) {
+        self.watchListId.removeAll { $0 == coin.id }
+        self.coinWatchList.removeAll { $0.id == coin.id }
         UserDefaults.standard.set(watchListId, forKey: "watchList")
     }
     

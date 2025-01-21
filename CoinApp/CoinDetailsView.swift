@@ -38,7 +38,7 @@ class CoinDetailsViewModel: ObservableObject {
             await loadData()
         }
     }
-
+    
     func loadData() async {
         DispatchQueue.main.async {
             Task {
@@ -80,6 +80,11 @@ struct CoinDetailsView: View {
     @StateObject private var viewModel: CoinDetailsViewModel
     
     @ObservedObject var appProvider = AppProvider.shared
+    
+    @State private var showSuccessAlert = false
+    @State private var showErrorAlert = false
+    
+    @State private var alertText = ""
     
     init(coin: Coin) {
         self.coin = coin
@@ -143,6 +148,25 @@ struct CoinDetailsView: View {
             Text(viewModel.dateRangeOptions[index])
                 .foregroundColor(viewModel.selectedDateRange == viewModel.dateRangeOptions[index] ? .white : .secondary)
                 .frame(maxWidth: .infinity)
+        }
+    }
+    
+    private func handleWatchlist() {
+        Task {
+            do {
+                if appProvider.coinWatchList.contains(coin) {
+                    try await UserApi.shared.removeFromWatchlist(coinId: coin.id)
+                    appProvider.removeFromWatchlist(coin)
+                    alertText = "The coin was successfully removed from the watchlist."
+                } else {
+                    try await UserApi.shared.addToWatchlist(coinId: coin.id)
+                    appProvider.addToWatchlist(coin)
+                    alertText = "The coin was successfully added to the watchlist."
+                }
+                showSuccessAlert = true
+            } catch {
+                showErrorAlert = true
+            }
         }
     }
     
@@ -687,6 +711,16 @@ struct CoinDetailsView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+            .alert("Success", isPresented: $showSuccessAlert, actions: {
+                Button("OK", role: .cancel) { }
+            }, message: {
+                Text(alertText)
+            })
+            .alert("Error", isPresented: $showErrorAlert, actions: {
+                Button("OK", role: .cancel) { }
+            }, message: {
+                Text("There was an error adding the coin to the watchlist. Please try again.")
+            })
             
             if viewModel.isLoading {
                 VStack {
@@ -722,11 +756,7 @@ struct CoinDetailsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     viewModel.impactFeedback.impactOccurred()
-                    if appProvider.coinWatchList.contains(coin) {
-                        appProvider.coinWatchList.removeAll(where: { $0 == coin })
-                    } else {
-                        appProvider.addToWatchlist(coin)
-                    }
+                    handleWatchlist()
                 }) {
                     if appProvider.coinWatchList.contains(coin) {
                         Image(systemName: "bookmark.circle.fill")

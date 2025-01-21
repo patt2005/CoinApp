@@ -57,7 +57,7 @@ class ChatViewModel: ObservableObject {
         let imagesList = uploadedImages.map { image in
             return convertImageToBase64(image: image) ?? ""
         }
-        var messageRow = MessageRow(isInteracting: true, sendText: text, sendImage: "userIcon", responseImage: "icon", responseText: streamText, uploadedImages: self.uploadedImages)
+        var messageRow = MessageRow(isInteracting: true, sendText: text, responseImage: UIImage(named: "icon")!, responseText: streamText, uploadedImages: self.uploadedImages)
         self.messages.append(messageRow)
         self.uploadedImages.removeAll()
         
