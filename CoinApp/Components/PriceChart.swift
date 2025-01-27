@@ -18,7 +18,6 @@ struct Line:Shape{
 
 struct PriceChart: View {
     let priceList: [Double]
-    
     let minY: Double
     let maxY: Double
     let lineColor: Color
@@ -32,10 +31,8 @@ struct PriceChart: View {
     
     init(priceList: [Double], trimValue: Binding<CGFloat>, selectedPrice: Binding<Double>) {
         self.priceList = priceList
-        let minPrice = priceList.min() ?? 0
-        let maxPrice = priceList.max() ?? 0
-        self.maxY = maxPrice
-        self.minY = minPrice
+        self.maxY = priceList.max() ?? 0
+        self.minY = priceList.min() ?? 0
         self.lineColor = ((priceList.last ?? 0) - (priceList.first ?? 0)) > 0 ? .green : .red
         self._trimValue = trimValue
         self._selectedPrice = selectedPrice

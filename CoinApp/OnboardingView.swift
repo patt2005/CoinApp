@@ -110,7 +110,7 @@ struct OnboardingView: View {
                 } else {
                     withAnimation {
                         appProvider.completeOnboarding()
-                        Superwall.shared.register(event: "campaign_trigger")
+                        Superwall.shared.register(event: "onboarding_trigger")
                     }
                 }
             }) {

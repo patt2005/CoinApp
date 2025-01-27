@@ -57,7 +57,7 @@ struct ContentView: View {
                     UITabBar.appearance().scrollEdgeAppearance = appearance
                 }
                 .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .topBarLeading) {
                         Button(action: {
                             appProvider.path.append(.searchCoin)
                         }) {
@@ -68,7 +68,7 @@ struct ContentView: View {
                         }
                     }
                     
-                    ToolbarItem(placement: .topBarLeading) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
                                 .resizable()

@@ -57,8 +57,8 @@ struct CoinListView: View {
         case "Gainers": return Image(systemName: "chart.line.uptrend.xyaxis.circle").foregroundStyle(.green)
         case "Losers": return Image(systemName: "chart.line.downtrend.xyaxis.circle").foregroundStyle(.red)
         case "Recently Added": return Image(systemName: "clock").foregroundStyle(.orange)
-        case "Most Visited": return Image(systemName: "star.fill").foregroundStyle(.yellow)
-        case "Watch List": return Image(systemName: "bookmark").foregroundStyle(.blue)
+        case "Most Visited": return Image(systemName: "crown.fill").foregroundStyle(.brown)
+        case "Watch List": return Image(systemName: "star.fill").foregroundStyle(.yellow)
         default:
             return Image(systemName: "arrow.up.circle.fill").foregroundStyle(.blue)
         }

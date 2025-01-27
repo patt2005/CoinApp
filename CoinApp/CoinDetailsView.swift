@@ -34,7 +34,8 @@ class CoinDetailsViewModel: ObservableObject {
     init(coin: Coin) {
         self.coin = coin
         self.impactFeedback.prepare()
-        Task {
+        Task { @MainActor in
+            self.postsList = await CMCApi.shared.getTrendingPosts(id: self.coin.id)
             await loadData()
         }
     }
@@ -45,7 +46,6 @@ class CoinDetailsViewModel: ObservableObject {
                 self.priceData = await CMCApi.shared.getCoinPriceList(id: self.coin.id, dateRange: self.selectedDateRange)
                 self.coinDetails = await CMCApi.shared.getCoinDetails(id: self.coin.id)
                 self.selectedPrice = self.coinDetails?.statistics.price ?? 0
-                self.postsList = await CMCApi.shared.getTrendingPosts(id: self.coinDetails?.id ?? 1)
             }
         }
     }
@@ -135,7 +135,6 @@ struct CoinDetailsView: View {
     private func getDateRangeButton(index: Int) -> some View {
         Button(action: {
             viewModel.impactFeedback.impactOccurred()
-            
             viewModel.trimValue = 0
             viewModel.selectedDateRange = viewModel.dateRangeOptions[index]
             Task {
@@ -175,7 +174,7 @@ struct CoinDetailsView: View {
             VStack {
                 if let coinDetails = viewModel.coinDetails {
                     ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(alignment: .center, spacing: 10) {
                                 AsyncImage(url: URL(string: coin.imageUrl)) { phase in
                                     if let image = phase.image {
@@ -193,7 +192,7 @@ struct CoinDetailsView: View {
                                             .frame(width: 60, height: 60)
                                     }
                                 }
-                                VStack(alignment: .leading) {
+                                VStack(alignment: .leading, spacing: 0) {
                                     HStack(spacing: 10) {
                                         Text(coinDetails.symbol)
                                             .font(.title.bold())
@@ -204,14 +203,62 @@ struct CoinDetailsView: View {
                             }
                             .padding(.horizontal, 10)
                             .padding(.vertical, 20)
+                            
                             PriceChart(priceList: viewModel.priceData.reversed(), trimValue: $viewModel.trimValue, selectedPrice: $viewModel.selectedPrice)
                                 .frame(height: 150)
+                            
                             HStack {
                                 ForEach(0..<viewModel.dateRangeOptions.count, id: \.self) { i in
                                     getDateRangeButton(index: i)
                                 }
                             }
                             .padding(.top, 30)
+                            
+                            HStack(spacing: 12) {
+                                Button(action: {
+                                    viewModel.impactFeedback.impactOccurred()
+                                    viewModel.isSharing = true
+                                }) {
+                                    HStack {
+                                        Image("share")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
+                                        
+                                        Text("Share")
+                                            .font(Font.custom("Inter", size: 16).weight(.medium))
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 16)
+                                    .background(AppConstants.grayColor)
+                                    .cornerRadius(15)
+                                }
+                                
+                                Button(action: {
+                                    Task {
+                                        await getAnalysis()
+                                    }
+                                }) {
+                                    HStack(spacing: 5) {
+                                        Image(systemName: "flame.fill")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Get Analysis")
+                                            .font(Font.custom("Inter", size: 16).weight(.medium))
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 15)
+                                    .background(AppConstants.primaryColor)
+                                    .cornerRadius(15)
+                                }
+                            }
+                            .padding(.top, 20)
+                            .padding(.bottom, 13)
+                            .padding(.horizontal, 10)
+                            
                             VStack(alignment: .leading) {
                                 Text("Details")
                                     .foregroundStyle(.white)
@@ -473,25 +520,30 @@ struct CoinDetailsView: View {
                                             .cornerRadius(10)
                                         }
                                     }
-                                    
-                                    Text("Holders share")
-                                        .font(Font.custom("Inter", size: 18).weight(.bold))
-                                        .foregroundStyle(.white)
-                                        .padding(.top, 10)
-                                    
-                                    ScrollView(.horizontal, showsIndicators: false) {
-                                        HStack(spacing: 15) {
-                                            HolderRatioCard(title: "Top 10", ratio: coinDetails.holders!.topTenHolderRatio)
-                                            HolderRatioCard(title: "Top 20", ratio: coinDetails.holders!.topTwentyHolderRatio)
-                                            HolderRatioCard(title: "Top 50", ratio: coinDetails.holders!.topFiftyHolderRatio)
-                                            HolderRatioCard(title: "Top 100 ", ratio: coinDetails.holders!.topHundredHolderRatio)
-                                        }
-                                        .padding(.top, 7)
-                                    }
                                 }
                             }
                             .padding(.horizontal, 10)
-                            .padding(.top, 20)
+                            
+                            if let holdersInfo = coinDetails.holders {
+                                Text("Holders share")
+                                    .font(Font.custom("Inter", size: 18).weight(.bold))
+                                    .foregroundStyle(.white)
+                                    .padding(.top, 10)
+                                    .padding(.leading, 10)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 13) {
+                                        Rectangle()
+                                            .foregroundStyle(.clear)
+                                            .frame(width: 0)
+                                        HolderRatioCard(title: "Top 10", ratio: holdersInfo.topTenHolderRatio)
+                                        HolderRatioCard(title: "Top 20", ratio: holdersInfo.topTwentyHolderRatio)
+                                        HolderRatioCard(title: "Top 50", ratio: holdersInfo.topFiftyHolderRatio)
+                                        HolderRatioCard(title: "Top 100 ", ratio: holdersInfo.topHundredHolderRatio)
+                                    }
+                                    .padding(.top, 7)
+                                }
+                            }
                             
                             if !viewModel.postsList.isEmpty {
                                 Text("Trending posts")
@@ -502,11 +554,7 @@ struct CoinDetailsView: View {
                                     .padding(.bottom, 7)
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 13) {
-                                        Rectangle()
-                                            .foregroundStyle(.clear)
-                                            .frame(width: 0)
-                                        
+                                    LazyHStack(spacing: 13) {
                                         ForEach(viewModel.postsList, id: \.postTime) { post in
                                             Button(action: {
                                                 viewModel.impactFeedback.impactOccurred()
@@ -517,12 +565,10 @@ struct CoinDetailsView: View {
                                                     .cornerRadius(15)
                                             }
                                         }
-                                        
-                                        Rectangle()
-                                            .foregroundStyle(.clear)
-                                            .frame(width: 6)
                                     }
+                                    .padding(.leading, 10)
                                 }
+                                .frame(height: 161)
                             }
                             
                             VStack {
@@ -656,27 +702,6 @@ struct CoinDetailsView: View {
                                         }
                                     }
                                 }
-                                
-                                Button(action: {
-                                    Task {
-                                        await getAnalysis()
-                                    }
-                                }) {
-                                    HStack(spacing: 10) {
-                                        Image(systemName: "flame.fill")
-                                            .foregroundStyle(.white)
-                                            .font(.title2)
-                                        Text("Get analysis")
-                                            .font(Font.custom("Inter", size: 18).weight(.medium))
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.primaryColor)
-                                    .cornerRadius(15)
-                                    .padding(.top, 8)
-                                    .padding(.bottom, 20)
-                                }
                             }
                             .padding(.horizontal, 10)
                             .padding(.bottom, 20)
@@ -738,37 +763,19 @@ struct CoinDetailsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     viewModel.impactFeedback.impactOccurred()
-                    viewModel.isSharing = true
-                }) {
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(AppConstants.grayColor)
-                            .frame(width: 35, height: 35)
-                            .cornerRadius(17.5)
-                        Image("share")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 17.5, height: 17.5)
-                    }
-                }
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {
-                    viewModel.impactFeedback.impactOccurred()
                     handleWatchlist()
                 }) {
                     if appProvider.coinWatchList.contains(coin) {
-                        Image(systemName: "bookmark.circle.fill")
+                        Image(systemName: "star.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 33, height: 33)
-                            .foregroundStyle(.white)
+                            .frame(width: 25, height: 25)
+                            .foregroundStyle(.yellow)
                     } else {
-                        Image(systemName: "bookmark.circle")
+                        Image(systemName: "star")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 33, height: 33)
+                            .frame(width: 25, height: 25)
                             .foregroundStyle(.white)
                     }
                 }
