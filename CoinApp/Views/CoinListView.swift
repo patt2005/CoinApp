@@ -124,20 +124,16 @@ struct CoinListView: View {
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
                     } else if phase.error != nil {
-                        Image(systemName: "circle.fill")
-                            .foregroundColor(.gray)
+                        Rectangle()
                             .frame(width: 40, height: 40)
-                            .background(Circle().fill(Color.gray.opacity(0.2)))
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.gray, lineWidth: 1)
-                            )
+                            .cornerRadius(20)
+                            .foregroundColor(AppConstants.grayColor )
                     } else {
                         ProgressView()
                             .frame(width: 40, height: 40)
                     }
                 }
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text(coin.symbol)
                         .font(.headline)
                         .foregroundStyle(.white)
@@ -150,9 +146,9 @@ struct CoinListView: View {
     
     private func refreshList() async {
         await CMCApi.shared.fetchCoinData(dateRange: viewModel.pickedDateRange)
-        await CMCApi.shared.fetchTrendingCoins(selectedTimeFrame: viewModel.pickedDateRange)
-        await CMCApi.shared.fetchMostVisitedCoins()
+        await CMCApi.shared.fetchTrendingCoins(timeFrame: viewModel.pickedDateRange)
         await CMCApi.shared.fetchRecentlyAddedCoins()
+        await CMCApi.shared.fetchMostVisitedCoin(dateRange: viewModel.pickedDateRange)
     }
     
     init() {

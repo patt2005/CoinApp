@@ -29,6 +29,14 @@ class CMCApi {
         let data: ResponseList
     }
     
+    struct MostVisitedApiResponse: Decodable {
+        struct ResponseList: Decodable {
+            let mostVisitedList: [Coin]
+        }
+        
+        let data: ResponseList
+    }
+    
     struct PriceApiResponse: Decodable {
         struct DataWrapper: Decodable {
             let points: [String: PointData]
@@ -75,26 +83,6 @@ class CMCApi {
                 let recentlyAddedData = try container.decodeIfPresent([Coin?].self, forKey: .recentlyAddedList) ?? []
                 
                 self.recentlyAddedList = recentlyAddedData.compactMap { $0 }
-            }
-        }
-        
-        let data: DataResponse
-    }
-    
-    struct MostVisitedApiResponse: Decodable {
-        struct DataResponse: Decodable {
-            let cryptoMostVisitedList: [Coin]
-            
-            enum CodingKeys: String, CodingKey {
-                case cryptoMostVisitedList = "cryptoMostVisitedList"
-            }
-            
-            init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                
-                let recentlyAddedData = try container.decodeIfPresent([Coin?].self, forKey: .cryptoMostVisitedList) ?? []
-                
-                self.cryptoMostVisitedList = recentlyAddedData.compactMap { $0 }
             }
         }
         
@@ -292,8 +280,8 @@ class CMCApi {
         }
     }
     
-    func fetchTrendingCoins(selectedTimeFrame: String) async {
-        guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/topsearch/rank?top=50&timeframe=\(selectedTimeFrame)") else { return }
+    func fetchTrendingCoins(timeFrame: String) async {
+        guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/topsearch/rank?top=50&timeframe=\(timeFrame)") else { return }
         
         let headers = [
             "Accepts": "application/json",
@@ -316,31 +304,50 @@ class CMCApi {
         }
     }
     
-    func fetchMostVisitedCoins() async {
-        guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/topsearch/most-visited-coins?start=1") else { return }
+    func fetchMostVisitedCoin(dateRange: String) async {
+        guard let url = URL(string: "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/spotlight") else { return }
         
-        let headers = [
-            "Content-Type": "application/json",
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip",
-            "Connection": "keep-alive",
+        let parameters: [String: Any] = [
+            "rankRange": "0",
+            "timeframe": dateRange != "1h" ? dateRange : "24h",
+            "convert": "USD",
+            "limit": 30
         ]
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = headers
+        let headers = [
+            "Accepts": "application/json",
+        ]
         
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            
-            let decoded = try JSONDecoder().decode(MostVisitedApiResponse.self, from: data)
-            
-            DispatchQueue.main.async {
-                AppProvider.shared.mostVisitedList = decoded.data.cryptoMostVisitedList
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        components.queryItems = parameters.map { URLQueryItem(name: $0.key, value: String(describing: $0.value)) }
+        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "GET"
+        headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Caught an error on line 522: \(error.localizedDescription)")
+                return
             }
-        } catch {
-            print("Caught an error while fetching most visited coins: \(error.localizedDescription)")
+            
+            guard let data = data else {
+                print("Data is nil.")
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(MostVisitedApiResponse.self, from: data)
+                DispatchQueue.main.async {
+                    AppProvider.shared.mostVisitedList = response.data.mostVisitedList
+                }
+            } catch {
+                print("Caught an error on line 540: \(error.localizedDescription)")
+            }
         }
+        
+        task.resume()
     }
     
     func fetchCoinData(dateRange: String) async {
@@ -350,8 +357,8 @@ class CMCApi {
             "rankRange": "0",
             "timeframe": dateRange,
             "convert": "USD",
+            "limit": 30,
             "dataType": 2,
-            "limit": 30
         ]
         
         let headers = [
@@ -383,6 +390,7 @@ class CMCApi {
                     AppProvider.shared.gainersList = response.data.gainerList
                     AppProvider.shared.losersList = response.data.loserList
                 }
+                print("Fetching the data was successful...")
             } catch {
                 print("Caught an error on line 540: \(error.localizedDescription)")
             }

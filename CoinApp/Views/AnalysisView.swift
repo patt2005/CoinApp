@@ -96,21 +96,21 @@ struct AnalysisView: View {
                         Superwall.shared.register(event: "campaign_trigger")
                     }
                 }) {
-                    HStack(spacing: 10) { // Add spacing between the icon and text
-                        Image(systemName: "chart.bar") // Add an icon (choose a suitable SF Symbol)
-                            .font(.title2) // Adjust size
-                            .foregroundColor(.white) // Match icon color with text
+                    HStack(spacing: 10) {
+                        Image(systemName: "chart.bar")
+                            .font(.title2)
+                            .foregroundColor(.white)
                         Text("Analyze Chart")
                             .font(Font.custom("Inter", size: 17).weight(.bold))
                             .foregroundColor(.white)
                     }
-                    .padding(.vertical, 16) // Increased vertical padding for better touch target
-                    .padding(.horizontal, 80) // Adjust horizontal padding for a better balance
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 80)
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .leading, endPoint: .trailing) // Add a gradient background
+                        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .leading, endPoint: .trailing)
                     )
-                    .cornerRadius(20) // Slightly larger corner radius for a smoother look
-                    .shadow(color: .gray.opacity(0.5), radius: 8, x: 0, y: 4) // Add a subtle shadow for depth
+                    .cornerRadius(20)
+                    .shadow(color: .gray.opacity(0.5), radius: 8, x: 0, y: 4)
                     .padding(.top, 60)
                 }
                 
@@ -157,7 +157,3 @@ struct AnalysisView: View {
         }
     }
 }
-
-//#Preview {
-//    AnalysisView()
-//}

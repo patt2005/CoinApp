@@ -213,51 +213,7 @@ struct CoinDetailsView: View {
                                 }
                             }
                             .padding(.top, 30)
-                            
-                            HStack(spacing: 12) {
-                                Button(action: {
-                                    viewModel.impactFeedback.impactOccurred()
-                                    viewModel.isSharing = true
-                                }) {
-                                    HStack {
-                                        Image("share")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                        
-                                        Text("Share")
-                                            .font(Font.custom("Inter", size: 16).weight(.medium))
-                                            .foregroundColor(.white)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 16)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                }
-                                
-                                Button(action: {
-                                    Task {
-                                        await getAnalysis()
-                                    }
-                                }) {
-                                    HStack(spacing: 5) {
-                                        Image(systemName: "flame.fill")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .foregroundColor(.white)
-                                        
-                                        Text("Get Analysis")
-                                            .font(Font.custom("Inter", size: 16).weight(.medium))
-                                            .foregroundColor(.white)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.primaryColor)
-                                    .cornerRadius(15)
-                                }
-                            }
-                            .padding(.top, 20)
                             .padding(.bottom, 13)
-                            .padding(.horizontal, 10)
                             
                             VStack(alignment: .leading) {
                                 Text("Details")
@@ -275,6 +231,49 @@ struct CoinDetailsView: View {
                                     }
                                     .foregroundStyle(.white)
                                 }
+                                
+                                HStack(spacing: 12) {
+                                    Button(action: {
+                                        viewModel.impactFeedback.impactOccurred()
+                                        viewModel.isSharing = true
+                                    }) {
+                                        HStack {
+                                            Image("share")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 20, height: 20)
+                                            
+                                            Text("Share")
+                                                .font(Font.custom("Inter", size: 16).weight(.medium))
+                                                .foregroundColor(.white)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 16)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                    }
+                                    
+                                    Button(action: {
+                                        Task {
+                                            await getAnalysis()
+                                        }
+                                    }) {
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "flame.fill")
+                                                .font(.system(size: 14, weight: .medium))
+                                                .foregroundColor(.white)
+                                            
+                                            Text("Get Analysis")
+                                                .font(Font.custom("Inter", size: 16).weight(.medium))
+                                                .foregroundColor(.white)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.primaryColor)
+                                        .cornerRadius(15)
+                                    }
+                                }
+                                
                                 HStack {
                                     VStack(spacing: 5) {
                                         HStack(spacing: 0) {
@@ -302,7 +301,7 @@ struct CoinDetailsView: View {
                                                     .font(.headline.bold())
                                                     .foregroundStyle(.white)
                                             } else {
-                                                Text("\(formatNumber(coin.marketCap))")
+                                                Text("\(formatNumber(coin.marketCap ?? 0.0))")
                                                     .font(.headline.bold())
                                                     .foregroundStyle(.white)
                                             }
@@ -331,7 +330,7 @@ struct CoinDetailsView: View {
                                     .background(AppConstants.grayColor)
                                     .cornerRadius(15)
                                 }
-                                .padding(.top, 10)
+                                
                                 HStack {
                                     VStack(spacing: 5) {
                                         HStack(spacing: 0) {
