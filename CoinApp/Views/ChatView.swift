@@ -37,6 +37,16 @@ class ChatViewModel: ObservableObject {
         .store(in: &cancellables)
     }
     
+    func scrollToBottom(proxy: ScrollViewProxy) {
+        guard let id = self.messages.last?.id else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation(.easeOut(duration: 0.3)) {
+                proxy.scrollTo(id, anchor: .bottom)
+            }
+        }
+    }
+    
     @MainActor
     func retry(messageRow: MessageRow) async {
         let index = messages.firstIndex { message in
@@ -88,12 +98,6 @@ struct ChatView: View {
     
     @State private var showActionSheet: Bool = false
     
-    private func scrollToBottom(proxy: ScrollViewProxy) {
-        guard let id = viewModel.messages.last?.id else { return }
-        
-        proxy.scrollTo(id, anchor: .bottomTrailing)
-    }
-    
     var body: some View {
         ScrollViewReader { proxy in
             VStack {
@@ -118,7 +122,7 @@ struct ChatView: View {
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 40)
                         }
-                        .padding(.top, isTextFieldFocused ? 150 : 200)
+                        .padding(.top, 140)
                     } else {
                         ForEach(viewModel.messages, id: \.id) { message in
                             MessageRowView(messageRow: message) { message in
@@ -176,7 +180,8 @@ struct ChatView: View {
                                     }
                                 }
                             }
-                            .padding(.horizontal, 14)
+                            .padding(.bottom, 10)
+                            .padding(.top, 10)
                         }
                         .frame(height: 80)
                     }
@@ -209,9 +214,7 @@ struct ChatView: View {
                                     viewModel.impactFeedback.impactOccurred()
                                     isTextFieldFocused = false
                                     await viewModel.sendTapped()
-                                    withAnimation {
-                                        scrollToBottom(proxy: proxy)
-                                    }
+                                    viewModel.scrollToBottom(proxy: proxy)
                                 }
                             }) {
                                 ZStack {
@@ -219,7 +222,7 @@ struct ChatView: View {
                                         .fill(.white)
                                         .frame(width: 31, height: 31)
                                     
-                                    Image(systemName: "arrow.up")
+                                    Image(systemName: "paperplane.fill")
                                         .resizable()
                                         .scaledToFit()
                                         .fontWeight(.bold)
@@ -230,8 +233,16 @@ struct ChatView: View {
                         }
                     }
                 }
+                .onAppear {
+                    viewModel.scrollToBottom(proxy: proxy)
+                }
+                .onChange(of: viewModel.messages) { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        viewModel.scrollToBottom(proxy: proxy)
+                    }
+                }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 8)
+                .padding(.vertical, 10)
                 .background(.gray.opacity(0.2))
                 .cornerRadius(20)
                 .padding(.horizontal, 13)

@@ -41,6 +41,19 @@ class OpenAiApi {
     
     private init() {}
     
+    private func cleanResponseText(_ text: String) -> String {
+        var cleanedText = text
+        
+        cleanedText = cleanedText.replacingOccurrences(of: "\\*\\*(.*?)\\*\\*", with: "$1", options: .regularExpression)
+        cleanedText = cleanedText.replacingOccurrences(of: "\\*(.*?)\\*", with: "$1", options: .regularExpression)
+        
+        cleanedText = cleanedText.replacingOccurrences(of: "###\\s*", with: "", options: .regularExpression)
+        
+        cleanedText = cleanedText.replacingOccurrences(of: "(?m)^-\\s", with: "• ", options: .regularExpression)
+        
+        return cleanedText
+    }
+    
     private let systemPrompt = """
                 You are a professional trader specializing in meme coins and cryptocurrency markets. 
                 You have extensive experience analyzing chart patterns, market trends, and identifying key factors that drive meme coin behavior. 
@@ -308,10 +321,8 @@ class OpenAiApi {
             Task(priority: .userInitiated) {
                 do {
                     for try await line in result.lines {
-                        if line.hasPrefix("data: "), let data = line.dropFirst(6).data(using: .utf8), let response = try? JSONDecoder().decode(CompletionResponse.self, from: data), var text = response.choices.first?.delta.content {
-                            text = text.replacingOccurrences(of: "**", with: "")
-                            text = text.replacingOccurrences(of: "###", with: "")
-                            continuation.yield(text)
+                        if line.hasPrefix("data: "), let data = line.dropFirst(6).data(using: .utf8), let response = try? JSONDecoder().decode(CompletionResponse.self, from: data), let text = response.choices.first?.delta.content {
+                            continuation.yield(cleanResponseText(text))
                         }
                     }
                     continuation.finish()

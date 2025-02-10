@@ -112,7 +112,9 @@ struct CoinListView: View {
             if appProvider.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {
-                Superwall.shared.register(event: "campaign_trigger")
+                withAnimation {
+                    appProvider.showPremiumFeature = true
+                }
             }
         }) {
             HStack {
@@ -296,7 +298,7 @@ struct CoinListView: View {
                     } else {
                         LazyVStack {
                             ForEach(getList(viewModel.pickedCoinListType), id: \.id) { coin in
-                                CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange)
+                                CoinListCard(coin: coin, type: viewModel.pickedCoinListType, pickedDateRange: $viewModel.pickedDateRange, showPreview: $appProvider.showPremiumFeature)
                             }
                             Divider()
                                 .background(Color.gray.opacity(0.25))

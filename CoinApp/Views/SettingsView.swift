@@ -42,7 +42,7 @@ struct SettingsView: View {
                                 .scaledToFit()
                                 .frame(width: 22.5, height: 22.5)
                             Text("Share App")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.7))
                                 .padding(.leading, 8.5)
                         }
                     }
@@ -66,7 +66,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Contact us")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                     
@@ -78,30 +78,30 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Rate us")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                                 .padding(.leading, 5)
                         }
                     }
                 }
                 
                 Section(header: Text("Legal")) {
-                    Link(destination: URL(string: "https://docs.google.com/document/d/1uth_ytIH6sL8eJu1w2loQkPMonuRYz-c1yq5xkVK71k/edit?usp=sharing")!) {
+                    Link(destination: URL(string: "https://codbun.com/chatai/privacypolicy")!) {
                         HStack {
                             Image(systemName: "lock.shield")
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Privacy Policy")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                     
-                    Link(destination: URL(string: "https://docs.google.com/document/d/1VbemNFyZpawCaigbmEPzndAt3HN-iH4VsMH0Znsi-gU/edit?usp=sharing")!) {
+                    Link(destination: URL(string: "https://codbun.com/chatai/termsofuse")!) {
                         HStack {
                             Image(systemName: "doc.text")
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Terms of Use")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                     
@@ -113,19 +113,29 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Disclaimer")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                 }
                 
                 Section(header: Text("About Us")) {
+                    Link(destination: URL(string: "https://www.linkedin.com/company/codbun")!) {
+                        HStack {
+                            Image(systemName: "person.2.fill")
+                                .foregroundColor(AppConstants.primaryColor)
+                                .font(.headline)
+                            Text("Follow us")
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                    
                     Link(destination: URL(string: "https://codbun.com/About")!) {
                         HStack {
                             Image(systemName: "info.circle")
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("About us")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                     
@@ -135,7 +145,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Our Apps")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                 }

@@ -49,6 +49,7 @@ class SearchViewModel: ObservableObject {
 
 struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
+    @ObservedObject private var appProvider = AppProvider.shared
     
     var body: some View {
         ScrollView {
@@ -78,7 +79,7 @@ struct SearchView: View {
                 }
             } else {
                 ForEach(viewModel.results, id: \.self) { coin in
-                    CoinListCard(coin: coin, type: "", pickedDateRange: .constant("24h"))
+                    CoinListCard(coin: coin, type: "", pickedDateRange: .constant("24h"), showPreview: $appProvider.showPremiumFeature)
                 }
             }
             

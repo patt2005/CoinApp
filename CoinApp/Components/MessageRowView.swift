@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MessageRow: Identifiable {
+struct MessageRow: Identifiable, Equatable {
     let id = UUID()
     var isInteracting: Bool
     let sendText: String
@@ -15,6 +15,10 @@ struct MessageRow: Identifiable {
     var responseText: String?
     var responseError: String?
     let uploadedImages: [UIImage]
+    
+    static func == (lhs: MessageRow, rhs: MessageRow) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 struct LoadingAnimation: View {

@@ -9,20 +9,21 @@ import SwiftUI
 import SuperwallKit
 
 struct CoinListCard: View {
-    let coin: Coin
-    
     @ObservedObject private var appProvider = AppProvider.shared
     
+    @Binding var showPreviwer: Bool
     @Binding var pickedDateRange: String
     
-    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     let type: String
+    let coin: Coin
     
-    init(coin: Coin, type: String, pickedDateRange: Binding<String>) {
+    init(coin: Coin, type: String, pickedDateRange: Binding<String>, showPreview: Binding<Bool>) {
         self.coin = coin
         self.type = type
         self._pickedDateRange = pickedDateRange
+        self._showPreviwer = showPreview
     }
     
     var body: some View {
@@ -31,7 +32,9 @@ struct CoinListCard: View {
             if appProvider.isUserSubscribed {
                 appProvider.path.append(.coinDetail(coin: coin))
             } else {
-                Superwall.shared.register(event: "campaign_trigger")
+                withAnimation {
+                    showPreviwer = true
+                }
             }
         }) {
             VStack {

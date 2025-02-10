@@ -26,6 +26,13 @@ struct ContentView: View {
     @State private var isSearchSheetPresented = false
     @State private var showAlert = false
     
+    private var previewInfo: FeaturePreviewInfo = FeaturePreviewInfo(features: [
+        Feature(text: "Track Meme Coins in Real-Time! 🚀📊", image: "image1"),
+        Feature(text: "Get AI-Powered Chart Analysis 📈🤖", image: "image4"),
+        Feature(text: "Explore Market Insights & Trends 🔥💡", image: "image2"),
+        Feature(text: "Stay Updated with Trending News 📰⚡", image: "image3"),
+    ])
+    
     var body: some View {
         ZStack {
             NavigationStack(path: $appProvider.path) {
@@ -92,13 +99,11 @@ struct ContentView: View {
                 .blur(radius: appProvider.showOnboarding ? 4 : 0)
             }
             
+            FeaturePreviewPopupView(isPresented: $appProvider.showPremiumFeature, previewInfo: previewInfo)
+            
             if appProvider.showOnboarding {
                 OnboardingView()
             }
         }
     }
 }
-
-//#Preview {
-//    ContentView()
-//}

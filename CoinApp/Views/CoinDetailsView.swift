@@ -215,11 +215,12 @@ struct CoinDetailsView: View {
                             .padding(.top, 30)
                             .padding(.bottom, 13)
                             
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 Text("Details")
                                     .foregroundStyle(.white)
                                     .font(.title.bold())
                                     .padding(.bottom, 5)
+                                
                                 VStack(alignment: .leading) {
                                     Text(coinDetails.description)
                                         .foregroundStyle(.secondary)
@@ -273,204 +274,217 @@ struct CoinDetailsView: View {
                                         .cornerRadius(15)
                                     }
                                 }
+                                .padding(.top, 9)
                                 
-                                HStack {
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "number")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text("\(coinDetails.statistics.rank)")
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("rank")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "dollarsign.circle")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
-                                                Text("\(formatNumber(selfReportedMarketCap))")
-                                                    .font(.headline.bold())
-                                                    .foregroundStyle(.white)
-                                            } else {
-                                                Text("\(formatNumber(coin.marketCap ?? 0.0))")
-                                                    .font(.headline.bold())
-                                                    .foregroundStyle(.white)
-                                            }
-                                        }
-                                        Text("market cap")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "chart.bar")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text("$\(formatNumber(coinDetails.volume))")
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("volume")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                }
+                                Text("Statistics")
+                                    .foregroundStyle(.white)
+                                    .font(.title.bold())
+                                    .padding(.top, 13)
+                                    .padding(.bottom, 7)
                                 
-                                HStack {
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text(formatNumber(coinDetails.statistics.totalSupply))
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("total supply")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                    
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "calendar")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text(getFormattedDate(date: coinDetails.dateAdded))
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("added date")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                }
-                                HStack {
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "star.fill")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text(formatNumber(Double(coinDetails.watchCount) ?? 0.0))
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("watch count")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                    
-                                    VStack(spacing: 5) {
-                                        HStack(spacing: 0) {
-                                            Image(systemName: "waveform.path.ecg")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                            Text("\(coinDetails.statistics.volumeRank)")
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                        }
-                                        Text("volume rank")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 15)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                }
-                                HStack {
-                                    VStack(spacing: 3) {
-                                        HStack(spacing: 3) {
-                                            Image(systemName: "arrow.up.right.circle.fill")
-                                                .font(.headline)
-                                                .foregroundColor(.green)
-                                            buildFormattedPrice(coinDetails.statistics.highAllTime)
-                                        }
-                                        Text("all-time high")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                    
-                                    VStack(spacing: 3) {
-                                        HStack(spacing: 3) {
-                                            Image(systemName: "arrow.down.right.circle.fill")
-                                                .font(.headline)
-                                                .foregroundColor(.red)
-                                            buildFormattedPrice(coinDetails.statistics.lowAllTime)
-                                        }
-                                        Text("all-time low")
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(AppConstants.grayColor)
-                                    .cornerRadius(15)
-                                }
-                                .frame(height: 75)
-                                
-                                HStack {
-                                    if !coinDetails.urls.website.isEmpty {
-                                        Link(destination: URL(string: coinDetails.urls.website.first!)!) {
-                                            HStack {
-                                                Image(systemName: "globe")
-                                                    .font(.title2)
-                                                    .foregroundColor(.blue)
-                                                Text("Website")
+                                VStack {
+                                    HStack {
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "number")
                                                     .font(.headline)
                                                     .foregroundColor(.white)
+                                                Text("\(coinDetails.statistics.rank)")
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
                                             }
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundColor(.blue)
+                                            Text("rank")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
                                         }
-                                        .padding(.vertical, 21.5)
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                        
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "dollarsign.circle")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                if let selfReportedMarketCap = coin.selfReportedMarketCap, selfReportedMarketCap != 0 {
+                                                    Text("\(formatNumber(selfReportedMarketCap))")
+                                                        .font(.headline.bold())
+                                                        .foregroundStyle(.white)
+                                                } else {
+                                                    Text("\(formatNumber(coin.marketCap ?? 0.0))")
+                                                        .font(.headline.bold())
+                                                        .foregroundStyle(.white)
+                                                }
+                                            }
+                                            Text("market cap")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                        
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "chart.bar")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                Text("$\(formatNumber(coinDetails.volume))")
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
+                                            }
+                                            Text("volume")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .padding(.vertical, 15)
                                         .background(AppConstants.grayColor)
                                         .cornerRadius(15)
                                     }
                                     
-                                    if !coinDetails.urls.twitter.isEmpty {
-                                        Link(destination: URL(string: coinDetails.urls.twitter.first!)!) {
-                                            HStack {
-                                                Image("twitter")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 28, height: 28)
-                                                    .cornerRadius(14)
-                                                Text("Twitter")
+                                    HStack {
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "chart.line.uptrend.xyaxis")
                                                     .font(.headline)
                                                     .foregroundColor(.white)
+                                                Text(formatNumber(coinDetails.statistics.totalSupply))
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
                                             }
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundColor(.blue)
+                                            Text("total supply")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
                                         }
-                                        .padding(.vertical, 21.5)
+                                        .padding(.vertical, 15)
                                         .background(AppConstants.grayColor)
                                         .cornerRadius(15)
+                                        
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "calendar")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                Text(getFormattedDate(date: coinDetails.dateAdded))
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
+                                            }
+                                            Text("added date")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                    }
+                                    
+                                    HStack {
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "star.fill")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                Text(formatNumber(Double(coinDetails.watchCount) ?? 0.0))
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
+                                            }
+                                            Text("watch count")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                        
+                                        VStack(spacing: 5) {
+                                            HStack(spacing: 0) {
+                                                Image(systemName: "waveform.path.ecg")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                Text("\(coinDetails.statistics.volumeRank)")
+                                                    .font(.headline.bold())
+                                                    .foregroundStyle(.white)
+                                            }
+                                            Text("volume rank")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .padding(.vertical, 15)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                    }
+                                    
+                                    HStack {
+                                        VStack(spacing: 3) {
+                                            HStack(spacing: 3) {
+                                                Image(systemName: "arrow.up.right.circle.fill")
+                                                    .font(.headline)
+                                                    .foregroundColor(.green)
+                                                buildFormattedPrice(coinDetails.statistics.highAllTime)
+                                            }
+                                            Text("all-time high")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                        
+                                        VStack(spacing: 3) {
+                                            HStack(spacing: 3) {
+                                                Image(systemName: "arrow.down.right.circle.fill")
+                                                    .font(.headline)
+                                                    .foregroundColor(.red)
+                                                buildFormattedPrice(coinDetails.statistics.lowAllTime)
+                                            }
+                                            Text("all-time low")
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .background(AppConstants.grayColor)
+                                        .cornerRadius(15)
+                                    }
+                                    .frame(height: 75)
+                                    
+                                    HStack {
+                                        if !coinDetails.urls.website.isEmpty {
+                                            Link(destination: URL(string: coinDetails.urls.website.first!)!) {
+                                                HStack {
+                                                    Image(systemName: "globe")
+                                                        .font(.title2)
+                                                        .foregroundColor(.blue)
+                                                    Text("Website")
+                                                        .font(.headline)
+                                                        .foregroundColor(.white)
+                                                }
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundColor(.blue)
+                                            }
+                                            .padding(.vertical, 21.5)
+                                            .background(AppConstants.grayColor)
+                                            .cornerRadius(15)
+                                        }
+                                        
+                                        if !coinDetails.urls.twitter.isEmpty {
+                                            Link(destination: URL(string: coinDetails.urls.twitter.first!)!) {
+                                                HStack {
+                                                    Image("twitter")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 28, height: 28)
+                                                        .cornerRadius(14)
+                                                    Text("Twitter")
+                                                        .font(.headline)
+                                                        .foregroundColor(.white)
+                                                }
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundColor(.blue)
+                                            }
+                                            .padding(.vertical, 21.5)
+                                            .background(AppConstants.grayColor)
+                                            .cornerRadius(15)
+                                        }
                                     }
                                 }
                                 
@@ -479,6 +493,7 @@ struct CoinDetailsView: View {
                                         .font(Font.custom("Inter", size: 18).weight(.bold))
                                         .foregroundStyle(.white)
                                         .padding(.vertical, 10)
+                                        .padding(.top, 8)
                                     
                                     VStack(spacing: 15) {
                                         ForEach(holderList.prefix(5), id: \.address) { holder in
@@ -529,6 +544,7 @@ struct CoinDetailsView: View {
                                     .foregroundStyle(.white)
                                     .padding(.top, 10)
                                     .padding(.leading, 10)
+                                    .padding(.top, 8)
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 13) {
@@ -548,7 +564,7 @@ struct CoinDetailsView: View {
                                 Text("Trending posts")
                                     .font(Font.custom("Inter", size: 18).weight(.bold))
                                     .foregroundStyle(.white)
-                                    .padding(.top, 15)
+                                    .padding(.top, 16)
                                     .padding(.horizontal, 13)
                                     .padding(.bottom, 7)
                                 
@@ -600,7 +616,7 @@ struct CoinDetailsView: View {
                                                     .foregroundColor(.secondary)
                                             }
                                         }
-                                        .padding(.top, 15)
+                                        .padding(.top, 16)
                                         
                                         VStack(alignment: .leading, spacing: 5) {
                                             Text("Address")
@@ -768,13 +784,13 @@ struct CoinDetailsView: View {
                         Image(systemName: "star.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 25, height: 25)
+                            .frame(width: 23, height: 23)
                             .foregroundStyle(.yellow)
                     } else {
                         Image(systemName: "star")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 25, height: 25)
+                            .frame(width: 23, height: 23)
                             .foregroundStyle(.white)
                     }
                 }

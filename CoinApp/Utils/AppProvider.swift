@@ -69,6 +69,8 @@ class AppProvider: ObservableObject {
     
     @Published var path: [AppDestination] = []
     
+    @Published var showPremiumFeature: Bool = false
+    
     @Published var chatHistoryList: [MessageRow] = []
     
     @Published var isUserSubscribed: Bool = false
