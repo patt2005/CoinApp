@@ -129,7 +129,7 @@ struct CoinListView: View {
                         Rectangle()
                             .frame(width: 40, height: 40)
                             .cornerRadius(20)
-                            .foregroundColor(AppConstants.grayColor )
+                            .foregroundColor(AppConstants.grayColor)
                     } else {
                         ProgressView()
                             .frame(width: 40, height: 40)
@@ -245,16 +245,19 @@ struct CoinListView: View {
                             ForEach(coinListType, id: \.self) { type in
                                 getCoinListTypeCard(type)
                             }
+                            Rectangle()
+                                .foregroundStyle(.clear)
+                                .frame(width: 4)
                         }
-                        .padding(.bottom, 18)
+                        .padding(.bottom, 10)
                     }
                     
                     if viewModel.pickedCoinListType == coinListType[2] || viewModel.pickedCoinListType == coinListType[1] {
-                        HStack(spacing: 0) {
+                        HStack(alignment: .bottom, spacing: 0) {
                             Text("Time range: ")
-                                .fontWeight(.bold)
-                            Text("\(viewModel.pickedDateRange)")
                                 .foregroundStyle(.gray)
+                            Text("\(viewModel.pickedDateRange)")
+                                .foregroundStyle(.white)
                             Spacer()
                             Menu {
                                 ForEach(dateRangeList, id: \.self) { item in
@@ -280,6 +283,7 @@ struct CoinListView: View {
                             }
                         }
                         .padding(.horizontal, 15)
+                        .padding(.bottom, 8)
                     }
                     if viewModel.pickedCoinListType == "Watch List" && getList(viewModel.pickedCoinListType).isEmpty {
                         LazyVStack(spacing: 20) {

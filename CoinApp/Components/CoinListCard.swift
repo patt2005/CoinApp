@@ -53,7 +53,7 @@ struct CoinListCard: View {
                             Rectangle()
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(25)
-                                .foregroundColor(AppConstants.grayColor )
+                                .foregroundColor(AppConstants.grayColor)
                         } else {
                             ProgressView()
                                 .frame(width: 50, height: 50)

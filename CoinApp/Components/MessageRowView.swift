@@ -11,7 +11,7 @@ struct MessageRow: Identifiable, Equatable {
     let id = UUID()
     var isInteracting: Bool
     let sendText: String
-    let responseImage: UIImage
+    let responseImage: String
     var responseText: String?
     var responseError: String?
     let uploadedImages: [UIImage]
@@ -72,14 +72,14 @@ struct MessageRowView: View {
     let messageRow: MessageRow
     let retryCallback: (MessageRow) -> Void
     
-    private func messageBubble(isUser: Bool, text: String, image: UIImage? = nil, responseError: String?, isLoading: Bool, imagesList: [UIImage] = []) -> some View {
+    private func messageBubble(isUser: Bool, text: String, image: String? = nil, responseError: String?, isLoading: Bool, imagesList: [UIImage] = []) -> some View {
         HStack(alignment: .top, spacing: 13) {
             if (!isUser) {
-                Image(uiImage: image!)
+                Image(image ?? "icon")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 35, height: 35)
-                    .cornerRadius(17.5)
+                    .frame(width: 38, height: 38)
+                    .cornerRadius(19)
             }
             
             VStack(alignment: isUser ? .trailing : .leading) {

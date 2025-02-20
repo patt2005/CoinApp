@@ -59,7 +59,8 @@ struct OnboardingView: View {
                         Image(onboardingSteps[index].image)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 250)
+                            .frame(maxWidth: .infinity)
+                            .padding(.bottom, index == onboardingSteps.count - 1 ? 0 : 10)
                         
                         Text(onboardingSteps[index].title)
                             .font(Font.custom("Inter", size: 23)).bold()

@@ -65,6 +65,8 @@ class AppProvider: ObservableObject {
     @Published var recentlyAddedList: [Coin] = []
     @Published var mostVisitedList: [Coin] = []
     
+    @Published var newsList: [NewsItem] = []
+    
     @Published var showOnboarding = false
     
     @Published var path: [AppDestination] = []

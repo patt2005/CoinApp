@@ -42,7 +42,7 @@ struct SettingsView: View {
                                 .scaledToFit()
                                 .frame(width: 22.5, height: 22.5)
                             Text("Share App")
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.white.opacity(0.5))
                                 .padding(.leading, 8.5)
                         }
                     }
@@ -66,7 +66,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Contact us")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                     
@@ -78,7 +78,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Rate us")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                                 .padding(.leading, 5)
                         }
                     }
@@ -91,7 +91,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Privacy Policy")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                     
@@ -101,7 +101,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Terms of Use")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                     
@@ -113,7 +113,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Disclaimer")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                 }
@@ -125,7 +125,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.headline)
                             Text("Follow us")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                     
@@ -135,7 +135,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("About us")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                     
@@ -145,7 +145,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppConstants.primaryColor)
                                 .font(.title2)
                             Text("Our Apps")
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.white.opacity(0.5))
                         }
                     }
                 }
@@ -167,8 +167,4 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .preferredColorScheme(.dark)
     }
-}
-
-#Preview {
-    SettingsView()
 }

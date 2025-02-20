@@ -543,7 +543,7 @@ struct CoinDetailsView: View {
                                     .font(Font.custom("Inter", size: 18).weight(.bold))
                                     .foregroundStyle(.white)
                                     .padding(.top, 10)
-                                    .padding(.leading, 10)
+                                    .padding(.leading, 13)
                                     .padding(.top, 8)
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
@@ -570,6 +570,9 @@ struct CoinDetailsView: View {
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 13) {
+                                        Rectangle()
+                                            .foregroundStyle(.clear)
+                                            .frame(width: 0)
                                         ForEach(viewModel.postsList, id: \.postTime) { post in
                                             Button(action: {
                                                 viewModel.impactFeedback.impactOccurred()
@@ -581,7 +584,6 @@ struct CoinDetailsView: View {
                                             }
                                         }
                                     }
-                                    .padding(.leading, 10)
                                 }
                                 .frame(height: 161)
                             }
@@ -713,6 +715,27 @@ struct CoinDetailsView: View {
                                             .frame(maxWidth: .infinity)
                                             .padding(.vertical, 15)
                                             .background(.pink)
+                                            .cornerRadius(15)
+                                        }
+                                        
+                                        Button(action: {
+                                            if let url = URL(string: "https://raydium.io/swap/?inputMint=sol&outputMint=\(contractInfo.contractAddress)") {
+                                                UIApplication.shared.open(url)
+                                            }
+                                        }) {
+                                            HStack {
+                                                Image("raydium")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 28, height: 28)
+                                                
+                                                Text("Trade on Raydium")
+                                                    .font(Font.custom("Inter", size: 18).weight(.medium))
+                                                    .foregroundColor(.white)
+                                            }
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 15)
+                                            .background(Color.init(hex: "#6A0DAD"))
                                             .cornerRadius(15)
                                         }
                                     }

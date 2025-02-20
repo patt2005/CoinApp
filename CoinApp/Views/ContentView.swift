@@ -49,11 +49,17 @@ struct ContentView: View {
                         }
                         .tag(1)
                     
-                    AnalysisView()
+                    NewsListView()
                         .tabItem {
-                            Label("Analysis", systemImage: "plus.viewfinder")
+                            Label("News", systemImage: "doc.text.image")
                         }
                         .tag(2)
+                    
+                    AiToolsView()
+                        .tabItem {
+                            Label("AI Tools", systemImage: "wand.and.stars")
+                        }
+                        .tag(3)
                 }
                 .onAppear {
                     let appearance = UITabBarAppearance()
@@ -94,6 +100,7 @@ struct ContentView: View {
                     case .chartAnalysis(let image, let analysis): ChartAnalysisView(image: image, analysis: analysis)
                     case .searchCoin: SearchView()
                     case .postDetails(let post): PostDetailsView(post: post)
+                    case .newsDetails(let id): NewsDetailsView(id: id)
                     }
                 }
                 .blur(radius: appProvider.showOnboarding ? 4 : 0)

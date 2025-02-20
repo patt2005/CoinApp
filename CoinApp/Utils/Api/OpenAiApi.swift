@@ -55,34 +55,42 @@ class OpenAiApi {
     }
     
     private let systemPrompt = """
-                You are a professional trader specializing in meme coins and cryptocurrency markets. 
-                You have extensive experience analyzing chart patterns, market trends, and identifying key factors that drive meme coin behavior. 
-                Your expertise includes understanding the volatile nature of meme coins, the impact of social media trends, community-driven market moves, and the role of celebrity endorsements. 
-                When analyzing charts, you focus on identifying early trends, breakout points, pump-and-dump patterns, and the influence of social sentiment. 
-                You are able to analyze a chart to determine which meme coin it is, providing detailed insights about its potential price movements, and the likelihood of continued hype or market correction. 
-                Your goal is to provide actionable insights on the meme coin, with a focus on spotting opportunities, understanding volatility, and predicting potential future movements.
-    """
+                    You are a professional cryptocurrency analyst specializing in meme coins. 
+                    Your expertise includes advanced technical analysis, trend identification, and market psychology. 
+                    You analyze price movements, support and resistance levels, and leverage key indicators to determine market sentiment. 
+                    You also consider external factors like social media trends, trading volume spikes, whale activity, and market liquidity. 
+        
+                    Your analysis must be objective, data-driven, and designed to help traders make informed decisions. 
+                    Provide a structured breakdown of the coin's technicals, key levels, and potential market moves. 
+        """
     
     private let jsonParams = """
-                        Please return your analysis in the following JSON format with the following sections:
-                        
-                        - **"general_trend"**: A detailed analysis of the current trend, whether it’s bullish, bearish, or neutral. Include key trend points like price movements, support, and resistance levels.
-                        
-                        - **"indicator_analysis"**: A breakdown of technical indicators used in the analysis. This may include moving averages, RSI, MACD, Bollinger Bands, etc. Provide insights into whether these indicators support the trend or signal a reversal.
-                        
-                        - **"chart_pattern"**: Analyze the chart for any recognizable patterns, such as triangles, head and shoulders, or double tops/bottoms. Mention if the chart pattern indicates a continuation or reversal.
-                        
-                        - **"future_market_prediction"**: A forecast of the potential market movements. Discuss any predicted future price movements, possible breakouts or breakdowns, or potential consolidation areas.
-    """
+                            Please return your analysis **strictly** in the following JSON format with **all fields included**:
+                            
+                            {
+                                "general_trend": "A summary of the current trend (bullish, bearish, or neutral). Include trend strength, recent price movements, and key resistance/support levels.",
+                                
+                                "indicator_analysis": "A detailed breakdown of at least three indicators (e.g., RSI, MACD, Moving Averages, Bollinger Bands). Explain whether they confirm the trend or signal a reversal.",
+                                
+                                "chart_pattern": "Identify any recognizable chart patterns (e.g., triangles, head & shoulders, double tops/bottoms). Mention if they indicate a breakout, reversal, or trend continuation.",
+                                
+                                "future_market_prediction": "Provide a forecast based on technical and market conditions. Include potential price levels, risk factors, and scenarios for traders to watch."
+                            }
+                            
+                            ⚠️ **Your response must always match this exact JSON structure.**
+        """
     
     private let sampleJsonPrompt = """
-                {
-                    "general_trend": "The current trend is neutral, as the coin has been experiencing a sideways movement over the past few days. Price action has not shown strong directional momentum.",
-                    "indicator_analysis": "The RSI is currently at 50, indicating a neutral market sentiment. The MACD is flat, and there are no strong buy or sell signals. Bollinger Bands are showing low volatility, suggesting consolidation.",
-                    "chart_pattern": "There are no significant patterns observed in the chart. The price action is range-bound, and there is no clear breakout or breakdown signal at the moment.",
-                    "future_market_prediction": "In the short term, the market is expected to remain relatively stable. However, any new market catalyst, such as news or social sentiment, could drive price movement in either direction."
-                }
-    """
+                    {
+                        "general_trend": "The meme coin is currently in a short-term uptrend, gaining 18% in the last 24 hours. Trading volume has increased by 120%, suggesting renewed interest. However, there is significant resistance at $0.0012, which has rejected price twice in the past week.",
+                        
+                        "indicator_analysis": "The RSI is at 68, approaching overbought conditions, indicating potential for a pullback. The 50-day moving average has crossed above the 200-day moving average (Golden Cross), historically signaling a bullish continuation. The MACD histogram is showing increasing bullish momentum, but traders should watch for potential divergence.",
+                        
+                        "chart_pattern": "A bullish pennant has formed on the 1-hour chart, suggesting a continuation pattern. If price breaks above $0.0012 with strong volume, a move toward $0.0015 is likely. However, failure to break out could lead to a retest of the $0.00085 support level.",
+                        
+                        "future_market_prediction": "If the coin sustains volume above $0.0012, the next resistance levels are $0.0015 and $0.0018. However, if momentum slows and RSI confirms a bearish divergence, a retracement to $0.0009 or lower could occur. Social sentiment remains positive, but traders should watch for sudden whale sell-offs or external news that could impact price movement."
+                    }
+        """
     
     func analyzeChartImage(image: UIImage) async throws -> MemeCoinAnalysisResponse {
         guard let base64Image = convertImageToBase64(image: image) else {

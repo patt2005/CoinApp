@@ -19,6 +19,8 @@ class AppConstants {
     static var openAiApiKey: String = ""
     static let superWallApiKey = "pk_bcb43ffa68186798f9b0f326960269a1c9e41b2a404cda6d"
     
+    static let appCode: String = "meme-ai"
+    
     struct ApiResponse: Decodable {
         let OPEN_AI_API_KEY: String
     }
@@ -42,6 +44,7 @@ enum AppDestination: Hashable {
     case chartAnalysis(image: UIImage?, analysis: MemeCoinAnalysisResponse?)
     case searchCoin
     case postDetails(post: Post)
+    case newsDetails(id: String)
 }
 
 func buildFormattedPrice(_ price: Double) -> some View {
@@ -129,7 +132,7 @@ func getFormattedDate(date: Date) -> String {
     dateFormatter.dateFormat = "dd MMM, yyyy"
     let formattedDate = dateFormatter.string(from: date)
     return formattedDate
-}
+}   
 
 extension Color {
     init(hex: String) {
